@@ -1,44 +1,44 @@
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Auth from "../src/components/Auth";
-import HomeScreen from "../src/screens/HomeScreen";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { supabase } from "../src/utils/supabase";
+import { router } from "expo-router";
 
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.navigate("/FeedTab");
+      } else {
+        router.navigate("/auth/Auth");
+      }
       setSession(session);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        router.navigate("/FeedTab");
+      } else {
+        router.navigate("/auth/Auth");
+      }
       setSession(session);
     });
   }, []);
 
-  return <View>{session && session.user ? <HomeScreen /> : <Auth />}</View>;
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size={"large"}></ActivityIndicator>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
     justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+    padding: 24,
   },
 });

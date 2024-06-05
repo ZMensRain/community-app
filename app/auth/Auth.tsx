@@ -8,7 +8,7 @@ import {
   Button,
   KeyboardAvoidingView,
 } from "react-native";
-import { supabase } from "../utils/supabase";
+import { supabase } from "../../src/utils/supabase";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
