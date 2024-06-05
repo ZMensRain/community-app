@@ -7,6 +7,8 @@ import {
   TextInput,
   Button,
   KeyboardAvoidingView,
+  Pressable,
+  Keyboard,
 } from "react-native";
 import { supabase } from "../../src/utils/supabase";
 
@@ -55,44 +57,52 @@ export default function Auth() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput
-          style={styles.input}
-          editable
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          keyboardType="email-address"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          style={styles.input}
-          editable
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Password"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title="Sign in"
-          disabled={loading}
-          onPress={() => signInWithEmail()}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button
-          title="Sign up"
-          disabled={loading}
-          onPress={() => signUpWithEmail()}
-        />
-      </View>
-    </KeyboardAvoidingView>
+    <View>
+      <Pressable
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
+      >
+        <KeyboardAvoidingView style={styles.container}>
+          <View style={[styles.verticallySpaced, styles.mt20]}>
+            <TextInput
+              style={styles.input}
+              editable
+              onChangeText={(text) => setEmail(text)}
+              value={email}
+              placeholder="email@address.com"
+              keyboardType="email-address"
+              autoCapitalize={"none"}
+            />
+          </View>
+          <View style={styles.verticallySpaced}>
+            <TextInput
+              style={styles.input}
+              editable
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+              secureTextEntry={true}
+              placeholder="Password"
+              autoCapitalize={"none"}
+            />
+          </View>
+          <View style={[styles.verticallySpaced, styles.mt20]}>
+            <Button
+              title="Sign in"
+              disabled={loading}
+              onPress={() => signInWithEmail()}
+            />
+          </View>
+          <View style={styles.verticallySpaced}>
+            <Button
+              title="Sign up"
+              disabled={loading}
+              onPress={() => signUpWithEmail()}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </Pressable>
+    </View>
   );
 }
 
