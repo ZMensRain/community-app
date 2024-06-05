@@ -8,6 +8,7 @@ import {
   View,
   StyleSheet,
   Text,
+  ScrollView,
 } from "react-native";
 import ProfileCamera from "../../src/components/ProfileCameraCircle";
 import { supabase } from "../../src/utils/supabase";
@@ -19,46 +20,48 @@ const profile = () => {
   const [loading, setLoading] = useState(false);
 
   return (
-    <View>
-      <Pressable
-        onPress={() => {
-          Keyboard.dismiss();
-        }}
-      >
-        <KeyboardAvoidingView style={styles.container}>
-          <ProfileCamera />
-          <View style={[styles.verticallySpaced, styles.mt20]}>
-            <TextInput
-              style={styles.input}
-              editable
-              onChangeText={(text) => setUsername(text)}
-              value={username}
-              placeholder="Username"
-              autoCapitalize={"words"}
-            />
-          </View>
-          <View style={[styles.verticallySpaced]}>
-            <TextInput
-              style={styles.input}
-              editable
-              onChangeText={(text) => setEmail(text)}
-              value={email}
-              placeholder="email@address.com"
-              keyboardType="email-address"
-              autoCapitalize={"none"}
-            />
-          </View>
-          <View style={styles.button}>
-            <Button
-              onPress={() => {
-                supabase.auth.signOut();
-              }}
-              title="Sign Out"
-            ></Button>
-          </View>
-        </KeyboardAvoidingView>
-      </Pressable>
-    </View>
+    <ScrollView>
+      <View>
+        <Pressable
+          onPress={() => {
+            Keyboard.dismiss();
+          }}
+        >
+          <KeyboardAvoidingView style={styles.container}>
+            <ProfileCamera />
+            <View style={[styles.verticallySpaced, styles.mt20]}>
+              <TextInput
+                style={styles.input}
+                editable
+                onChangeText={(text) => setUsername(text)}
+                value={username}
+                placeholder="Username"
+                autoCapitalize={"words"}
+              />
+            </View>
+            <View style={[styles.verticallySpaced]}>
+              <TextInput
+                style={styles.input}
+                editable
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+                placeholder="email@address.com"
+                keyboardType="email-address"
+                autoCapitalize={"none"}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                onPress={() => {
+                  supabase.auth.signOut();
+                }}
+                title="Sign Out"
+              ></Button>
+            </View>
+          </KeyboardAvoidingView>
+        </Pressable>
+      </View>
+    </ScrollView>
   );
 };
 
