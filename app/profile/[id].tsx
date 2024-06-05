@@ -10,6 +10,7 @@ import {
   Text,
 } from "react-native";
 import ProfileCamera from "../../src/components/ProfileCameraCircle";
+import { supabase } from "../../src/utils/supabase";
 
 const profile = () => {
   const [username, setUsername] = useState("");
@@ -47,6 +48,14 @@ const profile = () => {
               autoCapitalize={"none"}
             />
           </View>
+          <View style={styles.button}>
+            <Button
+              onPress={() => {
+                supabase.auth.signOut();
+              }}
+              title="Sign Out"
+            ></Button>
+          </View>
         </KeyboardAvoidingView>
       </Pressable>
     </View>
@@ -67,7 +76,9 @@ const styles = StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
-
+  button: {
+    marginTop: 100,
+  },
   input: {
     margin: 0,
     padding: 20,
