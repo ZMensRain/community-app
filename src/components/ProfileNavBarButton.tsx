@@ -1,10 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Pressable, Image } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 
 const ProfileButton = () => {
   function press() {
-    console.log("pressed");
+    router.navigate("profile/self");
   }
 
   let imageUrl: string | null = "https://reactnative.dev/img/tiny_logo.png";
