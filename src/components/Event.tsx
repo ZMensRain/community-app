@@ -11,7 +11,6 @@ const EventComponent = (props: EventProps) => {
     <Pressable
       onPress={() => {
         router.navigate("eventScreen");
-        console.log("hee");
       }}
       style={({ pressed }) => [
         {
