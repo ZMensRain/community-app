@@ -1,11 +1,13 @@
+type time = { hour: Number; minute: Number };
+
 class Day {
-  start: Date;
-  end: Date;
+  start: time;
+  end: time;
   date: Date;
   locations: Array<String | { lat: Number; lon: Number }>;
   constructor(
-    start: Date,
-    end: Date,
+    start: time,
+    end: time,
     date: Date,
     locations: Array<String | { lat: Number; lon: Number }>
   ) {
@@ -34,7 +36,7 @@ class CommunityEvent {
     title: string,
     description: string,
     type: EventType | String,
-    ageRange: { min: Number; max: Number },
+    ageRange: { min: Number; max: Number | null },
     days: Array<Day>,
     dressCode: "casual" | "formal" | "anything" | "costume" | "festive",
     attendingIds: Array<String>,
@@ -80,22 +82,36 @@ enum EventType {}
 enum EventTag {}
 enum EventKit {}
 
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
 /*cspell:disable */
 const testEvent = new CommunityEvent(
   "id",
   "title",
-  `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet mauris commodo. Faucibus et molestie ac feugiat sed lectus. Convallis convallis tellus id interdum velit laoreet id donec. Turpis massa sed elementum tempus. Dolor morbi non arcu risus quis varius. Ipsum dolor sit amet consectetur adipiscing elit ut aliquam purus. Lectus sit amet est placerat in egestas erat imperdiet sed. Aliquam faucibus purus in massa. Quis hendrerit dolor magna eget est. Mi tempus imperdiet nulla malesuada pellentesque elit. Sed id semper risus in hendrerit gravida rutrum quisque non. Eu feugiat pretium nibh ipsum consequat nisl vel pretium. Commodo odio aenean sed adipiscing diam donec adipiscing. At quis risus sed vulputate odio ut. In hac habitasse platea dictumst.
-
-Ut morbi tincidunt augue interdum velit euismod in. At urna condimentum mattis pellentesque id nibh tortor. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Urna nunc id cursus metus aliquam eleifend. Nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus. Vitae ultricies leo integer malesuada. Euismod lacinia at quis risus sed. In metus vulputate eu scelerisque felis. Odio aenean sed adipiscing diam donec adipiscing tristique. Sit amet dictum sit amet. Morbi tristique senectus et netus et malesuada. Adipiscing diam donec adipiscing tristique risus nec feugiat. Orci phasellus egestas tellus rutrum tellus pellentesque. Odio aenean sed adipiscing diam donec adipiscing tristique risus nec. Sed elementum tempus egestas sed sed risus pretium quam. Commodo viverra maecenas accumsan lacus vel facilisis volutpat est velit. Elit ut aliquam purus sit amet luctus venenatis. Consectetur adipiscing elit ut aliquam purus sit amet. Dictum sit amet justo donec.`,
+  `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet mauris commodo. Faucibus et molestie ac feugiat sed lectus. Convallis convallis tellus id interdum velit laoreet id donec. Turpis massa sed elementum tempus. Dolor morbi non arcu risus quis varius. Ipsum dolor sit amet consectetur adipiscing elit ut aliquam purus. Lectus sit amet est placerat in egestas erat imperdiet sed. Aliquam faucibus purus in massa. Quis hendrerit dolor magna eget est. Mi tempus imperdiet nulla malesuada pellentesque elit. Sed id semper risus in hendrerit gravida rutrum quisque non. Eu feugiat pretium nibh ipsum consequat nisl vel pretium. Commodo odio aenean sed adipiscing diam donec adipiscing. At quis risus sed vulputate odio ut. In hac habitasse platea dictumst.`,
   "Dance",
-  { min: 10, max: 100 },
-  [],
+  { min: 10, max: null },
+  [
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, yesterday, [
+      "1083 Bezuidenhout St, Mpumalanga",
+    ]),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
+      "1978 Wattle St, Eastern Cape",
+    ]),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
+      "2476 Diesel Street,Gauteng",
+    ]),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
+      { lat: -26.396225, lon: 28.027029 },
+    ]),
+  ],
   "anything",
   [],
   [],
   null,
   ["tag", "Vegan friendly", "swinging"],
-  []
+  ["Table", "Chairs", "Drinks"]
 );
 /*cspell:enable */
 
