@@ -1,14 +1,51 @@
-import { Button, View } from "react-native";
+import {
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+import React from "react";
 import { supabase } from "../../src/utils/supabase";
+import EventComponent from "../../src/components/Event";
+
+import { CommunityEvent, Day, testEvent } from "../../src/model/event";
 
 function feed() {
-  function signOut() {
-    supabase.auth.signOut();
-  }
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
-    <View>{/* <Button onPress={signOut} title="Sign out"></Button> */}</View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {[0, 1, 2, 3, 4, 5].map((e) => {
+          return <EventComponent key={e} event={testEvent}></EventComponent>;
+        })}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    padding: 10,
+    alignItems: "center",
+  },
+});
 export default feed;
