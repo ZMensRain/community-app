@@ -107,9 +107,20 @@ const testEvent = new CommunityEvent(
     ]),
   ],
   "anything",
-  [],
+  [
+    "pwsDKA79t6RN4SuZ",
+    "qPMNPB9ny09cqSbA",
+    "1mYk0yc0R54MTJAw",
+    "PIUK2EReuwr4aWm9",
+    "ae8hykYw6fhtissI",
+    "RRIJwi2VhOvRvhpK",
+    "QaVsTDvyPZvEQa6Z",
+    "967aHDSOMKYiBnFE",
+    "WA87l0EIj2KCq8JA",
+    "4goARK6KPGBtq5uU",
+  ],
   ["https://twitter.com", "https://facebook.com"],
-  null,
+  "https://www.tickets.com/",
   ["tag", "Vegan friendly", "swinging", "Dog Friendly", "something l"],
   ["Table", "Chairs", "Drinks"]
 );
