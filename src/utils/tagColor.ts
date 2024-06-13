@@ -1,4 +1,4 @@
-import { EventTag } from "../model/event";
+import { EventTag, EventType } from "../model/event";
 
 type ColorValueHex = `#${string}`;
 
@@ -36,15 +36,34 @@ const _tagColors: ColorValueHex[] = [
   "#C0C0C0",
 ];
 
+const _typeColors: ColorValueHex[] = [];
+
+/// Returns a background and a foreground color based on the tag passed in
 const tagColors = (tag: String | EventTag) => {
   let back: ColorValueHex =
-    _tagColors[hash(typeof tag === "string" ? tag : tag.toString())];
+    _tagColors[
+      hash(typeof tag === "string" ? tag : tag.toString(), _tagColors.length)
+    ];
   let fore: ColorValueHex = foregroundColor(back);
 
   return { background: back, foreground: fore };
 };
 
-const hash = (s: String) => {
+/// Returns a color based on the type passed in
+const typeColor = (type: String | EventType) => {
+  let color: ColorValueHex =
+    _tagColors[
+      hash(
+        typeof type === "string" ? type : type.toString(),
+        _typeColors.length
+      )
+    ];
+
+  return color;
+};
+
+/// Returns a number between 0 and n - 1 inclusive based on the string passed in
+const hash = (s: String, n: number) => {
   let t = 0;
 
   for (let i = 0; i < s.length; i++) {
@@ -52,9 +71,10 @@ const hash = (s: String) => {
     t += code;
   }
 
-  return t % _tagColors.length;
+  return t % n;
 };
 
+/// Returns black or white based on the background color passed in
 const foregroundColor = (color: ColorValueHex) => {
   let r = parseInt(color.slice(1, 3), 16);
   let g = parseInt(color.slice(3, 5), 16);
@@ -70,4 +90,4 @@ const foregroundColor = (color: ColorValueHex) => {
   return "#000000";
 };
 
-export { tagColors, ColorValueHex, foregroundColor };
+export { tagColors, typeColor, foregroundColor, ColorValueHex };
