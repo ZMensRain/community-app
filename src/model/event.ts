@@ -88,10 +88,10 @@ yesterday.setDate(yesterday.getDate() - 1);
 /*cspell:disable */
 const testEvent = new CommunityEvent(
   "id",
-  "title",
+  "Title",
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet mauris commodo. Faucibus et molestie ac feugiat sed lectus. Convallis convallis tellus id interdum velit laoreet id donec. Turpis massa sed elementum tempus. Dolor morbi non arcu risus quis varius. Ipsum dolor sit amet consectetur adipiscing elit ut aliquam purus. Lectus sit amet est placerat in egestas erat imperdiet sed. Aliquam faucibus purus in massa. Quis hendrerit dolor magna eget est. Mi tempus imperdiet nulla malesuada pellentesque elit. Sed id semper risus in hendrerit gravida rutrum quisque non. Eu feugiat pretium nibh ipsum consequat nisl vel pretium. Commodo odio aenean sed adipiscing diam donec adipiscing. At quis risus sed vulputate odio ut. In hac habitasse platea dictumst.`,
   "Dance",
-  { min: 10, max: null },
+  { min: 10, max: 20 },
   [
     new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, yesterday, [
       "1083 Bezuidenhout St, Mpumalanga",
@@ -108,11 +108,11 @@ const testEvent = new CommunityEvent(
   ],
   "anything",
   [],
-  [],
+  ["https://twitter.com", "https://facebook.com"],
   null,
-  ["tag", "Vegan friendly", "swinging"],
+  ["tag", "Vegan friendly", "swinging", "Dog Friendly", "something l"],
   ["Table", "Chairs", "Drinks"]
 );
 /*cspell:enable */
 
-export { Day, CommunityEvent, testEvent };
+export { Day, CommunityEvent, testEvent, EventTag, EventKit, EventType };
