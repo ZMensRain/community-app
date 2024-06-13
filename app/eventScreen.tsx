@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, ScrollView, Linking } from "react-native";
 import { CommunityEvent, testEvent } from "../src/model/event";
 import DayCard from "../src/components/DayCard";
 import { tagColors } from "../src/utils/tagColor";
+import ProfileIcon from "../src/components/profileIcon";
 
 const EventScreen = () => {
   const event = testEvent;
@@ -67,12 +68,20 @@ const EventScreen = () => {
             })}
           </View>
         </View>
-        {/*TODO*/}
-        <ScrollView horizontal={true}>
-          {event.attendingIds.map((id, index) => {
-            return <Text key={index}>TODO:{id}</Text>;
-          })}
-        </ScrollView>
+        {event.attendingIds.length > 0 && (
+          <>
+            <Text style={styles.h1}>Attending</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+            >
+              {event.attendingIds.map((id, index) => {
+                return <ProfileIcon id={id} key={index} />;
+              })}
+            </ScrollView>
+          </>
+        )}
 
         {event.links.length > 0 && (
           <View style={styles.linkContainer}>
@@ -165,7 +174,6 @@ const styles = StyleSheet.create({
   hosted: {
     flexDirection: "row",
     verticalAlign: "middle",
-    backgroundColor: "#0000000a",
     borderRadius: 10,
     padding: 5,
   },
