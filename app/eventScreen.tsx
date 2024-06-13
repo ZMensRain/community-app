@@ -32,7 +32,9 @@ const EventScreen = () => {
           Age Limit: {event.ageRange["min"].toString()}yr
           {event.ageRange["max"] != null ? ` — ${event.ageRange["max"]}yr` : ""}
         </Text>
-
+        <Text style={[styles.dressCode, styles.bodyFont]}>
+          Dress code: {event.dressCode}
+        </Text>
         <Text selectable={true} style={styles.description}>
           {event.description}
         </Text>
@@ -53,9 +55,6 @@ const EventScreen = () => {
           </ScrollView>
         </View>
 
-        <Text style={[styles.dressCode, styles.bodyFont]}>
-          Dress code: {event.dressCode}
-        </Text>
         <View>
           <Text style={styles.h1}>Bring</Text>
           <View>
@@ -140,8 +139,9 @@ const styles = StyleSheet.create({
     width: "20%",
     overflow: "hidden",
   },
+
   description: {
-    marginVertical: 15,
+    marginVertical: 10,
     fontSize: 16,
   },
   h1: {
@@ -160,11 +160,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   linkText: { color: "#3a87d6" },
-  dressCode: { marginVertical: 10 },
+  dressCode: {},
   bringItem: {},
   hosted: {
     flexDirection: "row",
     verticalAlign: "middle",
+    backgroundColor: "#0000000a",
+    borderRadius: 10,
+    padding: 5,
   },
 });
 
