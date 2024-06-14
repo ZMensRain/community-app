@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Keyboard,
@@ -7,17 +7,58 @@ import {
   TextInput,
   View,
   StyleSheet,
-  Text,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import ProfileCamera from "../../src/components/ProfileCameraCircle";
-import { supabase } from "../../src/utils/supabase";
+import { getUserData, supabase } from "../../src/utils/supabase";
+import { Session } from "@supabase/supabase-js";
 
 const profile = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setEmail(session?.user.email!);
+    });
+  }, []);
+
+  if (session === null) {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <ActivityIndicator size={"large"} />
+      </View>
+    );
+  }
+
+  getUserData(session.user.id).then((response) => {
+    if (typeof response === "string") {
+      return;
+    }
+    setUsername(response["username"]);
+  });
+
+  if (username === "") {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <ActivityIndicator size={"large"} />
+      </View>
+    );
+  }
 
   return (
     <ScrollView>
@@ -67,7 +108,6 @@ const profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     padding: 12,
     alignItems: "center",
   },
