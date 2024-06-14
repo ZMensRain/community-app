@@ -26,7 +26,11 @@ const EventScreen = () => {
           >
             Hosted by
           </Text>
-          <View style={styles.circle}></View>
+          <ProfileIcon
+            id={event.hosted_by.id}
+            size={50}
+            isGroup={event.hosted_by.group}
+          />
         </View>
         <Text style={styles.bodyFont}>Type: {event.type}</Text>
         <Text style={[styles.ageLimit, styles.bodyFont]}>
@@ -77,7 +81,9 @@ const EventScreen = () => {
               showsVerticalScrollIndicator={false}
             >
               {event.attendingIds.map((id, index) => {
-                return <ProfileIcon id={id} key={index} />;
+                return (
+                  <ProfileIcon id={id} size={42} showName={true} key={index} />
+                );
               })}
             </ScrollView>
           </>
@@ -139,14 +145,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     fontSize: 20,
-  },
-
-  circle: {
-    backgroundColor: "#aaaaaa",
-    borderRadius: 100,
-    aspectRatio: 1,
-    width: "20%",
-    overflow: "hidden",
   },
 
   description: {
