@@ -1,20 +1,25 @@
-import { Tabs } from "expo-router";
-import { View, StyleSheet } from "react-native";
+import { Tabs, router } from "expo-router";
+import { View, StyleSheet, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileButton from "../../src/components/ProfileNavBarButton";
 
 const layout = () => {
-  function test() {
-    return <ProfileButton></ProfileButton>;
-  }
-
   return (
     <Tabs>
       <Tabs.Screen
         name="FeedTab"
         options={{
           headerTitle: "Feed",
-          headerRight: test,
+          headerLeft: () => <ProfileButton />,
+          headerRight: () => (
+            <Pressable onPress={() => {}}>
+              <Ionicons
+                name="create-outline"
+                size={32}
+                style={{ margin: 5 }}
+              ></Ionicons>
+            </Pressable>
+          ),
           tabBarIcon: () => {
             return (
               <View>
@@ -29,7 +34,16 @@ const layout = () => {
         name="GroupsTab"
         options={{
           headerTitle: "Groups",
-          headerRight: () => <ProfileButton />,
+          headerLeft: () => <ProfileButton />,
+          headerRight: () => (
+            <Pressable onPress={() => {}}>
+              <Ionicons
+                name="create-outline"
+                size={32}
+                style={{ margin: 5 }}
+              ></Ionicons>
+            </Pressable>
+          ),
           tabBarIcon: () => {
             return (
               <View>
@@ -44,6 +58,15 @@ const layout = () => {
         name="MapTab"
         options={{
           headerTitle: "Map",
+          headerRight: () => (
+            <Pressable onPress={() => {}}>
+              <Ionicons
+                name="create-outline"
+                size={32}
+                style={{ margin: 5 }}
+              ></Ionicons>
+            </Pressable>
+          ),
           tabBarIcon: () => {
             return (
               <View>
