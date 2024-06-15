@@ -32,18 +32,22 @@ const EventScreen = () => {
             isGroup={event.hosted_by.group}
           />
         </View>
+
         <Text style={styles.bodyFont}>Type: {event.type}</Text>
-        <Text style={[styles.ageLimit, styles.bodyFont]}>
+
+        <Text style={[styles.bodyFont, styles.vMT]}>
           Age Limit: {event.ageRange["min"].toString()}yr
           {event.ageRange["max"] != null ? ` — ${event.ageRange["max"]}yr` : ""}
         </Text>
-        <Text style={[styles.dressCode, styles.bodyFont]}>
-          Dress code: {event.dressCode}
-        </Text>
-        <Text selectable={true} style={styles.description}>
+
+        <Text style={[styles.bodyFont]}>Dress code: {event.dressCode}</Text>
+
+        {/*Description*/}
+        <Text selectable={true} style={[styles.description, styles.vMT]}>
           {event.description}
         </Text>
 
+        {/*Day cards*/}
         <View style={{ flex: 1 }}>
           <ScrollView
             horizontal={true}
@@ -60,18 +64,23 @@ const EventScreen = () => {
           </ScrollView>
         </View>
 
-        <View>
-          <Text style={styles.h1}>Bring</Text>
+        {/*Kit to bring section*/}
+        {event.kit.length > 0 && (
           <View>
-            {event.kit.map((value) => {
-              return (
-                <Text style={[styles.bringItem, styles.bodyFont]}>
-                  • {value}
-                </Text>
-              );
-            })}
+            <Text style={styles.h1}>Bring</Text>
+            <View>
+              {event.kit.map((value, index) => {
+                return (
+                  <Text style={[styles.bodyFont]} key={index}>
+                    • {value}
+                  </Text>
+                );
+              })}
+            </View>
           </View>
-        </View>
+        )}
+
+        {/*People and groups attending*/}
         {event.attendingIds.length > 0 && (
           <>
             <Text style={styles.h1}>Attending</Text>
@@ -89,8 +98,9 @@ const EventScreen = () => {
           </>
         )}
 
+        {/*Links for event*/}
         {event.links.length > 0 && (
-          <View style={styles.linkContainer}>
+          <View style={styles.vMT}>
             <Text style={styles.h1}>Links</Text>
             {event.links.map((link, index) => {
               return (
@@ -106,6 +116,7 @@ const EventScreen = () => {
           </View>
         )}
 
+        {/*Event tags*/}
         {event.tags.length > 0 && (
           <>
             <Text style={styles.h1}>Tags</Text>
@@ -144,11 +155,9 @@ const EventScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    fontSize: 20,
   },
 
   description: {
-    marginVertical: 10,
     fontSize: 16,
   },
   h1: {
@@ -162,13 +171,13 @@ const styles = StyleSheet.create({
   bodyFont: {
     fontSize: 20,
   },
-  ageLimit: {},
-  linkContainer: {
-    marginTop: 10,
+
+  vMT: {
+    marginVertical: 5,
   },
+
   linkText: { color: "#3a87d6" },
-  dressCode: {},
-  bringItem: {},
+
   hosted: {
     flexDirection: "row",
     verticalAlign: "middle",
