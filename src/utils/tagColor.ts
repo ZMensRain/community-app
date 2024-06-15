@@ -80,14 +80,12 @@ const foregroundColor = (color: ColorValueHex) => {
   let g = parseInt(color.slice(3, 5), 16);
   let b = parseInt(color.slice(5, 7), 16);
 
-  let gray = (r + g + b) / 3;
+  let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-  let grayPercent = (gray / 250) * 100;
-
-  if (gray < 50) {
-    return "#ffffff";
+  if (luminance > 140) {
+    return "#000000";
   }
-  return "#000000";
+  return "#ffffff";
 };
 
 export { tagColors, typeColor, foregroundColor, ColorValueHex };
