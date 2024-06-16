@@ -1,5 +1,7 @@
 type time = { hour: Number; minute: Number };
 
+type dressCode = "casual" | "formal" | "anything" | "costume" | "festive";
+
 class Day {
   start: time;
   end: time;
@@ -26,7 +28,7 @@ class CommunityEvent {
   type: EventType | String;
   ageRange: { min: Number; max: Number | null };
   days: Array<Day>;
-  dressCode: "casual" | "formal" | "anything" | "costume" | "festive";
+  dressCode: dressCode;
   attendingIds: Array<String>;
   links: Array<String>;
   ticketWebsite: String | null;
@@ -40,7 +42,7 @@ class CommunityEvent {
     type: EventType | String,
     ageRange: { min: Number; max: Number | null },
     days: Array<Day>,
-    dressCode: "casual" | "formal" | "anything" | "costume" | "festive",
+    dressCode: dressCode,
     attendingIds: Array<String>,
     links: Array<String>,
     ticketWebsite: String | null,
@@ -81,7 +83,23 @@ class CommunityEvent {
 }
 
 //TODO Fill Enums
-enum EventType {}
+enum EventType {
+  Meetings,
+  MarketDay,
+  CleanupDay,
+  March,
+  Rally,
+  FundRaiser,
+  Competition,
+  Workshop,
+  Opening,
+  Festival,
+  Performance,
+  Networking,
+  Welfare,
+  Party,
+  CareerDay,
+}
 enum EventTag {}
 enum EventKit {}
 
@@ -130,4 +148,12 @@ const testEvent = new CommunityEvent(
 );
 /*cspell:enable */
 
-export { Day, CommunityEvent, testEvent, EventTag, EventKit, EventType };
+export {
+  Day,
+  CommunityEvent,
+  testEvent,
+  EventTag,
+  EventKit,
+  EventType,
+  dressCode,
+};
