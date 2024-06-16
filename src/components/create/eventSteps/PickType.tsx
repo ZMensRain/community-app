@@ -10,24 +10,30 @@ type props = { onTypePicked?: (type: String) => void };
 const PickTypeStep = ({ onTypePicked }: props) => {
   let [searched, setSearched] = useState(String);
 
+  // Returns a list of strings that relate to an event type or the user input
   function getTypesText() {
     let match: Boolean = false;
 
-    return Object.keys(EventType)
-      .filter((value) => {
-        if (!match) {
-          match = value.toUpperCase() === searched.toUpperCase();
-        }
+    return (
+      Object.keys(EventType)
+        .filter((value) => {
+          // sets match to true so the user input will not be shown if not needed
+          if (!match) {
+            match = value.toUpperCase() === searched.toUpperCase();
+          }
 
-        return (
-          isNaN(Number(value)) &&
-          value.toUpperCase().startsWith(searched.toUpperCase())
-        );
-      })
-      .concat(searched !== "" && match === false ? [searched] : [])
-      .map((value) => {
-        return value.replace(/([A-Z])/g, " $1").trimStart();
-      });
+          return (
+            isNaN(Number(value)) &&
+            value.toUpperCase().startsWith(searched.toUpperCase())
+          );
+        })
+        /*Adds the content the UserTyped if necessary*/
+        .concat(searched !== "" && match === false ? [searched] : [])
+        .map((value) => {
+          // Converts PascalCase to Title Case
+          return value.replace(/([A-Z])/g, " $1").trimStart();
+        })
+    );
   }
 
   return (
@@ -48,7 +54,7 @@ const PickTypeStep = ({ onTypePicked }: props) => {
               text={item}
               key={index}
               onPress={(type) => {
-                onTypePicked?.(type);
+                onTypePicked?.(type.replaceAll(" ", ""));
               }}
             />
           ))}
