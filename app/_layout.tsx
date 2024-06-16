@@ -1,10 +1,26 @@
 import { Stack } from "expo-router";
-import { View } from "react-native";
 
 const RootLayout = () => {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="create/entry"
+        options={{
+          headerShown: true,
+          title: "",
+          headerBackTitleVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="create/event"
+        options={{
+          headerShown: true,
+          title: "",
+
+          headerBackTitleVisible: false,
+        }}
+      />
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="auth/Auth" options={{ headerShown: false }} />
       <Stack.Screen

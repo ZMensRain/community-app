@@ -4,6 +4,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileButton from "../../src/components/ProfileNavBarButton";
 
 const layout = () => {
+  function navigateToCreate() {
+    router.navigate("create/entry");
+  }
+
   return (
     <Tabs>
       <Tabs.Screen
@@ -12,7 +16,11 @@ const layout = () => {
           headerTitle: "Feed",
           headerLeft: () => <ProfileButton />,
           headerRight: () => (
-            <Pressable onPress={() => {}}>
+            <Pressable
+              onPress={() => {
+                navigateToCreate();
+              }}
+            >
               <Ionicons
                 name="create-outline"
                 size={32}
@@ -36,7 +44,11 @@ const layout = () => {
           headerTitle: "Groups",
           headerLeft: () => <ProfileButton />,
           headerRight: () => (
-            <Pressable onPress={() => {}}>
+            <Pressable
+              onPress={() => {
+                navigateToCreate();
+              }}
+            >
               <Ionicons
                 name="create-outline"
                 size={32}
@@ -59,7 +71,11 @@ const layout = () => {
         options={{
           headerTitle: "Map",
           headerRight: () => (
-            <Pressable onPress={() => {}}>
+            <Pressable
+              onPress={() => {
+                navigateToCreate();
+              }}
+            >
               <Ionicons
                 name="create-outline"
                 size={32}
