@@ -1,12 +1,18 @@
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useState } from "react";
 
-type props = { onSearch?: (text: String) => void };
+type props = {
+  onSearch?: (text: String) => void;
+  onTextUpdate?: (text: String) => void;
+};
 
-const SearchBar = (props: props) => {
+const SearchBar = ({ onSearch, onTextUpdate: onUpdate }: props) => {
+  let [text, setText] = useState("");
+
   return (
     <View style={styles.container}>
-      <Pressable>
+      <Pressable onPress={() => onSearch?.(text)}>
         <Ionicons
           name="search"
           size={24}
@@ -14,7 +20,18 @@ const SearchBar = (props: props) => {
         ></Ionicons>
       </Pressable>
 
-      <TextInput placeholder="Search" style={{ width: "100%" }}></TextInput>
+      <TextInput
+        placeholder="Search"
+        style={{ width: "100%" }}
+        value={text}
+        onChangeText={(newText) => {
+          setText(newText);
+          onUpdate?.(newText);
+        }}
+        onSubmitEditing={() => {
+          onSearch?.(text);
+        }}
+      ></TextInput>
     </View>
   );
 };
