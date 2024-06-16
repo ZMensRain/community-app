@@ -1,38 +1,56 @@
-import {
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Pressable,
-  Keyboard,
-  KeyboardAvoidingView,
-} from "react-native";
+import { ScrollView, StyleSheet, View, Text } from "react-native";
 
 import { EventType } from "../../../model/event";
 import TypeButton from "../components/TypeButton";
 import SearchBar from "../components/SearchBar";
+import { useState } from "react";
 
-type props = {};
+type props = { onTypePicked?: (type: String) => void };
 
-const PickTypeStep = (props: props) => {
+const PickTypeStep = ({ onTypePicked }: props) => {
+  let [searched, setSearched] = useState(String);
+
   function getTypesText() {
-    return Object.keys(EventType).filter((value) => {
-      return isNaN(Number(value));
-    });
+    let match: Boolean = false;
+
+    return Object.keys(EventType)
+      .filter((value) => {
+        if (!match) {
+          match = value.toUpperCase() === searched.toUpperCase();
+        }
+
+        return (
+          isNaN(Number(value)) &&
+          value.toUpperCase().startsWith(searched.toUpperCase())
+        );
+      })
+      .concat(searched !== "" && match === false ? [searched] : [])
+      .map((value) => {
+        return value.replace(/([A-Z])/g, " $1").trimStart();
+      });
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.pageTitle}>Pick Type</Text>
-      <SearchBar />
+      <SearchBar
+        onTextUpdate={(newText) => {
+          setSearched(newText.toString());
+        }}
+      />
       <View style={{ flex: 1, marginHorizontal: 25, marginTop: 20 }}>
         <ScrollView
           style={{ alignContent: "center" }}
           showsVerticalScrollIndicator={false}
         >
           {getTypesText().map((item, index) => (
-            <TypeButton text={item} key={index} onPress={() => {}} />
+            <TypeButton
+              text={item}
+              key={index}
+              onPress={(type) => {
+                onTypePicked?.(type);
+              }}
+            />
           ))}
         </ScrollView>
       </View>
