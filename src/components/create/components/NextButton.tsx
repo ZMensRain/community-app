@@ -1,20 +1,23 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-type props = {};
+type props = { onPressed?: () => void };
 
 const NextButton = (props: props) => {
   return (
-    <View style={styles.container}>
-      <Pressable>
-        <Text style={{ color: "#fff" }}>Next</Text>
-      </Pressable>
-    </View>
+    <Pressable
+      onPress={props.onPressed}
+      style={(state) => [
+        styles.container,
+        { backgroundColor: state.pressed ? "#42a6ff" : "#53B7FF" },
+      ]}
+    >
+      <Text style={{ color: "#fff" }}>Next</Text>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#53B7FF",
     alignItems: "center",
     paddingVertical: 15,
     borderRadius: 10,
