@@ -1,6 +1,12 @@
 type time = { hour: Number; minute: Number };
 
-type dressCode = "casual" | "formal" | "anything" | "costume" | "festive";
+enum dressCode {
+  Casual = "casual",
+  Formal = "Formal",
+  Anything = "Anything",
+  Costume = "Costume",
+  Festive = "Festive",
+}
 
 class Day {
   start: time;
@@ -128,7 +134,7 @@ const testEvent = new CommunityEvent(
       { lat: -26.396225, lon: 28.027029 },
     ]),
   ],
-  "anything",
+  dressCode.Anything,
   [
     "pwsDKA79t6RN4SuZ",
     "qPMNPB9ny09cqSbA",
