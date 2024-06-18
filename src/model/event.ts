@@ -1,7 +1,7 @@
 type time = { hour: Number; minute: Number };
 
 enum dressCode {
-  Casual = "casual",
+  Casual = "Casual",
   Formal = "Formal",
   Anything = "Anything",
   Costume = "Costume",
