@@ -13,14 +13,25 @@ import {
   EventType,
   dressCode,
 } from "../../src/model/event";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import PickTypeStep from "../../src/components/create/eventSteps/PickType";
+import UserInputStep from "../../src/components/create/eventSteps/UserInput";
 
 const CreateEventScreen = () => {
   let [step, setStep] = useState(0);
 
-  let screens = [<PickTypeStep />];
+  let screens = [
+    <PickTypeStep
+      onTypePicked={() => {
+        setStep(step + 1);
+      }}
+    />,
+    <UserInputStep
+      onNextPressed={() => {
+        setStep(step + 1);
+      }}
+    />,
+  ];
 
   let type: String | EventType | null;
   let title: String | null;
