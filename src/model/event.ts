@@ -107,7 +107,14 @@ enum EventType {
   CareerDay,
 }
 enum EventTag {}
-enum EventKit {}
+enum EventKit {
+  Paint,
+  Food,
+  Drinks,
+  Chairs,
+  Tables,
+  PicnicBlanket,
+}
 
 const yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
