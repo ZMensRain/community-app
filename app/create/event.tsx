@@ -16,9 +16,11 @@ import {
 import { useState } from "react";
 import PickTypeStep from "../../src/components/create/eventSteps/PickType";
 import UserInputStep from "../../src/components/create/eventSteps/UserInput";
+import LinksStep from "../../src/components/create/eventSteps/Links";
+import KitStep from "../../src/components/create/eventSteps/Kit";
 
 const CreateEventScreen = () => {
-  let [step, setStep] = useState(0);
+  let [step, setStep] = useState(3);
 
   let screens = [
     <PickTypeStep
@@ -28,6 +30,17 @@ const CreateEventScreen = () => {
     />,
     <UserInputStep
       onNextPressed={() => {
+        setStep(step + 1);
+      }}
+    />,
+    <LinksStep
+      onNextButton={function (links: String[], ticketLink: String) {
+        setStep(step + 1);
+      }}
+    />,
+    <KitStep
+      onNextButtonPressed={function (chosenKit: (String | EventKit)[]) {
+        kit = chosenKit;
         setStep(step + 1);
       }}
     />,
