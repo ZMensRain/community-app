@@ -35,10 +35,9 @@ const SearchBar = ({ onSearch, onTextUpdate: onUpdate }: props) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 25,
+    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 5,
     backgroundColor: "#F5F5F5",
