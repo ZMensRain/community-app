@@ -22,7 +22,8 @@ const RootLayout = () => {
         }}
       />
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="auth/Auth" options={{ headerShown: false }} />
+      <Stack.Screen name="auth/signIn" options={{ headerShown: false }} />
+      <Stack.Screen name="auth/signUp" options={{ headerShown: false }} />
       <Stack.Screen
         name="profile/[id]"
         options={{
