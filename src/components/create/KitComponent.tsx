@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { EventKit } from "../../../model/event";
+import { EventKit } from "../../model/event";
 import Ionicons from "@expo/vector-icons/Ionicons";
 type props = {
-  kit: EventKit | String;
+  kit: EventKit;
   add: boolean;
-  onButtonPressed?: (kit: EventKit | String) => void;
+  onButtonPressed?: (kit: EventKit) => void;
 };
 
 const KitComponent = (props: props) => {
@@ -14,7 +14,6 @@ const KitComponent = (props: props) => {
       <View style={{ flex: 1, alignItems: "flex-end" }}>
         <Pressable
           onPress={() => props.onButtonPressed?.(props.kit)}
-          style={{ backgroundColor: "white" }}
           pressRetentionOffset={30}
         >
           <Ionicons name={props.add ? "add" : "close"} size={20}></Ionicons>

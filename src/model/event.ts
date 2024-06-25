@@ -1,6 +1,6 @@
 type time = { hour: Number; minute: Number };
 
-enum dressCode {
+enum DressCode {
   Casual = "Casual",
   Formal = "Formal",
   Anything = "Anything",
@@ -12,12 +12,12 @@ class Day {
   start: time;
   end: time;
   date: Date;
-  locations: Array<String | { lat: Number; lon: Number }>;
+  locations: Array<string | { lat: Number; lon: Number }>;
   constructor(
     start: time,
     end: time,
     date: Date,
-    locations: Array<String | { lat: Number; lon: Number }>
+    locations: Array<string | { lat: Number; lon: Number }>
   ) {
     this.start = start;
     this.end = end;
@@ -26,34 +26,40 @@ class Day {
   }
 }
 
+type Id = { group: boolean; id: string };
+type EventType = EventTypeEnum | string;
+type EventTag = EventTagEnum | string;
+type AgeRange = { min: Number; max: Number | null };
+type EventKit = EventKitEnum | string;
+
 class CommunityEvent {
-  id: String;
-  hosted_by: { group: boolean; id: string };
-  title: String;
-  description: String;
-  type: EventType | String;
-  ageRange: { min: Number; max: Number | null };
+  id: string;
+  hosted_by: Id;
+  title: string;
+  description: string;
+  type: EventType;
+  ageRange: AgeRange;
   days: Array<Day>;
-  dressCode: dressCode;
-  attendingIds: Array<String>;
-  links: Array<String>;
-  ticketWebsite: String | null;
-  tags: Array<EventTag | String>;
-  kit: Array<EventKit | String>;
+  dressCode: DressCode;
+  attendingIds: Id[];
+  links: string[];
+  ticketWebsite: string | null;
+  tags: EventTag[];
+  kit: EventKit[];
   public constructor(
     id: string,
-    hosted_by: { group: boolean; id: string },
+    hosted_by: Id,
     title: string,
     description: string,
-    type: EventType | String,
-    ageRange: { min: Number; max: Number | null },
+    type: EventType,
+    ageRange: AgeRange,
     days: Array<Day>,
-    dressCode: dressCode,
-    attendingIds: Array<String>,
-    links: Array<String>,
-    ticketWebsite: String | null,
-    tags: Array<EventTag | String>,
-    kit: Array<EventKit | String>
+    dressCode: DressCode,
+    attendingIds: Id[],
+    links: string[],
+    ticketWebsite: string | null,
+    tags: EventTag[],
+    kit: EventKit[]
   ) {
     this.id = id;
     this.hosted_by = hosted_by;
@@ -72,8 +78,8 @@ class CommunityEvent {
 
   public getLocations(
     unique: Boolean = true
-  ): Array<String | { lat: Number; lon: Number }> {
-    let output: Array<String | { lat: Number; lon: Number }> = [];
+  ): Array<string | { lat: Number; lon: Number }> {
+    let output: Array<string | { lat: Number; lon: Number }> = [];
     for (let i = 0; i < this.days.length; i++) {
       const element = this.days[i];
 
@@ -89,7 +95,7 @@ class CommunityEvent {
 }
 
 //TODO Fill Enums
-enum EventType {
+enum EventTypeEnum {
   Meetings,
   MarketDay,
   CleanupDay,
@@ -106,8 +112,8 @@ enum EventType {
   Party,
   CareerDay,
 }
-enum EventTag {}
-enum EventKit {
+enum EventTagEnum {}
+enum EventKitEnum {
   Paint,
   Food,
   Drinks,
@@ -141,18 +147,17 @@ const testEvent = new CommunityEvent(
       { lat: -26.396225, lon: 28.027029 },
     ]),
   ],
-  dressCode.Anything,
+  DressCode.Anything,
   [
-    "pwsDKA79t6RN4SuZ",
-    "qPMNPB9ny09cqSbA",
-    "1mYk0yc0R54MTJAw",
-    "PIUK2EReuwr4aWm9",
-    "ae8hykYw6fhtissI",
-    "RRIJwi2VhOvRvhpK",
-    "QaVsTDvyPZvEQa6Z",
-    "967aHDSOMKYiBnFE",
-    "WA87l0EIj2KCq8JA",
-    "4goARK6KPGBtq5uU",
+    { group: false, id: "pwsDKA79t6RN4SuZ" },
+    { group: false, id: "qPMNPB9ny09cqSbA" },
+    { group: false, id: "PIUK2EReuwr4aWm9" },
+    { group: false, id: "ae8hykYw6fhtissI" },
+    { group: false, id: "RRIJwi2VhOvRvhpK" },
+    { group: false, id: "QaVsTDvyPZvEQa6Z" },
+    { group: false, id: "967aHDSOMKYiBnFE" },
+    { group: false, id: "WA87l0EIj2KCq8JA" },
+    { group: false, id: "4goARK6KPGBtq5uU" },
   ],
   ["https://twitter.com", "https://facebook.com"],
   "https://www.tickets.com/",
@@ -167,6 +172,8 @@ export {
   testEvent,
   EventTag,
   EventKit,
+  EventKitEnum,
   EventType,
-  dressCode,
+  EventTypeEnum,
+  DressCode,
 };

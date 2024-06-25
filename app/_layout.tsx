@@ -15,7 +15,7 @@ const RootLayout = () => {
       <Stack.Screen
         name="create/event"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "",
 
           headerBackTitleVisible: false,

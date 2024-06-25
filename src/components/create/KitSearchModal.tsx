@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, View, Pressable, ScrollView, StyleSheet } from "react-native";
 
-import { EventKit } from "../../../model/event";
+import { EventKitEnum, EventKit } from "../../model/event";
 import KitComponent from "./KitComponent";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SearchBar from "./SearchBar";
@@ -9,14 +9,14 @@ import SearchBar from "./SearchBar";
 type props = {
   isVisible: boolean;
   onClose: () => void;
-  onAdd: (kit: String | EventKit) => void;
+  onAdd: (kit: EventKit) => void;
 };
 
 const KitSearchModal = (props: props) => {
   let [searched, setSearched] = useState("");
   const getSearchResults = () => {
     let match = false;
-    return Object.keys(EventKit)
+    return Object.keys(EventKitEnum)
       .filter((value) => {
         if (match === false) {
           match = value.toUpperCase() === searched.toUpperCase();

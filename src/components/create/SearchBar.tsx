@@ -12,7 +12,10 @@ const SearchBar = ({ onSearch, onTextUpdate: onUpdate }: props) => {
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => onSearch?.(text)}>
+      <Pressable
+        onPress={() => onSearch?.(text)}
+        style={{ alignSelf: "center" }}
+      >
         <Ionicons
           name="search"
           size={24}
@@ -37,7 +40,6 @@ const SearchBar = ({ onSearch, onTextUpdate: onUpdate }: props) => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 5,
     backgroundColor: "#F5F5F5",

@@ -19,7 +19,7 @@ const EntryScreen = () => {
       <View style={{ flex: 2 }}>
         <Pressable
           onPress={() => {
-            router.navigate("create/event");
+            router.navigate("create/event/1");
           }}
           style={(state) => {
             return [

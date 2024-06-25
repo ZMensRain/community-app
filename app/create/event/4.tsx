@@ -1,24 +1,42 @@
-import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
-import React, { useState } from "react";
-import KitComponent from "../components/KitComponent";
-import { EventKit } from "../../../model/event";
-import NextButton from "../components/NextButton";
-import KitSearchModal from "../components/KitSearchModal";
+import {
+  Button,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import KitSearchModal from "../../../src/components/create/KitSearchModal";
+import { useContext, useState } from "react";
+import KitComponent from "../../../src/components/create/KitComponent";
+import NextButton from "../../../src/components/create/NextButton";
+import { EventKit } from "../../../src/model/event";
+import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
 
-type props = {
-  onNextButtonPressed: (kit: Array<String | EventKit>) => void;
-};
+const KitScreen = () => {
+  let eventContext = useContext(EventCreationContext);
+  if (eventContext === undefined) {
+    Alert.alert("State is missing");
+    return;
+  }
 
-const KitStep = (props: props) => {
   let [isAdding, setIsAdding] = useState<boolean>(false);
-  let [kit, setKit] = useState<Array<String | EventKit>>([]);
+  let [kit, setKit] = useState<EventKit[]>(eventContext.event.kit);
+
+  function next() {
+    let e = eventContext!.event;
+    e.kit = kit;
+    eventContext?.setEvent(e);
+  }
 
   return (
     <View style={styles.container}>
       <KitSearchModal
         isVisible={isAdding}
         onClose={() => setIsAdding(false)}
-        onAdd={(value) => setKit(kit.concat(value))}
+        onAdd={(value) => {
+          setKit(kit.concat(value));
+        }}
       />
       <Text style={styles.pageTitle}>People should bring?</Text>
       <View style={(styles.section, { alignItems: "flex-start" })}>
@@ -50,7 +68,7 @@ const KitStep = (props: props) => {
       </View>
 
       <View style={{ justifyContent: "flex-end", paddingBottom: 35 }}>
-        <NextButton onPressed={() => props.onNextButtonPressed(kit)} />
+        <NextButton onPressed={next} />
       </View>
     </View>
   );
@@ -64,15 +82,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 20,
   },
-  input: {
-    backgroundColor: "#E4E4E4",
-    borderRadius: 20,
-    paddingVertical: 14,
-    paddingHorizontal: 25,
-  },
-  inputLabel: { fontSize: 16, fontWeight: "bold" },
   section: { marginTop: 5 },
   separator: { borderTopColor: "black", borderTopWidth: 1, borderRadius: 2 },
 });
 
-export default KitStep;
+export default KitScreen;

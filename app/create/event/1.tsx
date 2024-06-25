@@ -1,21 +1,28 @@
-import { ScrollView, StyleSheet, View, Text } from "react-native";
+import { ScrollView, StyleSheet, View, Text, Alert } from "react-native";
+import {
+  CommunityEvent,
+  DressCode,
+  EventType,
+  EventTypeEnum,
+} from "../../../src/model/event";
+import { useContext, useState } from "react";
+import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { EventType } from "../../../model/event";
-import TypeButton from "../components/TypeButton";
-import SearchBar from "../components/SearchBar";
-import { useState } from "react";
+import TypeButton from "../../../src/components/create/TypeButton";
+import SearchBar from "../../../src/components/create/SearchBar";
+import { router } from "expo-router";
 
-type props = { onTypePicked?: (type: String) => void };
+const PickTypeScreen = () => {
+  let event = useContext(EventCreationContext);
 
-const PickTypeStep = ({ onTypePicked }: props) => {
   let [searched, setSearched] = useState(String);
 
-  // Returns a list of strings that relate to an event type or the user input
   function getTypesText() {
     let match: Boolean = false;
 
     return (
-      Object.keys(EventType)
+      Object.keys(EventTypeEnum)
         .filter((value) => {
           // sets match to true so the user input will not be shown if not needed
           if (!match) {
@@ -36,15 +43,26 @@ const PickTypeStep = ({ onTypePicked }: props) => {
     );
   }
 
+  function next(type: EventType) {
+    if (event === undefined) {
+      Alert.alert("State is missing");
+      return;
+    }
+    let e = event?.event;
+    e.type = type;
+    event.setEvent(e);
+    router.navigate("create/event/2");
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.pageTitle}>Pick Type</Text>
+      <Text style={styles.title}>Pick Type</Text>
       <SearchBar
         onTextUpdate={(newText) => {
           setSearched(newText.toString());
         }}
       />
-      <View style={{ flex: 1, marginHorizontal: 25, marginTop: 20 }}>
+      <View style={{ flex: 1, marginTop: 15 }}>
         <ScrollView
           style={{ alignContent: "center" }}
           showsVerticalScrollIndicator={false}
@@ -53,9 +71,7 @@ const PickTypeStep = ({ onTypePicked }: props) => {
             <TypeButton
               text={item}
               key={index}
-              onPress={(type) => {
-                onTypePicked?.(type.replaceAll(" ", ""));
-              }}
+              onPress={(type) => next(type.toString())}
             />
           ))}
         </ScrollView>
@@ -65,14 +81,13 @@ const PickTypeStep = ({ onTypePicked }: props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white" },
-  pageTitle: {
+  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 25 },
+  title: {
     textAlign: "center",
-    margin: 50,
     marginBottom: 15,
     fontSize: 32,
     fontWeight: "bold",
   },
 });
 
-export default PickTypeStep;
+export default PickTypeScreen;
