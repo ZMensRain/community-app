@@ -34,10 +34,10 @@ const DayCard = (props: DayCardProps) => {
         {props.day.date.toDateString()}
       </Text>
       <Text style={[isPast && styles.pastText]}>
-        From: {`${props.day.start["hour"]}:${props.day.start["minute"]}`}
+        Starts From: {`${props.day.start["hour"]}:${props.day.start["minute"]}`}
       </Text>
       <Text style={[isPast && styles.pastText]}>
-        To: {`${props.day.end["hour"]}:${props.day.end["minute"]}`}
+        Ends At: {`${props.day.end["hour"]}:${props.day.end["minute"]}`}
       </Text>
       {isPath === false && (
         <Text style={[isPast && styles.pastText]}>
