@@ -6,12 +6,16 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import React, { useRef, useCallback } from "react";
 import KitSearchModal from "../../../src/components/create/KitSearchModal";
 import { useContext, useState } from "react";
 import KitComponent from "../../../src/components/create/KitComponent";
 import NextButton from "../../../src/components/create/NextButton";
 import { EventKit } from "../../../src/model/event";
 import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
+import { router } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 
 const KitScreen = () => {
   let eventContext = useContext(EventCreationContext);
@@ -20,27 +24,31 @@ const KitScreen = () => {
     return;
   }
 
-  let [isAdding, setIsAdding] = useState<boolean>(false);
-  let [kit, setKit] = useState<EventKit[]>(eventContext.event.kit);
-
   function next() {
     let e = eventContext!.event;
     e.kit = kit;
     eventContext?.setEvent(e);
+    router.navigate("create/event/5");
   }
 
-  return (
-    <View style={styles.container}>
-      <KitSearchModal
-        isVisible={isAdding}
-        onClose={() => setIsAdding(false)}
-        onAdd={(value) => {
-          setKit(kit.concat(value));
-        }}
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
       />
+    ),
+    []
+  );
+  const sheetRef = useRef<BottomSheet>(null);
+  let [kit, setKit] = useState<EventKit[]>(eventContext.event.kit);
+
+  return (
+    <GestureHandlerRootView style={styles.container}>
       <Text style={styles.pageTitle}>People should bring?</Text>
       <View style={(styles.section, { alignItems: "flex-start" })}>
-        <Button title="Add" onPress={() => setIsAdding(true)}></Button>
+        <Button title="Add" onPress={() => sheetRef.current?.snapToIndex(0)} />
       </View>
 
       <View style={[styles.section, { flex: 1 }, styles.separator]}>
@@ -70,7 +78,20 @@ const KitScreen = () => {
       <View style={{ justifyContent: "flex-end", paddingBottom: 35 }}>
         <NextButton onPressed={next} />
       </View>
-    </View>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={["75%", "100%"]}
+        enablePanDownToClose={true}
+        index={-1}
+        backdropComponent={renderBackdrop}
+      >
+        <KitSearchModal
+          onAdd={(value) => {
+            setKit(kit.concat(value));
+          }}
+        />
+      </BottomSheet>
+    </GestureHandlerRootView>
   );
 };
 

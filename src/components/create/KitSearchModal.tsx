@@ -5,10 +5,9 @@ import { EventKitEnum, EventKit } from "../../model/event";
 import KitComponent from "./KitComponent";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SearchBar from "./SearchBar";
+import { BottomSheetView } from "@gorhom/bottom-sheet";
 
 type props = {
-  isVisible: boolean;
-  onClose: () => void;
   onAdd: (kit: EventKit) => void;
 };
 
@@ -30,62 +29,41 @@ const KitSearchModal = (props: props) => {
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={props.isVisible}>
+    <BottomSheetView>
       <View style={styles.container}>
-        <View style={styles.sheet}>
-          <View
-            style={{
-              flexDirection: "row",
-              width: "100%",
-            }}
-          >
-            <Pressable
-              style={{ justifyContent: "center" }}
-              onPress={props.onClose}
-            >
-              <Ionicons name="close" size={24} />
-            </Pressable>
-
-            <SearchBar
-              onTextUpdate={(value) => setSearched(value.toString())}
-            />
-          </View>
-          <ScrollView>
-            {getSearchResults().map((value, index) => {
-              return (
-                <KitComponent
-                  kit={value}
-                  add={true}
-                  key={index}
-                  onButtonPressed={(value) => {
-                    props.onAdd(value);
-                    props.onClose();
-                  }}
-                />
-              );
-            })}
-          </ScrollView>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <SearchBar onTextUpdate={(value) => setSearched(value.toString())} />
         </View>
+        <ScrollView>
+          {getSearchResults().map((value, index) => {
+            return (
+              <KitComponent
+                kit={value}
+                add={true}
+                key={index}
+                onButtonPressed={(value) => {
+                  props.onAdd(value);
+                }}
+              />
+            );
+          })}
+        </ScrollView>
       </View>
-    </Modal>
+    </BottomSheetView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "flex-end",
-    height: "100%",
-  },
-  sheet: {
-    height: "80%",
-    backgroundColor: "#eeeeee",
-    width: "100%",
     alignItems: "stretch",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 5,
-    overflow: "hidden",
+    justifyContent: "flex-end",
+
+    paddingHorizontal: 10,
   },
 });
 
