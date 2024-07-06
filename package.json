@@ -16,6 +16,7 @@
     "@gorhom/bottom-sheet": "^4.6.3",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@supabase/supabase-js": "^2.43.4",
+    "@react-native-community/datetimepicker": "8.0.1",
     "expo": "~51.0.14",
     "expo-constants": "~16.0.2",
     "expo-image-picker": "~15.0.5",
