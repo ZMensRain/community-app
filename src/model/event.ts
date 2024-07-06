@@ -1,4 +1,4 @@
-type time = { hour: Number; minute: Number };
+type Time = { hour: Number; minute: Number };
 
 enum DressCode {
   Casual = "Casual",
@@ -9,18 +9,27 @@ enum DressCode {
 }
 
 class Day {
-  start: time;
-  end: time;
+  start: Time;
+  end: Time;
   date: Date;
   locations: Array<string | { lat: Number; lon: Number }>;
   constructor(
-    start: time,
-    end: time,
+    starts: Date | Time,
+    ends: Date | Time,
     date: Date,
     locations: Array<string | { lat: Number; lon: Number }>
   ) {
-    this.start = start;
-    this.end = end;
+    if (starts instanceof Date) {
+      this.start = { hour: starts.getHours(), minute: starts.getMinutes() };
+    } else {
+      this.start = starts;
+    }
+    if (ends instanceof Date) {
+      this.end = { hour: ends.getHours(), minute: ends.getMinutes() };
+    } else {
+      this.end = ends;
+    }
+
     this.date = date;
     this.locations = locations;
   }
