@@ -96,6 +96,7 @@ const UserInputScreen = () => {
                   placeholder="Description"
                   style={[styles.input, { maxHeight: 200, minHeight: 100 }]}
                   numberOfLines={10}
+                  textAlignVertical="top"
                   multiline={true}
                   maxLength={1000}
                   onChangeText={handleChange("description")}
@@ -155,6 +156,7 @@ const UserInputScreen = () => {
                   setSelected={(val: DressCode) =>
                     setFieldValue("dressCode", val)
                   }
+                  defaultOption={{ value: values.dressCode, key: 0 }}
                   data={Object.values(DressCode).map((value, index) => {
                     return { key: index, value: value };
                   })}
