@@ -26,12 +26,16 @@ const PickTypeScreen = () => {
         .filter((value) => {
           // sets match to true so the user input will not be shown if not needed
           if (!match) {
-            match = value.toUpperCase() === searched.toUpperCase();
+            match =
+              value.toUpperCase() ===
+              searched.toUpperCase().replaceAll(" ", "");
           }
 
           return (
             isNaN(Number(value)) &&
-            value.toUpperCase().startsWith(searched.toUpperCase())
+            value
+              .toUpperCase()
+              .startsWith(searched.toUpperCase().replaceAll(" ", ""))
           );
         })
         /*Adds the content the UserTyped if necessary*/
