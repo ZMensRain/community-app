@@ -36,7 +36,39 @@ const _tagColors: ColorValueHex[] = [
   "#C0C0C0",
 ];
 
-const _typeColors: ColorValueHex[] = [];
+const _typeColors: ColorValueHex[] = [
+  "#B53B69",
+  "#FF1493",
+  "#1E90FF",
+  "#0000CD",
+  "#E6E6FA",
+  "#808080",
+  "#8B008B",
+  "#F0F8FF",
+  "#FFA500",
+  "#9ACD32",
+  "#DAA520",
+  "#6B8E23",
+  "#F5DEB3",
+  "#FFFAFA",
+  "#9966CC",
+  "#BC8F8F",
+  "#808000",
+  "#FFA07A",
+  "#4682B4",
+  "#FDF5E6",
+  "#FFD700",
+  "#008000",
+  "#3CB371",
+  "#A9A9A9",
+  "#FFE4E1",
+  "#800000",
+  "#DEB887",
+  "#FFDAB9",
+  "#C71585",
+  "#00FFFF",
+  "#C0C0C0",
+];
 
 /// Returns a background and a foreground color based on the tag passed in
 const tagColors = (tag: String | EventTag) => {
