@@ -42,6 +42,7 @@ function feed() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   scrollView: {
     padding: 10,
