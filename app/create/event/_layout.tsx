@@ -6,6 +6,7 @@ import { EventCreationContext } from "../../../src/contexts/eventCreationContext
 import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Pressable } from "react-native";
+import { pageTitle } from "../../../src/utils/stylingValue";
 
 const EventCreationLayout = () => {
   let [event, setEvent] = useState(
@@ -27,19 +28,26 @@ const EventCreationLayout = () => {
   );
   return (
     <EventCreationContext.Provider value={{ event: event, setEvent: setEvent }}>
-      <Stack screenOptions={{ headerBackTitle: "", title: "" }}>
+      <Stack
+        screenOptions={{
+          headerBackTitleVisible: false,
+          title: "",
+        }}
+      >
         <Stack.Screen
           name="1"
           options={{
-            headerBackVisible: false,
             headerLeft: () => (
               <Pressable onPress={() => router.back()}>
                 <FontAwesomeIcon icon={faXmarkCircle} size={24} />
               </Pressable>
             ),
+            title: "Pick Type",
           }}
-        ></Stack.Screen>
-        <Stack.Screen name="2"></Stack.Screen>
+        />
+        <Stack.Screen name="2" options={{ title: "Details" }} />
+        <Stack.Screen name="3" options={{ title: "Links" }} />
+        <Stack.Screen name="5" options={{ title: "Wheres and Whens" }} />
       </Stack>
     </EventCreationContext.Provider>
   );

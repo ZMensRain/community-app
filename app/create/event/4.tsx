@@ -1,11 +1,4 @@
-import {
-  Button,
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
 import React, { useRef, useCallback } from "react";
 import KitSearchModal from "../../../src/components/create/KitSearchModal";
 import { useContext, useState } from "react";
@@ -13,9 +6,12 @@ import KitComponent from "../../../src/components/create/KitComponent";
 import NextButton from "../../../src/components/create/NextButton";
 import { EventKit } from "../../../src/model/event";
 import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { colors, pageStyle } from "../../../src/utils/stylingValue";
+
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const KitScreen = () => {
   let eventContext = useContext(EventCreationContext);
@@ -41,70 +37,104 @@ const KitScreen = () => {
     ),
     []
   );
+
   const sheetRef = useRef<BottomSheet>(null);
+
   let [kit, setKit] = useState<EventKit[]>(eventContext.event.kit);
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <Text style={styles.pageTitle}>People should bring?</Text>
-      <View style={(styles.section, { alignItems: "flex-start" })}>
-        <Button title="Add" onPress={() => sheetRef.current?.snapToIndex(0)} />
-      </View>
+    <>
+      <Stack.Screen
+        options={{
+          title: "People Should Bring",
+          headerRight: () => (
+            <Ionicons.Button
+              name="add"
+              size={32}
+              onPress={() => sheetRef.current?.snapToIndex(0)}
+              color={colors.primary}
+              backgroundColor={"transparent"}
+              iconStyle={{
+                marginRight: 0,
+              }}
+              underlayColor={"#00000012"}
+            />
+          ),
+        }}
+      />
+      <GestureHandlerRootView style={pageStyle}>
+        <View style={{ flex: 1 }}>
+          <>
+            {kit.length > 0 && (
+              <ScrollView>
+                {kit.map((v, index) => (
+                  <KitComponent
+                    key={index}
+                    kit={v}
+                    onButtonPressed={() =>
+                      setKit(
+                        kit.filter((_, i) => {
+                          if (i === index) {
+                            return false;
+                          }
+                          return true;
+                        })
+                      )
+                    }
+                    add={false}
+                  />
+                ))}
+              </ScrollView>
+            )}
+          </>
 
-      <View style={[styles.section, { flex: 1 }, styles.separator]}>
-        <ScrollView>
-          {kit.map((value, index) => {
-            return (
-              <KitComponent
-                kit={value}
-                add={false}
-                key={index}
-                onButtonPressed={() => {
-                  setKit(
-                    kit.filter((_, i) => {
-                      if (i === index) {
-                        return false;
-                      }
-                      return true;
-                    })
-                  );
+          {/* Text section */}
+          <>
+            {kit.length == 0 && (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
                 }}
-              />
-            );
-          })}
-        </ScrollView>
-      </View>
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  Add kit if your event requires people to bring something in
+                  order to participate in your event.
+                </Text>
+              </View>
+            )}
+          </>
+        </View>
 
-      <View style={{ justifyContent: "flex-end", paddingBottom: 35 }}>
-        <NextButton onPressed={next} />
-      </View>
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={["75%", "100%"]}
-        enablePanDownToClose={true}
-        index={-1}
-        backdropComponent={renderBackdrop}
-      >
-        <KitSearchModal
-          onAdd={(value) => {
-            setKit(kit.concat(value));
-          }}
-        />
-      </BottomSheet>
-    </GestureHandlerRootView>
+        <View style={{ justifyContent: "flex-end", paddingBottom: 25 }}>
+          <NextButton
+            onPressed={next}
+            text={kit.length <= 0 ? "Skip" : "Next"}
+          />
+        </View>
+
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={["75%", "100%"]}
+          enablePanDownToClose={true}
+          index={-1}
+          backdropComponent={renderBackdrop}
+        >
+          <KitSearchModal
+            onAdd={(value) => {
+              setKit(kit.concat(value));
+            }}
+          />
+        </BottomSheet>
+      </GestureHandlerRootView>
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 25, backgroundColor: "white" },
-  pageTitle: {
-    textAlign: "center",
-    fontSize: 32,
-    fontWeight: "bold",
-    marginTop: 20,
-  },
-  section: { marginTop: 5 },
-  separator: { borderTopColor: "black", borderTopWidth: 1, borderRadius: 2 },
-});
+const styles = StyleSheet.create({});
 
 export default KitScreen;
