@@ -1,30 +1,31 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
+import { colors } from "../../utils/stylingValue";
 
-type props = { onPressed?: () => void };
+type props = { onPressed?: () => void; text?: string };
 
-const NextButton = (props: props) => {
+const NextButton = ({ onPressed, text = "Next" }: props) => {
   return (
-    <Pressable
-      onPress={props.onPressed}
-      style={(state) => [
-        styles.container,
-        { backgroundColor: state.pressed ? "#42a6ff" : "#53B7FF" },
-      ]}
-    >
-      <Text style={{ color: "#fff" }}>Next</Text>
-    </Pressable>
+    <View style={styles.container}>
+      <TouchableHighlight onPress={onPressed} style={{ width: "100%" }}>
+        <View style={styles.button}>
+          <Text style={{ color: "#fff" }}>{text}</Text>
+        </View>
+      </TouchableHighlight>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    overflow: "hidden",
     alignItems: "center",
-    paddingVertical: 15,
+    backgroundColor: "black",
     borderRadius: 10,
-    shadowColor: "#53B7FF",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
+  },
+  button: {
+    backgroundColor: colors.primary,
+    paddingVertical: 15,
+    alignItems: "center",
   },
 });
 export default NextButton;
