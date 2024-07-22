@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { CommunityEvent } from "../model/event";
 import { router } from "expo-router";
-import { typeColor } from "../utils/tagColor";
+import { typeColor } from "../utils/stylingValue";
 
 type EventProps = {
   event: CommunityEvent;
