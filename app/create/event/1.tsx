@@ -1,17 +1,11 @@
 import { ScrollView, StyleSheet, View, Text, Alert } from "react-native";
-import {
-  CommunityEvent,
-  DressCode,
-  EventType,
-  EventTypeEnum,
-} from "../../../src/model/event";
 import { useContext, useState } from "react";
-import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-import TypeButton from "../../../src/components/create/TypeButton";
-import SearchBar from "../../../src/components/create/SearchBar";
 import { router } from "expo-router";
+
+import { EventCreationContext } from "~/src/contexts/eventCreationContext";
+import TypeButton from "~/src/components/create/TypeButton";
+import SearchBar from "~/src/components/create/SearchBar";
+import { EventType, EventTypeEnum } from "~/src/model/event";
 
 const PickTypeScreen = () => {
   let event = useContext(EventCreationContext);

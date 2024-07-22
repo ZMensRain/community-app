@@ -10,9 +10,9 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import ProfileCamera from "../../src/components/ProfileCameraCircle";
-import { getUserData, supabase } from "../../src/utils/supabase";
 import { Session } from "@supabase/supabase-js";
+import ProfileCamera from "~/src/components/ProfileCameraCircle";
+import { getUserData, supabase } from "~/src/utils/supabase";
 
 const profile = () => {
   const [username, setUsername] = useState("");

@@ -1,8 +1,8 @@
 import { Text, View, StyleSheet, ScrollView, Linking } from "react-native";
-import { CommunityEvent, testEvent } from "../src/model/event";
-import DayCard from "../src/components/DayCard";
-import { tagColors } from "../src/utils/stylingValue";
-import ProfileIcon from "../src/components/profileIcon";
+import { testEvent } from "~/src/model/event";
+import DayCard from "~/src/components/DayCard";
+import { tagColors } from "~/src/utils/stylingValue";
+import ProfileIcon from "~/src/components/profileIcon";
 
 const EventScreen = () => {
   const event = testEvent;

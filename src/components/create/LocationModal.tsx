@@ -1,5 +1,5 @@
 import { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Modal, StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, Button } from "react-native";
 
 type props = {
   onPickLocation?: (locations: { lat: number; lon: number }[]) => void;

@@ -1,15 +1,18 @@
 import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
 import React, { useRef, useCallback } from "react";
-import KitSearchModal from "../../../src/components/create/KitSearchModal";
+
 import { useContext, useState } from "react";
-import KitComponent from "../../../src/components/create/KitComponent";
-import NextButton from "../../../src/components/create/NextButton";
-import { EventKit } from "../../../src/model/event";
-import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
+
 import { router, Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { colors, pageStyle } from "../../../src/utils/stylingValue";
+
+import { colors, pageStyle } from "~/src/utils/stylingValue";
+import KitComponent from "~/src/components/create/KitComponent";
+import NextButton from "~/src/components/create/NextButton";
+import { EventKit } from "~/src/model/event";
+import { EventCreationContext } from "~/src/contexts/eventCreationContext";
+import KitSearchModal from "~/src/components/create/KitSearchModal";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 

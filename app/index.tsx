@@ -1,7 +1,7 @@
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
 import { ActivityIndicator, AppState, StyleSheet, View } from "react-native";
-import { supabase } from "../src/utils/supabase";
+import { supabase } from "~/src/utils/supabase";
 import { router } from "expo-router";
 
 // Tells Supabase Auth to continuously refresh the session automatically if

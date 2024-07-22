@@ -15,8 +15,8 @@
     "@fortawesome/react-native-fontawesome": "^0.3.2",
     "@gorhom/bottom-sheet": "^4.6.3",
     "@react-native-async-storage/async-storage": "1.23.1",
-    "@supabase/supabase-js": "^2.43.4",
     "@react-native-community/datetimepicker": "8.0.1",
+    "@supabase/supabase-js": "^2.43.4",
     "expo": "~51.0.14",
     "expo-constants": "~16.0.2",
     "expo-image-picker": "~15.0.5",
@@ -39,6 +39,7 @@
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
     "@types/react-native": "^0.73.0",
+    "babel-plugin-root-import": "^6.6.0",
     "typescript": "~5.3.3"
   },
   "private": true

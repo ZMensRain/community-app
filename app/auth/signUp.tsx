@@ -10,16 +10,16 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { supabase } from "../../src/utils/supabase";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons/faGoogle";
-import { faApple } from "@fortawesome/free-brands-svg-icons/faApple";
+import { faGoogle, faApple } from "@fortawesome/free-brands-svg-icons/";
 import { FormikValues, Formik } from "formik";
 import { router } from "expo-router";
-
 import * as Yup from "yup";
-import TermsComponent from "../../src/components/authComponents/Terms";
+
+import TermsComponent from "~/src/components/authComponents/Terms";
+import { supabase } from "~/src/utils/supabase";
 
 type formProps = {
   email: String;

@@ -11,20 +11,20 @@ import {
   faClock,
   faCalendar,
 } from "@fortawesome/free-regular-svg-icons";
-import NextButton from "../../../src/components/create/NextButton";
-import { Day } from "../../../src/model/event";
-import DayCard from "../../../src/components/DayCard";
-
-import { FormikValues, useFormik } from "formik";
-import React, { useCallback, useContext, useRef, useState } from "react";
-import IconButton from "../../../src/components/iconButton";
-import DateAndTimePicker from "../../../src/components/create/DateAndTimePicker";
-import * as Yup from "yup";
-import LocationPickerModal from "../../../src/components/create/LocationModal";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
+import { FormikValues, useFormik } from "formik";
+import React, { useCallback, useContext, useRef, useState } from "react";
+import * as Yup from "yup";
 import { router } from "expo-router";
+
+import NextButton from "~/src/components/create/NextButton";
+import { Day } from "~/src/model/event";
+import DayCard from "~/src/components/DayCard";
+import IconButton from "~/src/components/iconButton";
+import DateAndTimePicker from "~/src/components/create/DateAndTimePicker";
+import LocationPickerModal from "~/src/components/create/LocationModal";
+import { EventCreationContext } from "~/src/contexts/eventCreationContext";
 
 const WhereWhenScreen = () => {
   let eventContext = useContext(EventCreationContext);

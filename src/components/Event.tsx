@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, Text, Pressable } from "react-native";
 import { CommunityEvent } from "../model/event";
 import { router } from "expo-router";
 import { typeColor } from "../utils/stylingValue";

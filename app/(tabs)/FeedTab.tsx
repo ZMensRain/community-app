@@ -8,10 +8,9 @@ import {
 } from "react-native";
 
 import React from "react";
-import { supabase } from "../../src/utils/supabase";
-import EventComponent from "../../src/components/Event";
+import EventComponent from "~/src/components/Event";
 
-import { CommunityEvent, Day, testEvent } from "../../src/model/event";
+import { testEvent } from "~/src/model/event";
 
 function feed() {
   const [refreshing, setRefreshing] = React.useState(false);

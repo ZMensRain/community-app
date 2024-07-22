@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Modal, View, Pressable, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 
 import { EventKitEnum, EventKit } from "../../model/event";
 import KitComponent from "./KitComponent";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import SearchBar from "./SearchBar";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 
