@@ -7,6 +7,26 @@ const layout = () => {
   function navigateToCreate() {
     router.navigate("create/entry");
   }
+  function navigateToProfile() {
+    router.navigate("profile/[id]");
+  }
+  const headerLeftComponent = () => (
+    <ProfileIcon
+      showName={false}
+      id={{
+        group: false,
+        id: "",
+      }}
+      size={38}
+      onPress={navigateToProfile}
+      style={{ margin: 5 }}
+    />
+  );
+  const headerRightComponent = () => (
+    <Pressable onPress={navigateToCreate}>
+      <Ionicons name="create-outline" size={32} style={{ margin: 5 }} />
+    </Pressable>
+  );
 
   return (
     <Tabs>
@@ -14,37 +34,9 @@ const layout = () => {
         name="FeedTab"
         options={{
           headerTitle: "Feed",
-          headerLeft: () => (
-            <ProfileIcon
-              showName={true}
-              id={{
-                group: false,
-                id: "",
-              }}
-              size={38}
-            />
-          ),
-
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                navigateToCreate();
-              }}
-            >
-              <Ionicons
-                name="create-outline"
-                size={32}
-                style={{ margin: 5 }}
-              ></Ionicons>
-            </Pressable>
-          ),
-          tabBarIcon: () => {
-            return (
-              <View>
-                <Ionicons name="home" size={24}></Ionicons>
-              </View>
-            );
-          },
+          headerLeft: headerLeftComponent,
+          headerRight: headerRightComponent,
+          tabBarIcon: () => <Ionicons name="home" size={24} />,
           tabBarLabel: "Feed",
         }}
       />
@@ -52,36 +44,9 @@ const layout = () => {
         name="GroupsTab"
         options={{
           headerTitle: "Groups",
-          headerLeft: () => (
-            <ProfileIcon
-              showName={true}
-              id={{
-                group: false,
-                id: "",
-              }}
-              size={38}
-            />
-          ),
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                navigateToCreate();
-              }}
-            >
-              <Ionicons
-                name="create-outline"
-                size={32}
-                style={{ margin: 5 }}
-              ></Ionicons>
-            </Pressable>
-          ),
-          tabBarIcon: () => {
-            return (
-              <View>
-                <Ionicons name="people" size={24}></Ionicons>
-              </View>
-            );
-          },
+          headerLeft: headerLeftComponent,
+          headerRight: headerRightComponent,
+          tabBarIcon: () => <Ionicons name="people" size={24} />,
           tabBarLabel: "Groups",
         }}
       />
@@ -89,26 +54,9 @@ const layout = () => {
         name="MapTab"
         options={{
           headerTitle: "Map",
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                navigateToCreate();
-              }}
-            >
-              <Ionicons
-                name="create-outline"
-                size={32}
-                style={{ margin: 5 }}
-              ></Ionicons>
-            </Pressable>
-          ),
-          tabBarIcon: () => {
-            return (
-              <View>
-                <Ionicons name="map" size={24}></Ionicons>
-              </View>
-            );
-          },
+          headerLeft: headerLeftComponent,
+          headerRight: headerRightComponent,
+          tabBarIcon: () => <Ionicons name="map" size={24} />,
           tabBarLabel: "Map",
         }}
       />
