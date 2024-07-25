@@ -16,8 +16,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import * as Yup from "yup";
 
-import TermsComponent from "~/src/components/authComponents/Terms";
-import { supabase } from "~/src/utils/supabase";
+import TermsComponent from "src/components/authComponents/Terms";
+import { supabase } from "src/utils/supabase";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);

@@ -2,10 +2,10 @@ import { ScrollView, StyleSheet, View, Text, Alert } from "react-native";
 import { useContext, useState } from "react";
 import { router } from "expo-router";
 
-import { EventCreationContext } from "~/src/contexts/eventCreationContext";
-import TypeButton from "~/src/components/create/TypeButton";
-import SearchBar from "~/src/components/create/SearchBar";
-import { EventType, EventTypeEnum } from "~/src/model/event";
+import { EventCreationContext } from "src/contexts/eventCreationContext";
+import TypeButton from "src/components/create/TypeButton";
+import SearchBar from "src/components/create/SearchBar";
+import { EventType, EventTypeEnum } from "src/model/event";
 
 const PickTypeScreen = () => {
   let event = useContext(EventCreationContext);

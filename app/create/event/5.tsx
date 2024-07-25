@@ -18,13 +18,13 @@ import React, { useCallback, useContext, useRef, useState } from "react";
 import * as Yup from "yup";
 import { router } from "expo-router";
 
-import NextButton from "~/src/components/create/NextButton";
-import { Day } from "~/src/model/event";
-import DayCard from "~/src/components/DayCard";
-import IconButton from "~/src/components/iconButton";
-import DateAndTimePicker from "~/src/components/create/DateAndTimePicker";
-import LocationPickerModal from "~/src/components/create/LocationModal";
-import { EventCreationContext } from "~/src/contexts/eventCreationContext";
+import NextButton from "src/components/create/NextButton";
+import { Day } from "src/model/event";
+import DayCard from "src/components/DayCard";
+import IconButton from "src/components/iconButton";
+import DateAndTimePicker from "src/components/create/DateAndTimePicker";
+import LocationPickerModal from "src/components/create/LocationModal";
+import { EventCreationContext } from "src/contexts/eventCreationContext";
 
 const WhereWhenScreen = () => {
   let eventContext = useContext(EventCreationContext);

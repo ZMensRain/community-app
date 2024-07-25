@@ -8,9 +8,9 @@ import {
 } from "react-native";
 
 import React from "react";
-import EventComponent from "~/src/components/Event";
+import EventComponent from "src/components/Event";
 
-import { testEvent } from "~/src/model/event";
+import { testEvent } from "src/model/event";
 
 function feed() {
   const [refreshing, setRefreshing] = React.useState(false);

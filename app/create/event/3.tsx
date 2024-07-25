@@ -11,8 +11,8 @@ import {
 import * as Yup from "yup";
 import { router } from "expo-router";
 
-import { EventCreationContext } from "~/src/contexts/eventCreationContext";
-import NextButton from "~/src/components/create/NextButton";
+import { EventCreationContext } from "src/contexts/eventCreationContext";
+import NextButton from "src/components/create/NextButton";
 
 const LinksScreen = () => {
   let eventContext = useContext(EventCreationContext);

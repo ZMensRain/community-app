@@ -1,7 +1,7 @@
 import { Tabs, router } from "expo-router";
 import { View, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ProfileButton from "~/src/components/ProfileNavBarButton";
+import ProfileButton from "src/components/ProfileNavBarButton";
 
 const layout = () => {
   function navigateToCreate() {

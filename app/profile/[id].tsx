@@ -11,8 +11,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Session } from "@supabase/supabase-js";
-import ProfileCamera from "~/src/components/ProfileCameraCircle";
-import { getUserData, supabase } from "~/src/utils/supabase";
+import ProfileCamera from "src/components/ProfileCameraCircle";
+import { getUserData, supabase } from "src/utils/supabase";
 
 const profile = () => {
   const [username, setUsername] = useState("");

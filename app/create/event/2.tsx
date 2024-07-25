@@ -12,9 +12,9 @@ import { SelectList } from "react-native-dropdown-select-list";
 import * as Yup from "yup";
 import { router } from "expo-router";
 
-import { DressCode } from "~/src/model/event";
-import NextButton from "~/src/components/create/NextButton";
-import { EventCreationContext } from "~/src/contexts/eventCreationContext";
+import { DressCode } from "src/model/event";
+import NextButton from "src/components/create/NextButton";
+import { EventCreationContext } from "src/contexts/eventCreationContext";
 
 const UserInputScreen = () => {
   let event = useContext(EventCreationContext);

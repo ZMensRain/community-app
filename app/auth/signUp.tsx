@@ -18,8 +18,8 @@ import { FormikValues, Formik } from "formik";
 import { router } from "expo-router";
 import * as Yup from "yup";
 
-import TermsComponent from "~/src/components/authComponents/Terms";
-import { supabase } from "~/src/utils/supabase";
+import TermsComponent from "src/components/authComponents/Terms";
+import { supabase } from "src/utils/supabase";
 
 type formProps = {
   email: String;
