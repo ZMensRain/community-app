@@ -1,7 +1,7 @@
 import { Tabs, router } from "expo-router";
 import { View, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ProfileButton from "src/components/ProfileNavBarButton";
+import ProfileIcon from "~/src/components/shared/ProfileIcon";
 
 const layout = () => {
   function navigateToCreate() {
@@ -14,7 +14,17 @@ const layout = () => {
         name="FeedTab"
         options={{
           headerTitle: "Feed",
-          headerLeft: () => <ProfileButton />,
+          headerLeft: () => (
+            <ProfileIcon
+              showName={true}
+              id={{
+                group: false,
+                id: "",
+              }}
+              size={38}
+            />
+          ),
+
           headerRight: () => (
             <Pressable
               onPress={() => {
@@ -42,7 +52,16 @@ const layout = () => {
         name="GroupsTab"
         options={{
           headerTitle: "Groups",
-          headerLeft: () => <ProfileButton />,
+          headerLeft: () => (
+            <ProfileIcon
+              showName={true}
+              id={{
+                group: false,
+                id: "",
+              }}
+              size={38}
+            />
+          ),
           headerRight: () => (
             <Pressable
               onPress={() => {

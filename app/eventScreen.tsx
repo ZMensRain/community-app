@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, ScrollView, Linking } from "react-native";
 import { testEvent } from "src/model/event";
 import DayCard from "src/components/DayCard";
 import { tagColors } from "src/utils/stylingValue";
-import ProfileIcon from "src/components/profileIcon";
+import ProfileIcon from "src/components/shared/ProfileIcon";
 
 const EventScreen = () => {
   const event = testEvent;
@@ -26,11 +26,7 @@ const EventScreen = () => {
           >
             Hosted by
           </Text>
-          <ProfileIcon
-            id={event.hosted_by.id}
-            size={50}
-            isGroup={event.hosted_by.group}
-          />
+          <ProfileIcon id={event.hosted_by} size={50} showName={false} />
         </View>
 
         <Text style={styles.bodyFont}>Type: {event.type}</Text>
