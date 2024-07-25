@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import React from "react";
-import EventComponent from "src/components/Event";
+import EventComponent from "src/components/EventComponent";
 
 import { testEvent } from "src/model/event";
 
