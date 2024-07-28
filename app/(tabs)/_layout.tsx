@@ -8,7 +8,7 @@ const layout = () => {
     router.navigate("create/entry");
   }
   function navigateToProfile() {
-    router.navigate("profile/[id]");
+    router.navigate("profile/YourProfile");
   }
   const headerLeftComponent = () => (
     <ProfileIcon
