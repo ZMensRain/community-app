@@ -86,7 +86,7 @@ const EventScreen = () => {
           )}
 
           {/*People and groups attending*/}
-          {event.attendingIds.length > 0 && (
+          {event.attendees.length > 0 && (
             <>
               <Text style={styles.h1}>Attending</Text>
               <ScrollView
@@ -94,7 +94,7 @@ const EventScreen = () => {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
               >
-                {event.attendingIds.map((id, index) => {
+                {event.attendees.map((id, index) => {
                   return (
                     <ProfileIcon
                       id={id}
