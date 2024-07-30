@@ -54,7 +54,6 @@ const PickTypeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Pick Type</Text>
       <SearchBar
         onTextUpdate={(newText) => {
           setSearched(newText.toString());
@@ -79,7 +78,12 @@ const PickTypeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 25 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 25,
+    paddingTop: 25,
+  },
   title: {
     textAlign: "center",
     marginBottom: 15,
