@@ -1,40 +1,6 @@
-type Time = { hour: Number; minute: Number };
+import { Day } from "./day";
 
-enum DressCode {
-  Casual = "Casual",
-  Formal = "Formal",
-  Anything = "Anything",
-  Costume = "Costume",
-  Festive = "Festive",
-}
-
-class Day {
-  start: Time;
-  end: Time;
-  date: Date;
-  locations: Array<string | { lat: Number; lon: Number }>;
-  constructor(
-    starts: Date | Time,
-    ends: Date | Time,
-    date: Date,
-    locations: Array<string | { lat: Number; lon: Number }>
-  ) {
-    if (starts instanceof Date) {
-      this.start = { hour: starts.getHours(), minute: starts.getMinutes() };
-    } else {
-      this.start = starts;
-    }
-    if (ends instanceof Date) {
-      this.end = { hour: ends.getHours(), minute: ends.getMinutes() };
-    } else {
-      this.end = ends;
-    }
-
-    this.date = date;
-    this.locations = locations;
-  }
-}
-
+type locationType = string | { lat: Number; lon: Number };
 type Id = { group: boolean; id: string };
 type EventType = EventTypeEnum | string;
 type EventTag = EventTagEnum | string;
@@ -42,68 +8,36 @@ type AgeRange = { min: Number; max: Number | null };
 type EventKit = EventKitEnum | string;
 
 class CommunityEvent {
-  id: string;
-  hosted_by: Id;
-  title: string;
-  description: string;
-  type: EventType;
-  ageRange: AgeRange;
-  days: Array<Day>;
-  dressCode: DressCode;
-  attendingIds: Id[];
-  links: string[];
-  ticketWebsite: string | null;
-  tags: EventTag[];
-  kit: EventKit[];
   public constructor(
-    id: string,
-    hosted_by: Id,
-    title: string,
-    description: string,
-    type: EventType,
-    ageRange: AgeRange,
-    days: Array<Day>,
-    dressCode: DressCode,
-    attendingIds: Id[],
-    links: string[],
-    ticketWebsite: string | null,
-    tags: EventTag[],
-    kit: EventKit[]
-  ) {
-    this.id = id;
-    this.hosted_by = hosted_by;
-    this.title = title;
-    this.description = description;
-    this.type = type;
-    this.ageRange = ageRange;
-    this.days = days;
-    this.dressCode = dressCode;
-    this.attendingIds = attendingIds;
-    this.links = links;
-    this.ticketWebsite = ticketWebsite;
-    this.tags = tags;
-    this.kit = kit;
-  }
+    public id: string,
+    public hosted_by: Id,
+    public title: string,
+    public description: string,
+    public type: EventType,
+    public ageRange: AgeRange,
+    public days: Day[],
+    public dressCode: DressCode,
+    public attendees: Id[],
+    public links: string[],
+    public ticketWebsite: string | null,
+    public tags: EventTag[],
+    public kit: EventKit[]
+  ) {}
 
-  public getLocations(
-    unique: Boolean = true
-  ): Array<string | { lat: Number; lon: Number }> {
-    let output: Array<string | { lat: Number; lon: Number }> = [];
+  public getLocations(unique: Boolean = true): locationType[] {
+    let output: locationType[] = [];
+
     for (let i = 0; i < this.days.length; i++) {
-      const element = this.days[i];
-
-      output = output.concat(element.locations);
+      output = output.concat(this.days[i].locations);
     }
 
-    let keys = [...new Set(output)];
-    if (unique) {
-      return keys;
-    }
+    if (unique) return [...new Set(output)];
     return output;
   }
 }
 
 //TODO Fill Enums
+enum EventTagEnum {}
 enum EventTypeEnum {
   Meetings,
   MarketDay,
@@ -121,7 +55,6 @@ enum EventTypeEnum {
   Party,
   CareerDay,
 }
-enum EventTagEnum {}
 enum EventKitEnum {
   Paint,
   Food,
@@ -129,6 +62,13 @@ enum EventKitEnum {
   Chairs,
   Tables,
   PicnicBlanket,
+}
+enum DressCode {
+  Casual = "Casual",
+  Formal = "Formal",
+  Anything = "Anything",
+  Costume = "Costume",
+  Festive = "Festive",
 }
 
 const yesterday = new Date();
@@ -176,7 +116,7 @@ const testEvent = new CommunityEvent(
 /*cspell:enable */
 
 export {
-  Day,
+  locationType,
   CommunityEvent,
   testEvent,
   EventTag,
