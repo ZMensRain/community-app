@@ -19,7 +19,7 @@ import * as Yup from "yup";
 import { router } from "expo-router";
 
 import NextButton from "src/components/create/NextButton";
-import { Day } from "src/model/event";
+import { Day } from "src/model/day";
 import DayCard from "src/components/DayCard";
 import IconButton from "src/components/iconButton";
 import DateAndTimePicker from "src/components/create/DateAndTimePicker";
