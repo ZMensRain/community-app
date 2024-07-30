@@ -1,4 +1,4 @@
-import { Formik, FormikValues } from "formik";
+import { Formik, FormikValues, useFormik } from "formik";
 import { useContext } from "react";
 import {
   View,
@@ -13,6 +13,7 @@ import { router } from "expo-router";
 
 import { EventCreationContext } from "src/contexts/eventCreationContext";
 import NextButton from "src/components/create/NextButton";
+import { pageStyle } from "~/src/utils/stylingValue";
 
 const LinksScreen = () => {
   let eventContext = useContext(EventCreationContext);
@@ -34,83 +35,79 @@ const LinksScreen = () => {
       .url("Must be a valid url https://example.com or http://example.com")
       .notRequired()
       .nullable(),
-    otherLinks: Yup.array().of(Yup.string().url()),
+    otherLinks: Yup.array().of(Yup.string().url("Must be valid urls")),
   });
-
+  const formik = useFormik({
+    initialValues: {
+      ticketWebsite: eventContext.event.ticketWebsite,
+      otherLinks: eventContext.event.links,
+    },
+    validationSchema: validation,
+    validateOnChange: true,
+    onSubmit: next,
+  });
   return (
-    <View style={styles.container}>
-      <Text style={styles.pageTitle}>Links</Text>
-      <Formik
-        initialValues={{
-          ticketWebsite: eventContext.event.ticketWebsite,
-          otherLinks: eventContext.event.links,
-        }}
-        onSubmit={next}
-        validationSchema={validation}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          setFieldValue,
-          errors,
-          values,
-        }) => (
-          <View style={{ flex: 1 }}>
-            <ScrollView>
-              <View style={styles.section}>
-                <Text style={styles.inputLabel}>Ticket Website</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Ticket Website"
-                  onChangeText={handleChange("ticketWebsite")}
-                  onBlur={handleBlur("ticketWebsite")}
-                  keyboardType="url"
-                  value={values.ticketWebsite ?? ""}
-                />
-                {errors.ticketWebsite && (
-                  <Text style={styles.error}>{errors.ticketWebsite}</Text>
-                )}
-              </View>
-
-              <View style={styles.section}>
-                <Text style={styles.inputLabel}>Other Links</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={`Link1,\nLink2,\nLink3,\n...`}
-                  multiline={true}
-                  numberOfLines={10}
-                  keyboardType="url"
-                  onChangeText={(value) =>
-                    setFieldValue(
-                      "otherLinks",
-                      value.replaceAll("\n", "").replaceAll(" ", "").split(",")
-                    )
-                  }
-                  onBlur={handleBlur("otherLinks")}
-                  value={values.otherLinks.join(",") ?? ""}
-                />
-                {errors.otherLinks && (
-                  <Text style={styles.error}>{errors.otherLinks}</Text>
-                )}
-              </View>
-            </ScrollView>
-            <View
-              style={{
-                marginBottom: 25,
-              }}
-            >
-              <NextButton onPressed={() => handleSubmit()} />
-            </View>
+    <View style={pageStyle}>
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          <View style={styles.section}>
+            <Text style={styles.inputLabel}>Ticket Website</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ticket Website"
+              onChangeText={formik.handleChange("ticketWebsite")}
+              onBlur={formik.handleBlur("ticketWebsite")}
+              keyboardType="url"
+              value={formik.values.ticketWebsite ?? ""}
+            />
+            {formik.errors.ticketWebsite && (
+              <Text style={styles.error}>{formik.errors.ticketWebsite}</Text>
+            )}
           </View>
-        )}
-      </Formik>
+
+          <View style={styles.section}>
+            <Text style={styles.inputLabel}>Other Links</Text>
+            <TextInput
+              style={styles.input}
+              placeholder={`Link1,\nLink2,\nLink3,\n...`}
+              multiline={true}
+              numberOfLines={10}
+              keyboardType="url"
+              onChangeText={(value) =>
+                formik.setFieldValue(
+                  "otherLinks",
+                  value.replaceAll("\n", "").replaceAll(" ", "").split(",")
+                )
+              }
+              onBlur={formik.handleBlur("otherLinks")}
+              value={formik.values.otherLinks.join(",") ?? ""}
+            />
+            {formik.errors.otherLinks && (
+              <Text style={styles.error}>{formik.errors.otherLinks}</Text>
+            )}
+          </View>
+        </ScrollView>
+        <View
+          style={{
+            marginBottom: 25,
+          }}
+        >
+          <NextButton
+            onPressed={() => formik.handleSubmit()}
+            text={
+              formik.values.ticketWebsite?.trim() == "" &&
+              formik.values.otherLinks.length == 0
+                ? "Skip"
+                : "Next"
+            }
+          />
+        </View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 25, backgroundColor: "#fff" },
   pageTitle: {
     textAlign: "center",
     fontSize: 36,
