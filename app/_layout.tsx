@@ -16,10 +16,6 @@ const RootLayout = () => {
       <Stack.Screen name="auth/signIn" />
       <Stack.Screen name="auth/signUp" />
       <Stack.Screen name="profile/[id]" options={{ headerShown: true }} />
-      <Stack.Screen
-        name="profile/YourProfile"
-        options={{ headerShown: true, title: "Your Profile" }}
-      />
     </Stack>
   );
 };

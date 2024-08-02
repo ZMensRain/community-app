@@ -1,53 +1,44 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
-  Keyboard,
-  Pressable,
-  TextInput,
+  Text,
   View,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
 } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Session } from "@supabase/supabase-js";
-import ProfileCamera from "src/components/ProfileCameraCircle";
 import { getUserData, supabase } from "src/utils/supabase";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Stack } from "expo-router";
+
 import { pageStyle } from "~/src/utils/stylingValue";
+import ProfileIcon from "~/src/components/shared/ProfileIcon";
+import { MapSection, PostsSection, InterestsSection } from "./components";
+import FilledButton from "~/src/components/shared/filledButton";
 
-const profile = () => {
+const YourProfile = () => {
   const [username, setUsername] = useState("");
+  const [interests, setInterests] = useState<string[]>([]);
   const [email, setEmail] = useState("");
-
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session == null) return;
+      let userData = await getUserData(session?.user.id);
+
+      if (typeof userData === "string") {
+        return;
+      }
+      setUsername(userData["username"]);
+      setInterests(userData["interests"]);
       setSession(session);
       setEmail(session?.user.email!);
     });
   }, []);
 
   if (session === null) {
-    return (
-      <View
-        style={{
-          justifyContent: "center",
-          height: "100%",
-        }}
-      >
-        <ActivityIndicator size={"large"} />
-      </View>
-    );
-  }
-
-  getUserData(session.user.id).then((response) => {
-    if (typeof response === "string") {
-      return;
-    }
-    setUsername(response["username"]);
-  });
-
-  if (username === "") {
     return (
       <View
         style={[
@@ -63,60 +54,48 @@ const profile = () => {
   }
 
   return (
-    <View style={pageStyle}>
-      <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-        <ScrollView>
-          <View style={{ alignItems: "center", width: "100%" }}>
-            <ProfileCamera />
-          </View>
+    <>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "Your Profile",
+          headerRight: () => <Ionicons name="settings-sharp" size={20} />,
+        }}
+      />
+      <View style={pageStyle}>
+        <GestureHandlerRootView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          >
+            <View style={{ alignItems: "center", width: "100%" }}>
+              <ProfileIcon
+                id={{ id: "1000", group: false }}
+                size={125}
+                showName={false}
+              />
+              <Text style={styles.username}>{username}</Text>
+            </View>
 
-          <View style={[styles.verticallySpaced, styles.mt20]}>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) => setUsername(text)}
-              value={username}
-              placeholder="Username"
-              autoCapitalize={"words"}
+            <MapSection />
+            <PostsSection />
+            <InterestsSection interests={interests} />
+            <FilledButton
+              text="Sign Out"
+              buttonStyle={{ backgroundColor: "red" }}
+              onPress={() => {
+                supabase.auth.signOut();
+              }}
             />
-          </View>
-
-          <View style={[styles.verticallySpaced]}>
-            <TextInput
-              style={styles.input}
-              onChangeText={(text) => setEmail(text)}
-              value={email}
-              placeholder="email@address.com"
-              keyboardType="email-address"
-              autoCapitalize={"none"}
-            />
-          </View>
-
-          <View style={styles.button}>
-            <Button onPress={() => supabase.auth.signOut()} title="Sign Out" />
-          </View>
-        </ScrollView>
-      </Pressable>
-    </View>
+          </ScrollView>
+        </GestureHandlerRootView>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  verticallySpaced: {
-    paddingVertical: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-  button: {
-    marginTop: 100,
-  },
-  input: {
-    margin: 0,
-    padding: 20,
-    backgroundColor: "#00000011",
-    borderRadius: 10,
-  },
+  username: { fontSize: 30, fontWeight: "medium" },
 });
 
-export default profile;
+export default YourProfile;
