@@ -1,6 +1,7 @@
 import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
+import { CommunityEvent } from "../model/event";
 
 /* cSpell:disable */
 const supabaseURL = "https://yemtwnliyzhfbdclmrnn.supabase.co";
@@ -17,10 +18,33 @@ const supabase = createClient(supabaseURL, supabaseKey, {
   },
 });
 
+const getEvents = async (created_by: string, number: number | null) => {
+  if (number) {
+    return await supabase
+      .from("events")
+      .select()
+      .eq("created_by", created_by)
+      .order("created_at")
+      .limit(number);
+  }
+
+  let response = await supabase
+    .from("events")
+    .select()
+    .eq("created_by", created_by)
+    .order("created_at");
+
+  return response;
+};
+
+async function getPosts(created_by: string): Promise<CommunityEvent[]> {
+  throw new Error("Unimplemented");
+}
+
 const getUserData = async (id: string) => {
   let response = await supabase
     .from("profiles")
-    .select("username, avatar_url")
+    .select("username, avatar_url, interests")
     .eq("id", id);
   if (response.error) {
     return response.error.message;
