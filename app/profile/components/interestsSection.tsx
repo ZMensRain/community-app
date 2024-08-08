@@ -1,65 +1,74 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { tagColors } from "~/src/utils/stylingValue";
 
-const InterestsSection = ({ interests }: { interests: string[] }) => {
+type props = { interests: string[]; onAddPressed?: () => void };
+
+const InterestsSection = ({ interests, onAddPressed }: props) => {
   return (
     <>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <View style={styles.container}>
         <Text style={styles.h2}>Your Interests</Text>
-        <Ionicons name="add" size={24} />
+        <Pressable onPress={onAddPressed} hitSlop={20}>
+          <Ionicons name="add" size={24} />
+        </Pressable>
       </View>
 
-      <View
-        style={{
-          justifyContent: interests.length > 0 ? "flex-start" : "center",
-          flexWrap: "wrap",
-          flexDirection: "row",
-
-          overflow: "hidden",
-        }}
-      >
-        {interests.length > 0 ? (
-          interests.map((val, index) => (
-            <View
-              style={[
-                styles.interest,
-                { backgroundColor: tagColors(val).background },
-              ]}
-              key={index}
-            >
-              <Text style={{ color: tagColors(val).foreground }}>{val}</Text>
-              <Ionicons
-                name="close"
-                size={20}
-                color={tagColors(val).foreground}
-              />
-            </View>
-          ))
-        ) : (
-          <Text
-            style={{
-              textAlign: "center",
-              textAlignVertical: "center",
-              fontSize: 15,
-            }}
-          >
+      {interests.length > 0 ? (
+        <View
+          style={[
+            styles.content,
+            {
+              justifyContent: "flex-start",
+            },
+          ]}
+        >
+          {interests.map((val, index) => {
+            const colors = tagColors(val);
+            return (
+              <View
+                style={[
+                  styles.interest,
+                  { backgroundColor: colors.background },
+                ]}
+                key={index}
+              >
+                <Text style={{ color: colors.foreground }}>{val}</Text>
+                <Ionicons name="close" size={20} color={colors.foreground} />
+              </View>
+            );
+          })}
+        </View>
+      ) : (
+        <View
+          style={[
+            styles.content,
+            {
+              justifyContent: "center",
+            },
+          ]}
+        >
+          <Text style={styles.sectionFallBackText}>
             You don't have any interests saved yet. Interests help us tailor
             your feed.
           </Text>
-        )}
-      </View>
+        </View>
+      )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  content: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    overflow: "hidden",
+  },
   h2: { fontSize: 24, fontWeight: "semibold" },
   interest: {
     paddingHorizontal: 10,
@@ -68,6 +77,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 5,
+  },
+  sectionFallBackText: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 15,
   },
 });
 
