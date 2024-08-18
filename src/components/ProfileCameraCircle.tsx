@@ -1,29 +1,31 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import ProfileIcon from "./shared/ProfileIcon";
 
 const ProfileCamera = () => {
   return (
-    <View style={styles.profile}>
-      <View style={styles.profileCamera}>
-        <Ionicons name="camera" size={30}></Ionicons>
+    <ProfileIcon id={{ id: "100", group: false }} size={150} showName={false}>
+      <View
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          justifyContent: "flex-end",
+        }}
+      >
+        <View style={styles.profileCamera}>
+          <Ionicons name="camera" size={30} color={"white"}></Ionicons>
+        </View>
       </View>
-    </View>
+    </ProfileIcon>
   );
 };
 const styles = StyleSheet.create({
-  profile: {
-    width: "45%",
-    aspectRatio: 1,
-    borderRadius: 100,
-    backgroundColor: "#eeeeee",
-    justifyContent: "flex-end",
-    overflow: "hidden",
-  },
   profileCamera: {
-    backgroundColor: "#00000010",
+    backgroundColor: "#000000a0",
     width: "100%",
-    height: "20%",
+    height: "25%",
     alignItems: "center",
     justifyContent: "center",
   },
