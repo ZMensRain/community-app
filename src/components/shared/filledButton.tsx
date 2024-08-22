@@ -33,7 +33,7 @@ const FilledButton = (props: props) => {
               props.textStyle,
             ]}
           >
-            Sign Out
+            {props.text}
           </Text>
         </View>
       </TouchableHighlight>
@@ -45,7 +45,6 @@ const style = StyleSheet.create({
   container: {
     borderRadius: 10,
     overflow: "hidden",
-    marginVertical: 25,
   },
   button: {
     backgroundColor: colors.primary,
