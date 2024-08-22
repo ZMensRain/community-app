@@ -1,10 +1,19 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { tagColors } from "~/src/utils/stylingValue";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
-type props = { interests: string[]; onAddPressed?: () => void };
+type props = {
+  interests: string[];
+  onAddPressed?: () => void;
+  onInterestPress?: (interest: string) => void;
+};
 
-const InterestsSection = ({ interests, onAddPressed }: props) => {
+const InterestsSection = ({
+  interests,
+  onAddPressed,
+  onInterestPress,
+}: props) => {
   return (
     <>
       <View style={styles.container}>
@@ -27,14 +36,19 @@ const InterestsSection = ({ interests, onAddPressed }: props) => {
             const colors = tagColors(val);
             return (
               <View
-                style={[
-                  styles.interest,
-                  { backgroundColor: colors.background },
-                ]}
                 key={index}
+                style={{ margin: 5, borderRadius: 10, overflow: "hidden" }}
               >
-                <Text style={{ color: colors.foreground }}>{val}</Text>
-                <Ionicons name="close" size={20} color={colors.foreground} />
+                <TouchableHighlight onLongPress={() => onInterestPress?.(val)}>
+                  <View
+                    style={[
+                      styles.interest,
+                      { backgroundColor: colors.background },
+                    ]}
+                  >
+                    <Text style={{ color: colors.foreground }}>{val}</Text>
+                  </View>
+                </TouchableHighlight>
               </View>
             );
           })}
@@ -73,10 +87,9 @@ const styles = StyleSheet.create({
   interest: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
+
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 5,
   },
   sectionFallBackText: {
     textAlign: "center",
