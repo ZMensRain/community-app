@@ -3,10 +3,9 @@ import { CommunityEvent, DressCode } from "../../../src/model/event";
 import { useState } from "react";
 import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
 
-import { faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable } from "react-native";
-import { pageTitle } from "../../../src/utils/stylingValue";
+import { colors } from "~/src/utils/stylingValue";
 
 const EventCreationLayout = () => {
   let [event, setEvent] = useState(
@@ -39,7 +38,7 @@ const EventCreationLayout = () => {
           options={{
             headerLeft: () => (
               <Pressable onPress={() => router.back()}>
-                <FontAwesomeIcon icon={faXmarkCircle} size={24} />
+                <Ionicons name="close" size={24} color={colors.primary} />
               </Pressable>
             ),
             title: "Pick Type",
@@ -47,7 +46,7 @@ const EventCreationLayout = () => {
         />
         <Stack.Screen name="2" options={{ title: "Details" }} />
         <Stack.Screen name="3" options={{ title: "Links" }} />
-        <Stack.Screen name="5" options={{ title: "Wheres and Whens" }} />
+        <Stack.Screen name="6" options={{ title: "Attending" }} />
       </Stack>
     </EventCreationContext.Provider>
   );
