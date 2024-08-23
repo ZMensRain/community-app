@@ -16,7 +16,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FormikValues, useFormik } from "formik";
 import React, { useCallback, useContext, useRef, useState } from "react";
 import * as Yup from "yup";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 
 import NextButton from "src/components/create/NextButton";
 import { Day } from "src/model/day";
@@ -25,6 +25,7 @@ import IconButton from "src/components/iconButton";
 import DateAndTimePicker from "src/components/create/DateAndTimePicker";
 import LocationPickerModal from "src/components/create/LocationModal";
 import { EventCreationContext } from "src/contexts/eventCreationContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const WhereWhenScreen = () => {
   let eventContext = useContext(EventCreationContext);
@@ -79,125 +80,113 @@ const WhereWhenScreen = () => {
   );
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <Text style={styles.pageTitle}>Wheres and Whens</Text>
+    <>
+      <Stack.Screen
+        options={{
+          title: "Wheres and Whens",
+          headerRight: () => (
+            <Pressable onPress={() => formik.handleSubmit()}>
+              <Ionicons name="add" size={24} />
+            </Pressable>
+          ),
+        }}
+      />
+      <GestureHandlerRootView style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/*Day form*/}
+          <>
+            {/*Date */}
+            <DateAndTimePicker
+              error={formik.errors.date as string}
+              label="Date"
+              mode="date"
+              onValueSet={(newDate) => formik.setFieldValue("date", newDate)}
+              value={formik.values.date}
+              icon={faCalendar}
+            />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/*Day form*/}
-        <>
-          {/*Date */}
-          <DateAndTimePicker
-            error={formik.errors.date as string}
-            label="Date"
-            mode="date"
-            onValueSet={(newDate) => formik.setFieldValue("date", newDate)}
-            value={formik.values.date}
-            icon={faCalendar}
-          />
+            {/*Starts */}
+            <DateAndTimePicker
+              error={formik.errors.starts as string}
+              label="Starts"
+              mode="time"
+              onValueSet={(newDate) => formik.setFieldValue("starts", newDate)}
+              value={formik.values.starts}
+              icon={faClock}
+            />
 
-          {/*Starts */}
-          <DateAndTimePicker
-            error={formik.errors.starts as string}
-            label="Starts"
-            mode="time"
-            onValueSet={(newDate) => formik.setFieldValue("starts", newDate)}
-            value={formik.values.starts}
-            icon={faClock}
-          />
+            {/*Ends */}
+            <DateAndTimePicker
+              error={formik.errors.ends as string}
+              label="Ends"
+              mode="time"
+              onValueSet={(newDate) => formik.setFieldValue("ends", newDate)}
+              value={formik.values.ends}
+              icon={faClock}
+            />
 
-          {/*Ends */}
-          <DateAndTimePicker
-            error={formik.errors.ends as string}
-            label="Ends"
-            mode="time"
-            onValueSet={(newDate) => formik.setFieldValue("ends", newDate)}
-            value={formik.values.ends}
-            icon={faClock}
-          />
-
-          {/*Location */}
-          <View style={styles.mt10}>
-            <Text style={styles.label}>
-              Location
-              <Text style={{ color: "red" }}>*</Text>
-            </Text>
-            <IconButton
-              icon={faMap}
-              onPress={() => sheetRef.current?.snapToIndex(0)}
-            >
-              <Text>
-                {formik.values.location.length === 0
-                  ? "No location set"
-                  : formik.values.location.length}
+            {/*Location */}
+            <View style={styles.mt10}>
+              <Text style={styles.label}>
+                Location
+                <Text style={{ color: "red" }}>*</Text>
               </Text>
-            </IconButton>
-            {formik.errors.location && <Text>{formik.errors.location}</Text>}
-          </View>
-
-          {/*Add button */}
-          <Pressable
-            onPress={() => formik.handleSubmit()}
-            style={{
-              backgroundColor: "#53B7FF",
-              borderRadius: 10,
-              marginHorizontal: "20%",
-              paddingVertical: 8,
-              marginVertical: 10,
-            }}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                color: "white",
-                fontSize: 20,
-              }}
-            >
-              Add
-            </Text>
-          </Pressable>
-        </>
-
-        {/*Days view */}
-        <>
-          {days.length > 0 && (
-            <View style={{ flex: 1 }}>
-              <ScrollView
-                horizontal={true}
-                nestedScrollEnabled={true}
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                style={{
-                  height: 300,
-                }}
+              <IconButton
+                icon={faMap}
+                onPress={() => sheetRef.current?.snapToIndex(0)}
               >
-                {days.map((value, index) => {
-                  return <DayCard day={value} index={index} key={index} />;
-                })}
-              </ScrollView>
+                <Text>
+                  {formik.values.location.length === 0
+                    ? "No location set"
+                    : formik.values.location.length}
+                </Text>
+              </IconButton>
+              {formik.errors.location && <Text>{formik.errors.location}</Text>}
             </View>
-          )}
-        </>
-      </ScrollView>
+          </>
 
-      <View style={{ justifyContent: "flex-end", paddingBottom: 35 }}>
-        <NextButton onPressed={next} />
-      </View>
+          {/*Days view */}
+          <>
+            {days.length > 0 && (
+              <View style={{ flex: 1 }}>
+                <ScrollView
+                  horizontal={true}
+                  nestedScrollEnabled={true}
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  style={{
+                    height: 300,
+                  }}
+                >
+                  {days.map((value, index) => {
+                    return <DayCard day={value} index={index} key={index} />;
+                  })}
+                </ScrollView>
+              </View>
+            )}
+          </>
+        </ScrollView>
 
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
-        backdropComponent={renderBackdrop}
-        index={-1}
-      >
-        <LocationPickerModal
-          onPickLocation={(location) => {
-            sheetRef.current?.close();
-            formik.setFieldValue("location", location);
-          }}
-        />
-      </BottomSheet>
-    </GestureHandlerRootView>
+        <View style={{ justifyContent: "flex-end", paddingBottom: 35 }}>
+          <NextButton onPressed={next} />
+        </View>
+
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={snapPoints}
+          enablePanDownToClose={true}
+          backdropComponent={renderBackdrop}
+          index={-1}
+        >
+          <LocationPickerModal
+            onPickLocation={(location) => {
+              sheetRef.current?.close();
+              formik.setFieldValue("location", location);
+            }}
+          />
+        </BottomSheet>
+      </GestureHandlerRootView>
+    </>
   );
 };
 
