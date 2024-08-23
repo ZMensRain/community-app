@@ -69,7 +69,7 @@ const UserInputScreen = () => {
           errors,
         }) => (
           <>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               {/*Title*/}
               <View style={styles.section}>
                 <Text style={styles.h2}>
