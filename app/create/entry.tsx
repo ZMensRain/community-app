@@ -1,75 +1,55 @@
 import { router } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import FilledButton from "~/src/components/shared/filledButton";
+import { pageStyle } from "~/src/utils/stylingValue";
 
 const EntryScreen = () => {
   return (
-    <View style={styles.container}>
+    <View style={[pageStyle, styles.container]}>
       <Text
         style={[
           styles.h1,
           {
             textAlignVertical: "top",
             textAlign: "center",
-            margin: 50,
+            margin: 25,
           },
         ]}
       >
         What would you like to create?
       </Text>
-      <View style={{ flex: 2 }}>
-        <Pressable
-          onPress={() => {
-            router.navigate("create/event/1");
-          }}
-          style={(state) => {
-            return [
-              styles.button,
-              { backgroundColor: state.pressed ? "#2976c5" : "#3a87d6" },
-            ];
-          }}
-        >
-          <Text style={styles.buttonText}>Event</Text>
-        </Pressable>
 
-        <Pressable
-          onPress={() => {}}
-          style={(state) => {
-            return [
-              styles.button,
-              { backgroundColor: state.pressed ? "#2976c5" : "#3a87d6" },
-            ];
-          }}
-        >
-          <Text style={styles.buttonText}>Issue</Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() => {}}
-          style={(state) => {
-            return [
-              styles.button,
-              { backgroundColor: state.pressed ? "#2976c5" : "#3a87d6" },
-            ];
-          }}
-        >
-          <Text style={styles.buttonText}>Group</Text>
-        </Pressable>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-start",
+        }}
+      >
+        <View>
+          <FilledButton
+            text={"Event"}
+            textStyle={{ fontSize: 30 }}
+            onPress={() => router.navigate("create/event/1")}
+          />
+          <View style={{ height: 20 }} />
+          <FilledButton
+            text={"Issue"}
+            textStyle={{ fontSize: 30 }}
+            onPress={() => {}}
+          />
+          <View style={{ height: 20 }} />
+          <FilledButton
+            text={"Group"}
+            textStyle={{ fontSize: 30 }}
+            onPress={() => {}}
+          />
+        </View>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  container: { justifyContent: "center", alignItems: "center", flex: 1 },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 100,
-    marginHorizontal: 50,
-    marginVertical: 10,
-    width: "100%",
-  },
-  buttonText: { color: "#fff", fontSize: 25 },
+  container: { alignItems: "stretch", flex: 1 },
   h1: {
     fontSize: 32,
     fontWeight: "bold",
