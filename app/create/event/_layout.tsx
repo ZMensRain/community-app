@@ -6,6 +6,7 @@ import { EventCreationContext } from "../../../src/contexts/eventCreationContext
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable } from "react-native";
 import { colors } from "~/src/utils/stylingValue";
+import { supabase } from "~/src/utils/supabase";
 
 const EventCreationLayout = () => {
   let [event, setEvent] = useState(
@@ -25,8 +26,16 @@ const EventCreationLayout = () => {
       []
     )
   );
+
+  const createEvent = async () => {
+    let a = await supabase.auth.getUser();
+    let id = a.data.user?.id;
+  };
+
   return (
-    <EventCreationContext.Provider value={{ event: event, setEvent: setEvent }}>
+    <EventCreationContext.Provider
+      value={{ event: event, setEvent: setEvent, createEvent: createEvent }}
+    >
       <Stack
         screenOptions={{
           headerBackTitleVisible: false,
@@ -46,7 +55,6 @@ const EventCreationLayout = () => {
         />
         <Stack.Screen name="2" options={{ title: "Details" }} />
         <Stack.Screen name="3" options={{ title: "Links" }} />
-        <Stack.Screen name="6" options={{ title: "Attending" }} />
       </Stack>
     </EventCreationContext.Provider>
   );
