@@ -20,4 +20,4 @@ class Day {
   }
 }
 
-export { Day };
+export { Day, Time };
