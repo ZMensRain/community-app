@@ -3,8 +3,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 
 type props = {
-  onSearch?: (text: String) => void;
-  onTextUpdate?: (text: String) => void;
+  onSearch?: (text: string) => void;
+  onTextUpdate?: (text: string) => void;
 };
 
 const SearchBar = ({ onSearch, onTextUpdate: onUpdate }: props) => {
