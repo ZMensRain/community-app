@@ -37,7 +37,10 @@ class CommunityEvent {
 }
 
 //TODO Fill Enums
-enum EventTagEnum {}
+enum EventTagEnum {
+  DogFriendly,
+  Vegan,
+}
 enum EventTypeEnum {
   Meetings,
   MarketDay,
@@ -120,6 +123,7 @@ export {
   CommunityEvent,
   testEvent,
   EventTag,
+  EventTagEnum,
   EventKit,
   EventKitEnum,
   EventType,
