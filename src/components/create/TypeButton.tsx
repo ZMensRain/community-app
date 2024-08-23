@@ -7,7 +7,7 @@ const TypeButton = ({ text, onPress }: props) => {
     <Pressable
       style={(state) => [
         styles.container,
-        { backgroundColor: state.pressed ? "#ded7e1" : "#E6E8F2" },
+        { borderColor: state.pressed ? "#ded7e1" : "#E6E8F2" },
       ]}
       onPress={() => onPress(text)}
     >
@@ -22,9 +22,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginVertical: 10,
     borderRadius: 10,
-    shadowOpacity: 0.25,
-
-    shadowOffset: { width: 0, height: 2 },
+    borderWidth: 2,
   },
 });
 
