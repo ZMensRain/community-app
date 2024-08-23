@@ -3,14 +3,16 @@ import { locationType } from "./event";
 type Time = { hour: Number; minute: Number };
 
 class Day {
+  start: Time;
+  end: Time;
   constructor(
-    public start: Date | Time,
-    public end: Date | Time,
+    start: Date | Time,
+    end: Date | Time,
     public date: Date,
     public locations: locationType[]
   ) {
-    start = this.formatTime(start);
-    end = this.formatTime(end);
+    this.start = this.formatTime(start);
+    this.end = this.formatTime(end);
   }
 
   private formatTime(time: Date | Time) {
