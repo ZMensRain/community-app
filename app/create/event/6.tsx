@@ -20,6 +20,15 @@ const TagsScreen = () => {
     if (tags.includes(v)) return;
     setTags([...tags, v]);
   };
+  const onRemoveTag = (v: string) => {
+    setTags(tags.filter((value) => value !== v));
+  };
+  const onFinish = () => {
+    let e = context.event;
+    e.tags = tags;
+    context.setEvent(e);
+    context.createEvent();
+  };
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
@@ -60,13 +69,14 @@ const TagsScreen = () => {
                     key={v.toString()}
                     text={v.toString()}
                     buttonStyle={{ backgroundColor: tagColors(v).background }}
+                    onLongPress={() => onRemoveTag(v.toString())}
                   />
                 ))}
               </View>
             </ScrollView>
           )}
           <View style={{ paddingBottom: 25 }}>
-            <FilledButton text="🎉Finish🎉" />
+            <FilledButton text="🎉Finish🎉" onPress={onFinish} />
           </View>
         </View>
         <BottomSheet
