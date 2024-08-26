@@ -26,6 +26,7 @@ import DateAndTimePicker from "src/components/create/DateAndTimePicker";
 import LocationPickerModal from "src/components/create/LocationModal";
 import { EventCreationContext } from "src/contexts/eventCreationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { colors } from "~/src/utils/stylingValue";
 
 const WhereWhenScreen = () => {
   let eventContext = useContext(EventCreationContext);
@@ -38,6 +39,8 @@ const WhereWhenScreen = () => {
   const snapPoints = ["75%", "100%"];
 
   function next() {
+    if (days.length < 1) return;
+
     let e = eventContext!.event;
     e.days = days;
     eventContext?.setEvent(e);
@@ -86,7 +89,7 @@ const WhereWhenScreen = () => {
           title: "Wheres and Whens",
           headerRight: () => (
             <Pressable onPress={() => formik.handleSubmit()}>
-              <Ionicons name="add" size={24} />
+              <Ionicons name="add" size={24} color={colors.primary} />
             </Pressable>
           ),
         }}

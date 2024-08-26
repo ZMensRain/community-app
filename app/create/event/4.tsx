@@ -1,4 +1,11 @@
-import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Pressable,
+} from "react-native";
 import React, { useRef, useCallback } from "react";
 
 import { useContext, useState } from "react";
@@ -51,17 +58,9 @@ const KitScreen = () => {
         options={{
           title: "People Should Bring",
           headerRight: () => (
-            <Ionicons.Button
-              name="add"
-              size={32}
-              onPress={() => sheetRef.current?.snapToIndex(0)}
-              color={colors.primary}
-              backgroundColor={"transparent"}
-              iconStyle={{
-                marginRight: 0,
-              }}
-              underlayColor={"#00000012"}
-            />
+            <Pressable onPress={() => sheetRef.current?.snapToIndex(0)}>
+              <Ionicons name="add" size={24} color={colors.primary} />
+            </Pressable>
           ),
         }}
       />
