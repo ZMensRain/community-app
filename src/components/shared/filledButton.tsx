@@ -13,6 +13,7 @@ type props = {
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
   onPress?: () => void;
+  onLongPress?: () => void;
 };
 
 const FilledButton = (props: props) => {
@@ -22,7 +23,11 @@ const FilledButton = (props: props) => {
       : colors.primary;
   return (
     <View style={style.container}>
-      <TouchableHighlight activeOpacity={0.9} onPress={props.onPress}>
+      <TouchableHighlight
+        activeOpacity={0.9}
+        onPress={props.onPress}
+        onLongPress={props.onLongPress}
+      >
         <View style={[style.button, props.buttonStyle]}>
           <Text
             style={[
