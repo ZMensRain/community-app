@@ -37,6 +37,7 @@ const YourProfile = () => {
       let userData = await getUserData(session?.user.id);
 
       if (typeof userData === "string") return;
+      if (userData.username === null) return;
 
       setUsername(userData["username"]);
       setInterests(userData["interests"]);
