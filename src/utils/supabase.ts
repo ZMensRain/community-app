@@ -2,6 +2,9 @@ import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import { CommunityEvent } from "../model/event";
+import { Database } from '~/database.types';
+
+
 
 /* cSpell:disable */
 const supabaseURL = "https://yemtwnliyzhfbdclmrnn.supabase.co";
@@ -9,7 +12,7 @@ const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllbXR3bmxpeXpoZmJkY2xtcm5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY5NjUyMzQsImV4cCI6MjAzMjU0MTIzNH0.N31WgDzl0WzGGhpGoTL6cXzF2kdmdDSv1XMstnQwMQ0";
 /* cSpell:enable */
 
-const supabase = createClient(supabaseURL, supabaseKey, {
+const supabase = createClient<Database>(supabaseURL, supabaseKey, {
   auth: {
     storage: AsyncStorage,
     autoRefreshToken: true,
