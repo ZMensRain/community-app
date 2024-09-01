@@ -1,10 +1,11 @@
 import { Day } from "./day";
+import { Database } from "~/database.types";
 
-type locationType = string | { lat: Number; lon: Number };
+type locationType = string | { lat: number; lon: number };
 type Id = { group: boolean; id: string };
 type EventType = EventTypeEnum | string;
 type EventTag = EventTagEnum | string;
-type AgeRange = { min: Number; max: Number | null };
+type AgeRange = { min: number; max: number | null };
 type EventKit = EventKitEnum | string;
 
 class CommunityEvent {
@@ -33,6 +34,32 @@ class CommunityEvent {
 
     if (unique) return [...new Set(output)];
     return output;
+  }
+  public convertToDatabase(): Database["public"]["Tables"]["events"]["Row"] {
+    let days = [];
+
+    for (let i = 0; i < this.days.length; i++) {
+      days.push({
+        event_date: this.days[i].date.toISOString(),
+        start_time: `${this.days[i].start.hour}:${this.days[i].start.minute}:00`,
+        end_time: `${this.days[i].start.hour}:${this.days[i].start.minute}:00`,
+        location: [],
+      });
+    }
+    // @ts-ignore
+    return {
+      age_limit: this.ageRange.min,
+      attendees: this.attendees.map((v) => v.id),
+      days: days,
+      description: this.description,
+      dress_code: Object.values(DressCode)[this.dressCode as unknown as number],
+      kit: this.kit as string[],
+      links: this.links,
+      tags: this.tags as string[],
+      ticket_website: this.ticketWebsite,
+      title: this.title,
+      type: this.type.toString(),
+    };
   }
 }
 
