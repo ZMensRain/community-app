@@ -34,7 +34,8 @@ const EventCreationLayout = () => {
 
     let finialEvent = event;
     finialEvent.hosted_by = { id: id, group: false };
-    let r = await supabase
+    router.navigate("FeedTab");
+    const r = await supabase
       .from("events")
       .insert([finialEvent.convertToDatabase()]);
   };

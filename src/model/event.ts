@@ -95,13 +95,15 @@ class CommunityEvent {
         location: [],
       });
     }
+
     // @ts-ignore
     return {
       age_limit: this.ageRange.min,
       attendees: this.attendees.map((v) => v.id),
       days: days,
       description: this.description,
-      dress_code: Object.values(DressCode)[this.dressCode as unknown as number],
+      dress_code:
+        this.dressCode.toString() as Database["public"]["Enums"]["dresscode"],
       kit: this.kit as string[],
       links: this.links,
       tags: this.tags as string[],
