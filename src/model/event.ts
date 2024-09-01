@@ -35,6 +35,55 @@ class CommunityEvent {
     if (unique) return [...new Set(output)];
     return output;
   }
+
+  static fromDatabase(data: Database["public"]["Tables"]["events"]["Row"]) {
+    const formatDays = (
+      days: Database["public"]["CompositeTypes"]["day"][]
+    ): Day[] => {
+      const formatLocation = (
+        data: Database["public"]["CompositeTypes"]["day"]["location"]
+      ): locationType[] => {
+        //TODO
+        return [];
+      };
+      const out = [];
+
+      for (let index = 0; index < days.length; index++) {
+        const element = days[index];
+        const start = element.start_time?.split(":");
+        const end = element.end_time?.split(":");
+        if (!start || !end || !element.event_date) continue;
+
+        out.push(
+          new Day(
+            { hour: Number(start[0]), minute: Number(start[1]) },
+            { hour: Number(end[0]), minute: Number(end[1]) },
+            new Date(element.event_date),
+            formatLocation(element.location)
+          )
+        );
+      }
+
+      return out;
+    };
+
+    return new CommunityEvent(
+      data.id,
+      { id: data.created_by, group: false },
+      data.title,
+      data.description,
+      data.type,
+      { min: data.age_limit, max: 100 },
+      formatDays(data.days),
+      DressCode[data.dress_code],
+      [], //data.attendees,
+      data.links,
+      data.ticket_website,
+      data.tags,
+      data.kit
+    );
+  }
+
   public convertToDatabase(): Database["public"]["Tables"]["events"]["Row"] {
     let days = [];
 
