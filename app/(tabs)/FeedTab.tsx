@@ -1,51 +1,58 @@
-import {
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { RefreshControl, View, ScrollView, StyleSheet } from "react-native";
 
-import React from "react";
+import React, { useEffect } from "react";
 import EventComponent from "src/components/EventComponent";
 
-import { testEvent } from "src/model/event";
+import { CommunityEvent } from "src/model/event";
+import { supabase } from "~/src/utils/supabase";
+import { pageStyle } from "~/src/utils/stylingValue";
 
-function feed() {
+function FeedTab() {
   const [refreshing, setRefreshing] = React.useState(false);
-
+  const [events, setEvents] = React.useState<CommunityEvent[]>([]);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
+    fetchEvents().then((events) => {
       setRefreshing(false);
-    }, 2000);
+      if (!events) return;
+      setEvents(events);
+    });
   }, []);
 
+  useEffect(() => {
+    fetchEvents().then((events) => {
+      setRefreshing(false);
+      if (!events) return;
+      setEvents(events);
+    });
+  }, []);
+
+  const fetchEvents = async () => {
+    const e = await supabase.from("events").select();
+    if (e.data === null) return;
+    return e.data.map((data) => CommunityEvent.fromDatabase(data));
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={pageStyle}>
       <ScrollView
         contentContainerStyle={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {[0, 1, 2, 3, 4, 5].map((e) => {
-          return <EventComponent key={e} event={testEvent}></EventComponent>;
+        {events.map((e) => {
+          return <EventComponent key={e.id} event={e}></EventComponent>;
         })}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
   scrollView: {
-    padding: 10,
     alignItems: "center",
   },
 });
-export default feed;
+
+export default FeedTab;
