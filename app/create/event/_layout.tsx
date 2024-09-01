@@ -11,11 +11,11 @@ import { supabase } from "~/src/utils/supabase";
 const EventCreationLayout = () => {
   let [event, setEvent] = useState(
     new CommunityEvent(
-      "to be set",
+      "",
       { group: false, id: "" },
       "",
       "",
-      "Type",
+      "",
       { min: 1, max: 100 },
       [],
       DressCode.Anything,
@@ -30,6 +30,13 @@ const EventCreationLayout = () => {
   const createEvent = async () => {
     let a = await supabase.auth.getUser();
     let id = a.data.user?.id;
+    if (!id) return;
+
+    let finialEvent = event;
+    finialEvent.hosted_by = { id: id, group: false };
+    let r = await supabase
+      .from("events")
+      .insert([finialEvent.convertToDatabase()]);
   };
 
   return (
