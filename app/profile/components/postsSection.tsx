@@ -1,5 +1,9 @@
+import { router } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import EventComponent from "~/src/components/EventComponent";
 import { CommunityEvent } from "~/src/model/event";
+import { colors } from "~/src/utils/stylingValue";
 
 const PostsSection = ({ posts = [] }: { posts?: CommunityEvent[] }) => {
   return (
@@ -12,18 +16,40 @@ const PostsSection = ({ posts = [] }: { posts?: CommunityEvent[] }) => {
         }}
       >
         <Text style={styles.h2}>Your Posts</Text>
-        <Text>See All</Text>
+        {posts.length > 0 && (
+          <Text
+            onPress={() => router.navigate("profile/posts/me")}
+            style={{ color: colors.primary }}
+          >
+            See All
+          </Text>
+        )}
       </View>
+
       <View
         style={{
-          aspectRatio: 1,
-
+          aspectRatio: 2,
           borderRadius: 10,
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
         {posts.length > 0 ? (
-          <Text>TODO</Text>
+          <View style={{ flex: 1 }}>
+            <ScrollView
+              horizontal={true}
+              nestedScrollEnabled={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              {posts.map((post, index) => {
+                if (post instanceof CommunityEvent)
+                  return (
+                    <View style={{ width: 300, padding: 5 }}>
+                      <EventComponent event={post} key={index} />
+                    </View>
+                  );
+              })}
+            </ScrollView>
+          </View>
         ) : (
           <View style={{ justifyContent: "center", flex: 1 }}>
             <Text style={{ textAlign: "center", fontSize: 15 }}>
