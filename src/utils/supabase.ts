@@ -2,9 +2,7 @@ import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import { CommunityEvent } from "../model/event";
-import { Database } from '~/database.types';
-
-
+import { Database } from "~/database.types";
 
 /* cSpell:disable */
 const supabaseURL = "https://yemtwnliyzhfbdclmrnn.supabase.co";
@@ -22,26 +20,30 @@ const supabase = createClient<Database>(supabaseURL, supabaseKey, {
 });
 
 const getEvents = async (created_by: string, number: number | null) => {
+  let data: Database["public"]["Tables"]["events"]["Row"][] = [];
+
   if (number) {
-    return await supabase
+    const f = await supabase
       .from("events")
       .select()
       .eq("created_by", created_by)
       .order("created_at")
       .limit(number);
+    if (f.data) data = [...data, ...f.data];
+  } else {
+    const response = await supabase
+      .from("events")
+      .select()
+      .eq("created_by", created_by)
+      .order("created_at");
+    if (response.data) data = data.concat(response.data);
   }
 
-  let response = await supabase
-    .from("events")
-    .select()
-    .eq("created_by", created_by)
-    .order("created_at");
-
-  return response;
+  return data.map((v) => CommunityEvent.fromDatabase(v));
 };
 
 async function getPosts(created_by: string): Promise<CommunityEvent[]> {
-  throw new Error("Unimplemented");
+  return getEvents(created_by, 10);
 }
 
 const getUserData = async (id: string) => {
@@ -56,4 +58,4 @@ const getUserData = async (id: string) => {
   return response.data[0];
 };
 
-export { getUserData, supabase };
+export { getUserData, supabase, getPosts };
