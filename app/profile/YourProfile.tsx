@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Session } from "@supabase/supabase-js";
-import { getUserData, supabase } from "src/utils/supabase";
+import { getPosts, getUserData, supabase } from "src/utils/supabase";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack } from "expo-router";
 
@@ -24,23 +24,27 @@ import {
 
 import FilledButton from "~/src/components/shared/filledButton";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { CommunityEvent } from "~/src/model/event";
 
 const YourProfile = () => {
   const [username, setUsername] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
+  const [posts, setPosts] = useState<CommunityEvent[]>([]);
   const [session, setSession] = useState<Session | null>(null);
   const sheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session === null) return;
-      let userData = await getUserData(session?.user.id);
+      const userData = await getUserData(session?.user.id);
+      const posts = await getPosts(session?.user.id);
 
       if (typeof userData === "string") return;
       if (userData.username === null) return;
 
       setUsername(userData["username"]);
       setInterests(userData["interests"]);
+      setPosts(posts);
       setSession(session);
     });
   }, []);
@@ -138,19 +142,21 @@ const YourProfile = () => {
             </View>
 
             <MapSection />
-            <PostsSection />
+            <PostsSection posts={posts} />
             <InterestsSection
               interests={interests}
               onAddPressed={() => sheetRef.current?.snapToIndex(0)}
               onInterestPress={onRemoveInterest}
             />
-            <FilledButton
-              text="Sign Out"
-              buttonStyle={{ backgroundColor: "red" }}
-              onPress={() => {
-                supabase.auth.signOut();
-              }}
-            />
+            <View style={{ marginVertical: 10 }}>
+              <FilledButton
+                text="Sign Out"
+                buttonStyle={{ backgroundColor: "red" }}
+                onPress={() => {
+                  supabase.auth.signOut();
+                }}
+              />
+            </View>
           </ScrollView>
         </View>
         <BottomSheet
