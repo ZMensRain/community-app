@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, ViewStyle } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { tagColors } from "~/src/utils/stylingValue";
 import { TouchableHighlight } from "react-native-gesture-handler";
@@ -7,15 +7,17 @@ type props = {
   interests: string[];
   onAddPressed?: () => void;
   onInterestPress?: (interest: string) => void;
+  style?: ViewStyle;
 };
 
 const InterestsSection = ({
   interests,
   onAddPressed,
   onInterestPress,
+  style,
 }: props) => {
   return (
-    <>
+    <View style={style}>
       <View style={styles.container}>
         <Text style={styles.h2}>Your Interests</Text>
         <Pressable onPress={onAddPressed} hitSlop={20}>
@@ -68,7 +70,7 @@ const InterestsSection = ({
           </Text>
         </View>
       )}
-    </>
+    </View>
   );
 };
 

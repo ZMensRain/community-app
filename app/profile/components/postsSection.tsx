@@ -1,13 +1,18 @@
 import { router } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ViewStyle } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import EventComponent from "~/src/components/EventComponent";
 import { CommunityEvent } from "~/src/model/event";
 import { colors } from "~/src/utils/stylingValue";
 
-const PostsSection = ({ posts = [] }: { posts?: CommunityEvent[] }) => {
+type props = {
+  posts?: CommunityEvent[];
+  style?: ViewStyle;
+};
+
+const PostsSection = ({ posts = [], style }: props) => {
   return (
-    <>
+    <View style={style}>
       <View
         style={{
           flexDirection: "row",
@@ -59,7 +64,7 @@ const PostsSection = ({ posts = [] }: { posts?: CommunityEvent[] }) => {
           </View>
         )}
       </View>
-    </>
+    </View>
   );
 };
 

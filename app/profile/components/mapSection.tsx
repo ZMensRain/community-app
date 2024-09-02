@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
-
-const MapSection = () => {
+import { View, Text, StyleSheet, ViewStyle } from "react-native";
+type props = {
+  style?: ViewStyle;
+};
+const MapSection = ({ style }: props) => {
   return (
-    <>
+    <View style={style}>
       <Text style={styles.h2}>Your Area</Text>
       <View
         style={{
@@ -15,7 +17,7 @@ const MapSection = () => {
       >
         <Text>TODO</Text>
       </View>
-    </>
+    </View>
   );
 };
 
