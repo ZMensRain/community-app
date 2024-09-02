@@ -141,12 +141,13 @@ const YourProfile = () => {
               <Text style={styles.username}>{username}</Text>
             </View>
 
-            <MapSection />
-            <PostsSection posts={posts} />
+            <MapSection style={styles.section} />
+            <PostsSection posts={posts} style={styles.section} />
             <InterestsSection
               interests={interests}
               onAddPressed={() => sheetRef.current?.snapToIndex(0)}
               onInterestPress={onRemoveInterest}
+              style={styles.section}
             />
             <View style={{ marginVertical: 10 }}>
               <FilledButton
@@ -175,6 +176,7 @@ const YourProfile = () => {
 
 const styles = StyleSheet.create({
   username: { fontSize: 30, fontWeight: "medium" },
+  section: { marginTop: 10 },
 });
 
 export default YourProfile;
