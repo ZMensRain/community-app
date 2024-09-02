@@ -6,7 +6,7 @@ import {
   Linking,
   ActivityIndicator,
 } from "react-native";
-import { CommunityEvent, testEvent } from "src/model/event";
+import { CommunityEvent } from "src/model/event";
 import DayCard from "src/components/DayCard";
 import {
   colors,
@@ -21,7 +21,7 @@ import { supabase } from "~/src/utils/supabase";
 import FilledButton from "~/src/components/shared/filledButton";
 
 const EventScreen = () => {
-  const [event, setEvent] = useState<CommunityEvent | null>(testEvent);
+  const [event, setEvent] = useState<CommunityEvent | null>();
   const local = useLocalSearchParams();
   const eventId = local["id"];
 
@@ -47,8 +47,8 @@ const EventScreen = () => {
             headerShown: true,
           }}
         />
-        <View>
-          <ActivityIndicator />
+        <View style={[pageStyle, { justifyContent: "center" }]}>
+          <ActivityIndicator size="large" />
         </View>
       </>
     );
@@ -250,10 +250,6 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: 24,
     fontWeight: "semibold",
-  },
-  h2: {
-    fontSize: 25,
-    fontWeight: "500",
   },
   bodyFont: {
     fontSize: 14,
