@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import { colors } from "~/src/utils/stylingValue";
 
 type props = {
   onSearch?: (text: string) => void;
@@ -12,19 +13,17 @@ const SearchBar = ({ onSearch, onTextUpdate: onUpdate }: props) => {
 
   return (
     <View style={styles.container}>
-      <Pressable
+      <Ionicons
         onPress={() => onSearch?.(text)}
-        style={{ alignSelf: "center" }}
-      >
-        <Ionicons
-          name="search"
-          size={24}
-          style={{ marginRight: 10 }}
-        ></Ionicons>
-      </Pressable>
+        name="search"
+        size={24}
+        style={{ marginRight: 5 }}
+        color={colors.input}
+      />
 
       <TextInput
         placeholder="Search"
+        placeholderTextColor={colors.input}
         style={{ width: "100%" }}
         value={text}
         onChangeText={(newText) => {
@@ -42,10 +41,11 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
     paddingHorizontal: 5,
-    backgroundColor: "#F5F5F5",
+    borderColor: colors.input,
+    borderWidth: 2,
     overflow: "hidden",
     flexDirection: "row",
-    borderRadius: 20,
+    borderRadius: 15,
   },
 });
 
