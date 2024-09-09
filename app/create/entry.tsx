@@ -35,7 +35,7 @@ const EntryScreen = () => {
           <FilledButton
             text={"Issue"}
             textStyle={{ fontSize: 30 }}
-            onPress={() => {}}
+            onPress={() => router.navigate("create/issueReport/1")}
           />
           <View style={{ height: 20 }} />
           <FilledButton
