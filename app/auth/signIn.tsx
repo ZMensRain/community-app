@@ -54,72 +54,65 @@ export default function SignIn() {
           {/*Subtitle*/}
           <Text style={styles.subtitle}>Sign In</Text>
 
-          <View style={styles.body}>
-            {loading ? (
-              <ActivityIndicator size={"large"} />
-            ) : (
-              <Formik
-                initialValues={{ email: "", password: "" }}
-                onSubmit={onSubmit}
-                validationSchema={validation}
-                validateOnChange={true}
-              >
-                {({
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  values,
-                  errors,
-                }) => (
+          {loading ? (
+            <ActivityIndicator size={"large"} />
+          ) : (
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              onSubmit={onSubmit}
+              validationSchema={validation}
+              validateOnChange={true}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+                <>
+                  {/*Input fields*/}
                   <>
-                    {/*Input fields*/}
-                    <>
-                      <TextInput
-                        value={values.email}
-                        style={styles.input}
-                        onChangeText={handleChange("email")}
-                        onBlur={handleBlur("email")}
-                        placeholder={"email@address.com"}
-                      />
-                      {errors.email != null && (
-                        <Text style={styles.error}>{errors.email}</Text>
-                      )}
+                    <TextInput
+                      value={values.email}
+                      style={styles.input}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      placeholder={"email@address.com"}
+                    />
+                    {errors.email != null && (
+                      <Text style={styles.error}>{errors.email}</Text>
+                    )}
 
-                      <TextInput
-                        value={values.password}
-                        style={styles.input}
-                        onChangeText={handleChange("password")}
-                        onBlur={handleBlur("password")}
-                        placeholder={"password"}
-                        secureTextEntry={true}
-                      />
-                      {errors.password != null && (
-                        <Text style={styles.error}>{errors.password}</Text>
-                      )}
-                    </>
-
-                    <Pressable
-                      style={[styles.mt, styles.mb]}
-                      onPress={() => router.navigate("auth/signUp")}
-                      pressRetentionOffset={20}
-                    >
-                      <Text style={[{ textAlign: "center", color: "#828282" }]}>
-                        Don't have an account?
-                      </Text>
-                    </Pressable>
-
-                    {/*Sign in button */}
-                    <Pressable
-                      style={[styles.signInButton, styles.mt]}
-                      onPress={() => handleSubmit()}
-                    >
-                      <Text style={styles.signInButtonText}>Sign in</Text>
-                    </Pressable>
+                    <TextInput
+                      value={values.password}
+                      style={styles.input}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      placeholder={"password"}
+                      secureTextEntry={true}
+                    />
+                    {errors.password != null && (
+                      <Text style={styles.error}>{errors.password}</Text>
+                    )}
                   </>
-                )}
-              </Formik>
-            )}
-          </View>
+
+                  <Pressable
+                    style={[styles.mt, styles.mb]}
+                    onPress={() => router.navigate("auth/signUp")}
+                    pressRetentionOffset={20}
+                  >
+                    <Text style={[{ textAlign: "center", color: "#828282" }]}>
+                      Don't have an account?
+                    </Text>
+                  </Pressable>
+
+                  {/*Sign in button */}
+                  <Pressable
+                    style={[styles.signInButton, styles.mt]}
+                    onPress={() => handleSubmit()}
+                  >
+                    <Text style={styles.signInButtonText}>Sign in</Text>
+                  </Pressable>
+                </>
+              )}
+            </Formik>
+          )}
+
           <TermsComponent />
         </ScrollView>
       </Pressable>
@@ -128,11 +121,12 @@ export default function SignIn() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 35 },
   body: {
     marginHorizontal: 36,
     justifyContent: "center",
     height: "100%",
+    backgroundColor: "blue",
   },
   title: {
     fontWeight: "bold",
