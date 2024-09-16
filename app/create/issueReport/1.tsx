@@ -39,7 +39,7 @@ const IssueTypeScreen = () => {
   };
 
   const onPickType = (type: string) => {
-    router.navigate("/create/issueReport/2");
+    router.navigate("create/issueReport/2");
   };
 
   return (
