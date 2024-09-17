@@ -145,8 +145,8 @@ const YourProfile = () => {
 
             <MapSection
               style={styles.section}
-              lat={location?.coordinates[0] ?? 0}
-              long={location?.coordinates[1] ?? 0}
+              lat={location?.coordinates[1] ?? 0}
+              long={location?.coordinates[0] ?? 0}
             />
             <PostsSection posts={posts} style={styles.section} />
             <InterestsSection
