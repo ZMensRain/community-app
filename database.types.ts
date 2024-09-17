@@ -1,3 +1,11 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
 export type Database = {
   public: {
     Tables: {
@@ -13,6 +21,7 @@ export type Database = {
           id: string;
           kit: string[];
           links: string[];
+          location: unknown | null;
           tags: string[];
           ticket_website: string | null;
           title: string;
@@ -23,12 +32,13 @@ export type Database = {
           attendees: string[];
           created_at?: string;
           created_by?: string;
-          days: Database["public"]["CompositeTypes"]["day"][];
+          days?: Database["public"]["CompositeTypes"]["day"][];
           description: string;
           dress_code?: Database["public"]["Enums"]["dresscode"];
           id?: string;
           kit: string[];
           links: string[];
+          location?: unknown | null;
           tags: string[];
           ticket_website?: string | null;
           title: string;
@@ -45,6 +55,7 @@ export type Database = {
           id?: string;
           kit?: string[];
           links?: string[];
+          location?: unknown | null;
           tags?: string[];
           ticket_website?: string | null;
           title?: string;
@@ -145,7 +156,7 @@ export type Database = {
         event_date: string | null;
         start_time: string | null;
         end_time: string | null;
-        location: unknown[] | null;
+        location: unknown | null;
       };
     };
   };

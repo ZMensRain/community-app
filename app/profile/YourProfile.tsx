@@ -30,6 +30,7 @@ const YourProfile = () => {
   const [username, setUsername] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
   const [posts, setPosts] = useState<CommunityEvent[]>([]);
+  const [location, setLocation] = useState<location | null>();
   const [session, setSession] = useState<Session | null>(null);
   const sheetRef = useRef<BottomSheet>(null);
 
@@ -46,6 +47,7 @@ const YourProfile = () => {
       setInterests(userData["interests"]);
       setPosts(posts);
       setSession(session);
+      setLocation(userData.location as location);
     });
   }, []);
 
@@ -141,7 +143,11 @@ const YourProfile = () => {
               <Text style={styles.username}>{username}</Text>
             </View>
 
-            <MapSection style={styles.section} />
+            <MapSection
+              style={styles.section}
+              lat={location?.coordinates[0] ?? 0}
+              long={location?.coordinates[1] ?? 0}
+            />
             <PostsSection posts={posts} style={styles.section} />
             <InterestsSection
               interests={interests}
@@ -180,3 +186,5 @@ const styles = StyleSheet.create({
 });
 
 export default YourProfile;
+
+type location = { coordinates: [0, 0]; type: "Point" };

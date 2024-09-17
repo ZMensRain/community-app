@@ -49,7 +49,7 @@ async function getPosts(created_by: string): Promise<CommunityEvent[]> {
 const getUserData = async (id: string) => {
   let response = await supabase
     .from("profiles")
-    .select("username, avatar_url, interests")
+    .select("username, avatar_url, interests, location")
     .eq("id", id);
   if (response.error) {
     return response.error.message;
