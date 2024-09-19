@@ -25,14 +25,21 @@ import {
 import FilledButton from "~/src/components/shared/filledButton";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { CommunityEvent } from "~/src/model/event";
+import { UserActionKind, useUserContext } from "~/src/contexts/userContext";
 
 const YourProfile = () => {
-  const [username, setUsername] = useState("");
-  const [interests, setInterests] = useState<string[]>([]);
   const [posts, setPosts] = useState<CommunityEvent[]>([]);
-  const [location, setLocation] = useState<location | null>();
   const [session, setSession] = useState<Session | null>(null);
   const sheetRef = useRef<BottomSheet>(null);
+  const userContext = useUserContext();
+
+  if (!userContext) {
+    Alert.alert("Something went wrong");
+    router.back();
+    return <View></View>;
+  }
+
+  console.log(userContext.state);
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -43,11 +50,8 @@ const YourProfile = () => {
       if (typeof userData === "string") return;
       if (userData.username === null) return;
 
-      setUsername(userData["username"]);
-      setInterests(userData["interests"]);
       setPosts(posts);
       setSession(session);
-      setLocation(userData.location as location);
     });
   }, []);
 
@@ -63,28 +67,35 @@ const YourProfile = () => {
   );
 
   const onAddInterest = async (value: string) => {
-    if (interests.includes(value)) return;
+    if (userContext?.state.interests.includes(value)) return;
     if (session === null) return;
-
-    setInterests([...interests, value]);
+    const newInterests = [...userContext.state.interests, value];
+    userContext?.dispatch({
+      type: UserActionKind.updateInterests,
+      payload: newInterests,
+    });
     sheetRef.current?.close();
 
     //Update server
     let response = await supabase
       .from("profiles")
-      .update({ interests: [...interests, value] })
+      .update({ interests: newInterests })
       .eq("id", session.user.id)
       .select();
     if (response.error)
       Alert.alert("Something went wrong", response.error.message);
   };
+
   const onRemoveInterest = async (value: string) => {
     if (session === null) return;
-    let newInterests = interests.filter((val) => {
-      if (value.toLowerCase() === val.toLowerCase()) return false;
-      return true;
+    let newInterests = userContext.state.interests.filter(
+      (val) => value.toLowerCase() !== val.toLowerCase()
+    );
+
+    userContext?.dispatch({
+      type: UserActionKind.updateInterests,
+      payload: newInterests,
     });
-    setInterests(newInterests as string[]);
 
     //Update server
     let response = await supabase
@@ -140,17 +151,17 @@ const YourProfile = () => {
                 size={125}
                 showName={false}
               />
-              <Text style={styles.username}>{username}</Text>
+              <Text style={styles.username}>{userContext?.state.username}</Text>
             </View>
 
             <MapSection
               style={styles.section}
-              lat={location?.coordinates[1] ?? 0}
-              long={location?.coordinates[0] ?? 0}
+              lat={userContext.state.location.latitude}
+              long={userContext.state.location.longitude}
             />
             <PostsSection posts={posts} style={styles.section} />
             <InterestsSection
-              interests={interests}
+              interests={userContext.state.interests}
               onAddPressed={() => sheetRef.current?.snapToIndex(0)}
               onInterestPress={onRemoveInterest}
               style={styles.section}
