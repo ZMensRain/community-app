@@ -58,7 +58,7 @@ const getUserData = async (id: string) => {
   let out = {
     location: {
       latitude: (data.location as { coordinates: number[] }).coordinates[1],
-      longitude: (data.location as { coordinates: number[] }).coordinates[1],
+      longitude: (data.location as { coordinates: number[] }).coordinates[0],
     },
     username: data.username,
     interests: data.interests,
