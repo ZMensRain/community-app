@@ -54,8 +54,17 @@ const getUserData = async (id: string) => {
   if (response.error) {
     return response.error.message;
   }
-
-  return response.data[0];
+  const data = response.data[0];
+  let out = {
+    location: {
+      latitude: (data.location as { coordinates: number[] }).coordinates[1],
+      longitude: (data.location as { coordinates: number[] }).coordinates[1],
+    },
+    username: data.username,
+    interests: data.interests,
+    avatar_url: data.avatar_url,
+  };
+  return out;
 };
 
 export { getUserData, supabase, getPosts };
