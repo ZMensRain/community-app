@@ -1,8 +1,18 @@
-import { Session } from "@supabase/supabase-js";
-import { useState, useEffect } from "react";
-import { ActivityIndicator, AppState, StyleSheet, View } from "react-native";
-import { supabase } from "src/utils/supabase";
+import { useEffect } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  AppState,
+  StyleSheet,
+  View,
+} from "react-native";
+import { getUserData, supabase } from "src/utils/supabase";
 import { router } from "expo-router";
+import {
+  User,
+  UserActionKind,
+  useUserContext,
+} from "~/src/contexts/userContext";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -17,25 +27,39 @@ AppState.addEventListener("change", (state) => {
 });
 
 export default function Page() {
-  const [session, setSession] = useState<Session | null>(null);
+  const userContext = useUserContext();
+  if (userContext == null) Alert.alert("Something has gone very wrong");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.navigate("/FeedTab");
-      } else {
-        router.navigate("/auth/signUp");
-      }
-      setSession(session);
+      if (session) router.replace("/FeedTab");
+      else router.replace("/auth/signUp");
+
+      supabase.auth.getUser().then(async (response) => {
+        if (!response.data.user) return;
+
+        let user: User = {
+          id: response.data.user.id,
+          email: response.data.user.email ?? "",
+          interests: [],
+          location: { latitude: 0, longitude: 0 },
+          postIds: [],
+          username: "",
+          discriminator: "user",
+        };
+        let r = await getUserData(user.id);
+        if (typeof r != "string") {
+          user.interests = r.interests;
+          user.username = String(r.username);
+          user.location = r.location;
+        }
+        userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
+      });
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        router.navigate("/FeedTab");
-      } else {
-        router.navigate("/auth/signUp");
-      }
-      setSession(session);
+      if (session) router.replace("/FeedTab");
+      else router.replace("/auth/signUp");
     });
   }, []);
 
