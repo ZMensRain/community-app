@@ -4,16 +4,19 @@ import { FlatList, View, Text } from "react-native";
 import SearchBar from "~/src/components/create/SearchBar";
 
 import OutlineButton from "~/src/components/shared/outlineButton";
-import { EventTypeEnum } from "~/src/model/event";
+import { useIssueCreationContext } from "~/src/contexts/issueReportCreationContext";
+import { IssueTypeEnum } from "~/src/model/issue";
 import { pageStyle } from "~/src/utils/stylingValue";
 
 const IssueTypeScreen = () => {
+  const issueCreationContext = useIssueCreationContext();
+  if (!issueCreationContext) return null;
   const [searched, setSearched] = useState<string>("");
   const getResults = () => {
     let match: Boolean = false;
 
     return (
-      Object.keys(EventTypeEnum)
+      Object.keys(IssueTypeEnum)
         .filter((value) => {
           // sets match to true so the user input will not be shown if not needed
           if (!match) {
@@ -40,6 +43,10 @@ const IssueTypeScreen = () => {
 
   const onPickType = (type: string) => {
     router.navigate("create/issueReport/2");
+    issueCreationContext.state[1]({
+      ...issueCreationContext.state[0],
+      type: type,
+    });
   };
 
   return (
