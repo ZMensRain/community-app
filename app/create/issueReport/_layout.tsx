@@ -32,12 +32,13 @@ const IssueCreationLayout = () => {
         <Stack.Screen
           name="2"
           options={{
-            headerLeft: () => (
-              <Pressable onPress={() => router.back()}>
-                <Ionicons name="close" size={24} color={colors.primary} />
-              </Pressable>
-            ),
-            title: "Pick Type",
+            title: "Short Description",
+          }}
+        />
+        <Stack.Screen
+          name="3"
+          options={{
+            title: "Location",
           }}
         />
       </Stack>

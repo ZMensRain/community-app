@@ -1,54 +1,59 @@
+import { router } from "expo-router";
 import { useState } from "react";
-import { View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import SearchBar from "~/src/components/create/SearchBar";
+import { TextInput, View, StyleSheet, Pressable, Keyboard } from "react-native";
 import FilledButton from "~/src/components/shared/filledButton";
-import { colors } from "~/src/utils/stylingValue";
+import { useIssueCreationContext } from "~/src/contexts/issueReportCreationContext";
+import { pageStyle } from "~/src/utils/stylingValue";
 
-const IssueLocationScreen = () => {
-  const [markerLocation, setMarkerLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+const IssueDescriptionScreen = () => {
+  const issueCreationContext = useIssueCreationContext();
+  if (!issueCreationContext) return null;
+  const [description, setDescription] = useState("");
 
   return (
-    <View>
-      <MapView
-        style={{ width: "100%", height: "100%" }}
-        onPress={(v) => {
-          setMarkerLocation(v.nativeEvent.coordinate);
-          console.log(v.nativeEvent.coordinate);
-        }}
-        showsUserLocation={true}
-        followsUserLocation={true}
-      >
-        {markerLocation && <Marker coordinate={markerLocation} />}
-      </MapView>
+    <Pressable style={pageStyle} onPress={() => Keyboard.dismiss()}>
+      <TextInput
+        style={[styles.input, { minHeight: 200 }]}
+        placeholder="Description"
+        autoCorrect={true}
+        multiline={true}
+        maxLength={1000}
+        onChangeText={(v) => setDescription(v)}
+      />
       <View
         style={{
-          position: "absolute",
-          width: "100%",
-          padding: 10,
-        }}
-      >
-        <View
-          style={{ backgroundColor: colors.primaryContainer, borderRadius: 15 }}
-        >
-          <SearchBar />
-        </View>
-      </View>
-      <View
-        style={{
-          position: "absolute",
-          width: "100%",
-          padding: 10,
           bottom: 0,
+          left: 0,
+          right: 0,
+          position: "absolute",
+          padding: 10,
+          alignItems: "stretch",
         }}
       >
-        <FilledButton text="🎉Finish🎉" />
+        <FilledButton
+          text={description.length > 0 ? "Next" : "Skip"}
+          onPress={() => {
+            router.push("create/issueReport/3");
+            issueCreationContext.state[1]({
+              ...issueCreationContext.state[0],
+              description: description,
+            });
+          }}
+        />
       </View>
-    </View>
+    </Pressable>
   );
 };
 
-export default IssueLocationScreen;
+const styles = StyleSheet.create({
+  input: {
+    marginVertical: 7.5,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderColor: "#E0E0E0",
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+});
+
+export default IssueDescriptionScreen;
