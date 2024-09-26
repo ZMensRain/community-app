@@ -39,8 +39,6 @@ const YourProfile = () => {
     return <View></View>;
   }
 
-  console.log(userContext.state);
-
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session === null) return;
