@@ -13,21 +13,35 @@ import { pageStyle } from "~/src/utils/stylingValue";
 import FilledButton from "~/src/components/shared/filledButton";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { supabase } from "~/src/utils/supabase";
 import MapSheet from "./components/mapSheet";
+import { UserActionKind, useUserContext } from "~/src/contexts/userContext";
+import { LatLng } from "react-native-maps";
 
 const EditProfile = () => {
+  const userContext = useUserContext();
+  if (!userContext) return;
   const headerRight = () => {
+    const edited = username != userContext?.state.username;
+
+    const updateUsername = () => {
+      if (!userContext) return;
+      supabase
+        .from("profiles")
+        .update({ username: username })
+        .eq("id", userContext.state.id);
+
+      userContext.dispatch({
+        type: UserActionKind.updateUsername,
+        payload: username,
+      });
+    };
+
     return (
-      <Ionicons
-        name="checkmark"
-        size={24}
-        onPress={() => console.log("wwww")}
-      />
+      edited && <Ionicons name="checkmark" size={24} onPress={updateUsername} />
     );
   };
-
   const deleteAccount = () => {
     Alert.prompt(
       "Delete Your Account",
@@ -42,8 +56,25 @@ const EditProfile = () => {
       {}
     );
   };
-  const sheetRef = useRef<BottomSheet>(null);
+  const updateUserLocation = (coordinate: LatLng) => {
+    if (!userContext) return;
 
+    sheetRef.current?.close();
+    userContext.dispatch({
+      type: UserActionKind.updateLocation,
+      payload: coordinate,
+    });
+    supabase.auth.getUser().then((user) => {
+      if (!user.data.user) return;
+
+      supabase
+        .from("profiles")
+        .update({
+          location: `POINT(${coordinate.longitude} ${coordinate.latitude})`,
+        })
+        .eq("id", user.data.user?.id);
+    });
+  };
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
@@ -54,6 +85,10 @@ const EditProfile = () => {
     ),
     []
   );
+
+  const sheetRef = useRef<BottomSheet>(null);
+
+  const [username, setUsername] = useState(userContext.state.username);
 
   return (
     <>
@@ -68,7 +103,12 @@ const EditProfile = () => {
             Username <Text style={{ color: "red" }}>*</Text>
           </Text>
 
-          <TextInput placeholder="Username" style={styles.input} />
+          <TextInput
+            placeholder="Username"
+            style={styles.input}
+            value={username}
+            onChangeText={(v) => setUsername(v)}
+          />
 
           <Text style={styles.label}>Email</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -77,7 +117,7 @@ const EditProfile = () => {
                 fontSize: 20,
               }}
             >
-              (user email)
+              {userContext.state.email}
             </Text>
             <Ionicons
               name="pencil"
@@ -132,25 +172,7 @@ const EditProfile = () => {
           index={-1}
           backdropComponent={renderBackdrop}
         >
-          <MapSheet
-            onSaveLocation={(coordinate) => {
-              sheetRef.current?.close();
-
-              supabase.auth.getUser().then((user) => {
-                if (!user.data.user) return;
-
-                supabase
-                  .from("profiles")
-                  .update({
-                    location: `POINT(${coordinate.longitude} ${coordinate.latitude})`,
-                  })
-                  .eq("id", user.data.user?.id)
-                  .then((a) => {
-                    console.log(a);
-                  });
-              });
-            }}
-          />
+          <MapSheet onSaveLocation={updateUserLocation} />
         </BottomSheet>
       </GestureHandlerRootView>
     </>
