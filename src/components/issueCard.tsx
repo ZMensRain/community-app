@@ -13,7 +13,9 @@ const IssueCard = ({ issue, onPress }: props) => {
     >
       <View>
         <View style={{ position: "absolute", top: 0, right: 0 }}>
-          <Text>{getTimeSincePost(issue.createdAt)}</Text>
+          <Text style={{ color: colors.subText }}>
+            {getTimeSincePost(issue.createdAt)}
+          </Text>
         </View>
         <Text style={styles.title}>{issue.type}</Text>
         <Text numberOfLines={3} style={styles.description}>
@@ -26,6 +28,7 @@ const IssueCard = ({ issue, onPress }: props) => {
 
 const styles = StyleSheet.create({
   container: {
+    marginVertical: 5,
     borderColor: colors.input,
     borderWidth: 2,
     borderRadius: 10,
@@ -34,7 +37,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: { fontSize: 20 },
-  description: { color: "#494949" },
+  description: { color: colors.subText },
 });
 
 export default IssueCard;

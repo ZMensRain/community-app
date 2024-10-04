@@ -6,6 +6,7 @@ const colors = {
   secondary: "#A5D59C",
   primaryContainer: "#F2F2F2",
   input: "#E0E0E0",
+  subText: "#494949",
 };
 const pageTitle: TextStyle = {
   fontWeight: "semibold",

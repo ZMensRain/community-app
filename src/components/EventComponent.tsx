@@ -26,7 +26,9 @@ const EventComponent = (props: EventProps) => {
     >
       <View>
         <View style={{ position: "absolute", top: 0, right: 0 }}>
-          <Text>{getTimeSincePost(props.event.createdAt)}</Text>
+          <Text style={{ color: colors.subText }}>
+            {getTimeSincePost(props.event.createdAt)}
+          </Text>
         </View>
         <Text style={styles.title}>{props.event.title}</Text>
         <Text
