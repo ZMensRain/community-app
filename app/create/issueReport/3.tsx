@@ -9,17 +9,23 @@ import { colors } from "~/src/utils/stylingValue";
 const IssueLocationScreen = () => {
   const issueCreationContext = useIssueCreationContext();
   if (!issueCreationContext) return null;
-  const [markerLocation, setMarkerLocation] = useState<LatLng | null>(null);
+  const [locationChosen, setLocationChosen] = useState(false);
 
   return (
     <View>
       <MapView
         style={{ width: "100%", height: "100%" }}
-        onPress={(v) => setMarkerLocation(v.nativeEvent.coordinate)}
+        onPress={(v) => {
+          setLocationChosen(true);
+
+          issueCreationContext.state[1]({
+            ...issueCreationContext.state[0],
+            coordinates: v.nativeEvent.coordinate,
+          });
+        }}
         showsUserLocation={true}
-        followsUserLocation={true}
       >
-        {markerLocation && <Marker coordinate={markerLocation} />}
+        <Marker coordinate={issueCreationContext.state[0].coordinates} />
       </MapView>
       <View
         style={{
@@ -45,11 +51,7 @@ const IssueLocationScreen = () => {
         <FilledButton
           text="🎉Finish🎉"
           onPress={() => {
-            if (!markerLocation) return;
-            issueCreationContext.state[1]({
-              ...issueCreationContext.state[0],
-              coordinates: markerLocation,
-            });
+            if (!locationChosen) return;
             issueCreationContext.onSubmit();
           }}
         />
