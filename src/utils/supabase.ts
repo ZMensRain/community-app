@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import { CommunityEvent } from "../model/event";
 import { Database } from "~/database.types";
+import { Issue, IssueFromDatabase } from "../model/issue";
 
 /* cSpell:disable */
 const supabaseURL = "https://yemtwnliyzhfbdclmrnn.supabase.co";
@@ -42,8 +43,38 @@ const getEvents = async (created_by: string, number: number | null) => {
   return data.map((v) => CommunityEvent.fromDatabase(v));
 };
 
-async function getPosts(created_by: string): Promise<CommunityEvent[]> {
-  return getEvents(created_by, 10);
+const getIssues = async (created_by: string, number: number | null) => {
+  let data: Database["public"]["Tables"]["issues"]["Row"][] = [];
+
+  if (number) {
+    const f = await supabase
+      .from("issues")
+      .select()
+      .eq("created_by", created_by)
+      .order("created_at")
+      .limit(number);
+    if (f.data) data = [...data, ...f.data];
+  } else {
+    const response = await supabase
+      .from("issues")
+      .select()
+      .eq("created_by", created_by)
+      .order("created_at");
+    if (response.data) data = data.concat(response.data);
+  }
+
+  return data.map((v) => IssueFromDatabase(v));
+};
+
+async function getPosts(
+  created_by: string
+): Promise<(CommunityEvent | Issue)[]> {
+  let l = [
+    ...(await getEvents(created_by, null)),
+    ...(await getIssues(created_by, null)),
+  ];
+
+  return l;
 }
 
 const getUserData = async (id: string) => {
@@ -67,4 +98,4 @@ const getUserData = async (id: string) => {
   return out;
 };
 
-export { getUserData, supabase, getPosts };
+export { getUserData, supabase, getPosts, getEvents, getIssues };
