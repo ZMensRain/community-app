@@ -15,6 +15,7 @@ interface Issue {
   description: string;
   creatorId: string;
   createdAt: Date;
+  id: string;
 }
 
 const IssueFromDatabase = (
@@ -30,6 +31,7 @@ const IssueFromDatabase = (
       latitude: location.coordinates[1],
       longitude: location.coordinates[0],
     },
+    id: data.id,
   };
   return issue;
 };
