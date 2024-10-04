@@ -12,6 +12,9 @@ const IssueReportCreationProvider = ({ children, onSubmit }: props) => {
     coordinates: { latitude: 0, longitude: 0 },
     description: "",
     type: "",
+    createdAt: new Date(),
+    creatorId: "",
+    id: "",
   });
   return (
     <IssueReportCreationContext.Provider
