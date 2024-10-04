@@ -26,9 +26,10 @@ import FilledButton from "~/src/components/shared/filledButton";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { CommunityEvent } from "~/src/model/event";
 import { UserActionKind, useUserContext } from "~/src/contexts/userContext";
+import { Issue } from "~/src/model/issue";
 
 const YourProfile = () => {
-  const [posts, setPosts] = useState<CommunityEvent[]>([]);
+  const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>([]);
   const [session, setSession] = useState<Session | null>(null);
   const sheetRef = useRef<BottomSheet>(null);
   const userContext = useUserContext();
@@ -43,7 +44,7 @@ const YourProfile = () => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session === null) return;
       const userData = await getUserData(session?.user.id);
-      const posts = await getPosts(session?.user.id);
+      const posts = await getPosts(session?.user.id, 10);
 
       if (typeof userData === "string") return;
       if (userData.username === null) return;
@@ -104,6 +105,7 @@ const YourProfile = () => {
     if (response.error)
       Alert.alert("Something went wrong", response.error.message);
   };
+
   if (session === null)
     return (
       <View

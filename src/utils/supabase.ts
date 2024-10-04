@@ -67,11 +67,12 @@ const getIssues = async (created_by: string, number: number | null) => {
 };
 
 async function getPosts(
-  created_by: string
+  created_by: string,
+  numberOfEach: number
 ): Promise<(CommunityEvent | Issue)[]> {
   let l = [
-    ...(await getEvents(created_by, null)),
-    ...(await getIssues(created_by, null)),
+    ...(await getEvents(created_by, numberOfEach)),
+    ...(await getIssues(created_by, numberOfEach)),
   ];
   l.sort((a, b) => {
     return b.createdAt.getTime() - a.createdAt.getTime();
