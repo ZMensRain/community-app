@@ -12,6 +12,8 @@ interface Issue {
   type: IssueType;
   coordinates: LatLng;
   description: string;
+  creatorId: string;
+  createdAt: Date;
 }
 
 export { Issue, IssueType, IssueTypeEnum };
