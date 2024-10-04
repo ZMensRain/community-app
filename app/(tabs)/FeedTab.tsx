@@ -13,6 +13,7 @@ import { supabase } from "~/src/utils/supabase";
 import { pageStyle } from "~/src/utils/stylingValue";
 import { Issue, IssueFromDatabase } from "~/src/model/issue";
 import IssueCard from "~/src/components/issueCard";
+import { router } from "expo-router";
 
 function FeedTab() {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -49,10 +50,19 @@ function FeedTab() {
     return data;
   };
 
+  const onIssuePress = (issue: Issue) => {
+    router.navigate(`issue/${issue.id}`);
+  };
+
   const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
     if (item.item instanceof CommunityEvent)
       return <EventComponent event={item.item} />;
-    return <IssueCard issue={item.item} />;
+    return (
+      <IssueCard
+        issue={item.item}
+        onPress={() => onIssuePress(item.item as Issue)}
+      />
+    );
   };
 
   return (
