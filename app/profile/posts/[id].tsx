@@ -1,15 +1,23 @@
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  ListRenderItemInfo,
+} from "react-native";
 import EventComponent from "~/src/components/EventComponent";
+import IssueCard from "~/src/components/issueCard";
 import { CommunityEvent } from "~/src/model/event";
+import { Issue } from "~/src/model/issue";
 import { pageStyle } from "~/src/utils/stylingValue";
 import { getPosts, supabase } from "~/src/utils/supabase";
 
 const Posts = () => {
   const local = useLocalSearchParams();
   const userId = local["id"];
-  const [posts, setPosts] = useState<CommunityEvent[]>();
+  const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const call = async () => {
@@ -30,6 +38,12 @@ const Posts = () => {
     call();
   }, []);
 
+  const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
+    if (item.item instanceof CommunityEvent)
+      return <EventComponent event={item.item} />;
+    return <IssueCard issue={item.item} onPress={() => {}} />;
+  };
+
   return (
     <>
       <Stack.Screen
@@ -43,14 +57,7 @@ const Posts = () => {
         {loading ? (
           <ActivityIndicator size="large" />
         ) : (
-          <FlatList
-            data={posts}
-            renderItem={(val) => {
-              if (val.item instanceof CommunityEvent)
-                return <EventComponent event={val.item} />;
-              return <Text>PlaceHolder</Text>;
-            }}
-          />
+          <FlatList data={posts} renderItem={renderItem} />
         )}
       </View>
     </>
