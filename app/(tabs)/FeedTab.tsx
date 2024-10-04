@@ -1,4 +1,9 @@
-import { RefreshControl, View, ScrollView, StyleSheet } from "react-native";
+import {
+  RefreshControl,
+  View,
+  FlatList,
+  ListRenderItemInfo,
+} from "react-native";
 
 import React, { useEffect } from "react";
 import EventComponent from "src/components/EventComponent";
@@ -6,53 +11,62 @@ import EventComponent from "src/components/EventComponent";
 import { CommunityEvent } from "src/model/event";
 import { supabase } from "~/src/utils/supabase";
 import { pageStyle } from "~/src/utils/stylingValue";
+import { Issue, IssueFromDatabase } from "~/src/model/issue";
+import IssueCard from "~/src/components/issueCard";
 
 function FeedTab() {
   const [refreshing, setRefreshing] = React.useState(false);
-  const [events, setEvents] = React.useState<CommunityEvent[]>([]);
+  const [posts, setPosts] = React.useState<(CommunityEvent | Issue)[]>([]);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchEvents().then((events) => {
+    fetchPosts().then((events) => {
       setRefreshing(false);
       if (!events) return;
-      setEvents(events);
+      setPosts(events);
     });
   }, []);
 
   useEffect(() => {
-    fetchEvents().then((events) => {
+    fetchPosts().then((events) => {
       setRefreshing(false);
       if (!events) return;
-      setEvents(events);
+      setPosts(events);
     });
   }, []);
 
-  const fetchEvents = async () => {
+  const fetchPosts = async () => {
     const e = await supabase.from("events").select();
+    const i = await supabase.from("issues").select();
+
     if (e.data === null) return;
-    return e.data.map((data) => CommunityEvent.fromDatabase(data));
+    if (i.data === null) return;
+
+    let data = [
+      ...e.data.map((data) => CommunityEvent.fromDatabase(data)),
+      ...i.data.map((data) => IssueFromDatabase(data)),
+    ];
+
+    return data;
+  };
+
+  const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
+    if (item.item instanceof CommunityEvent)
+      return <EventComponent event={item.item} />;
+    return <IssueCard issue={item.item} />;
   };
 
   return (
     <View style={pageStyle}>
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
+      <FlatList
+        data={posts}
+        renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      >
-        {events.map((e) => {
-          return <EventComponent key={e.id} event={e}></EventComponent>;
-        })}
-      </ScrollView>
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    alignItems: "center",
-  },
-});
 
 export default FeedTab;
