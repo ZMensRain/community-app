@@ -73,6 +73,9 @@ async function getPosts(
     ...(await getEvents(created_by, null)),
     ...(await getIssues(created_by, null)),
   ];
+  l.sort((a, b) => {
+    return b.createdAt.getTime() - a.createdAt.getTime();
+  });
 
   return l;
 }
