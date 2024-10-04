@@ -22,7 +22,8 @@ class CommunityEvent {
     public links: string[],
     public ticketWebsite: string | null,
     public tags: EventTag[],
-    public kit: EventKit[]
+    public kit: EventKit[],
+    public createdAt: Date
   ) {}
 
   public getLocations(unique: Boolean = true): locationType[] {
@@ -80,7 +81,8 @@ class CommunityEvent {
       data.links,
       data.ticket_website,
       data.tags,
-      data.kit
+      data.kit,
+      new Date(data.created_at)
     );
   }
 
@@ -192,7 +194,8 @@ const testEvent = new CommunityEvent(
   ["https://twitter.com", "https://facebook.com"],
   "https://www.tickets.com/",
   ["tag", "Vegan friendly", "swinging", "Dog Friendly", "something l"],
-  ["Table", "Chairs", "Drinks"]
+  ["Table", "Chairs", "Drinks"],
+  new Date()
 );
 /*cspell:enable */
 
