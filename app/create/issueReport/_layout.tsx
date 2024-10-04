@@ -1,13 +1,26 @@
 import { Stack, router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Pressable } from "react-native";
+import { Alert, Pressable } from "react-native";
 import { colors } from "~/src/utils/stylingValue";
 import { IssueReportCreationProvider } from "~/src/contexts/issueReportCreationContext";
 import { Issue } from "~/src/model/issue";
+import { supabase } from "~/src/utils/supabase";
 
 const IssueCreationLayout = () => {
   const handleSubmit = (value: Issue) => {
     router.navigate("FeedTab");
+    supabase
+      .from("issues")
+      .insert({
+        type: value.type.toString(),
+        description: value.description.toString(),
+        location: `POINT(${value.coordinates.latitude} ${value.coordinates.longitude})`,
+      })
+      .then((v) => {
+        if (v.error) {
+          Alert.alert("Something Went Wrong", v.error.message);
+        }
+      });
   };
 
   return (
