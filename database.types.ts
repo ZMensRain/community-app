@@ -75,25 +75,25 @@ export type Database = {
         Row: {
           created_at: string;
           created_by: string;
-          id: number;
-          latitude: number;
-          longitude: number;
+          description: string | null;
+          id: string;
+          location: unknown | null;
           type: string | null;
         };
         Insert: {
           created_at?: string;
           created_by?: string;
-          id?: number;
-          latitude: number;
-          longitude: number;
+          description?: string | null;
+          id?: string;
+          location?: unknown | null;
           type?: string | null;
         };
         Update: {
           created_at?: string;
           created_by?: string;
-          id?: number;
-          latitude?: number;
-          longitude?: number;
+          description?: string | null;
+          id?: string;
+          location?: unknown | null;
           type?: string | null;
         };
         Relationships: [
