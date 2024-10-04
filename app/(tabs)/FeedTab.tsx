@@ -46,6 +46,9 @@ function FeedTab() {
       ...e.data.map((data) => CommunityEvent.fromDatabase(data)),
       ...i.data.map((data) => IssueFromDatabase(data)),
     ];
+    data.sort((a, b) => {
+      return b.createdAt.getTime() - a.createdAt.getTime();
+    });
 
     return data;
   };
