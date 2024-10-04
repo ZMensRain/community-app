@@ -14,7 +14,7 @@ const IssueCreationLayout = () => {
       .insert({
         type: value.type.toString(),
         description: value.description.toString(),
-        location: `POINT(${value.coordinates.latitude} ${value.coordinates.longitude})`,
+        location: `POINT(${value.coordinates.longitude} ${value.coordinates.latitude})`,
       })
       .then((v) => {
         if (v.error) {
