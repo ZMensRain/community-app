@@ -50,12 +50,12 @@ const PostsSection = ({ posts = [], style }: props) => {
               {posts.map((post, index) => {
                 if (post instanceof CommunityEvent)
                   return (
-                    <View style={{ width: 300, padding: 5 }}>
+                    <View style={{ width: 300, padding: 5 }} key={index}>
                       <EventComponent event={post} key={index} />
                     </View>
                   );
                 return (
-                  <View style={{ width: 300, padding: 5 }}>
+                  <View style={{ width: 300, padding: 5 }} key={index}>
                     <IssueCard issue={post} key={index} />
                   </View>
                 );
