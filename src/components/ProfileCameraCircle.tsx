@@ -3,9 +3,16 @@ import { View, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileIcon from "./shared/ProfileIcon";
 
-const ProfileCamera = () => {
+type props = { onPress: () => void; id: string };
+
+const ProfileCamera = (props: props) => {
   return (
-    <ProfileIcon id={{ id: "100", group: false }} size={150} showName={false}>
+    <ProfileIcon
+      id={{ id: props.id, group: false }}
+      size={150}
+      showName={false}
+      onPress={props.onPress}
+    >
       <View
         style={{
           position: "absolute",

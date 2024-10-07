@@ -18,6 +18,9 @@ import { supabase } from "~/src/utils/supabase";
 import MapSheet from "./components/mapSheet";
 import { UserActionKind, useUserContext } from "~/src/contexts/userContext";
 import { LatLng } from "react-native-maps";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import { decode } from "base64-arraybuffer";
 
 const EditProfile = () => {
   const userContext = useUserContext();
@@ -42,6 +45,7 @@ const EditProfile = () => {
       edited && <Ionicons name="checkmark" size={24} onPress={updateUsername} />
     );
   };
+
   const deleteAccount = () => {
     Alert.prompt(
       "Delete Your Account",
@@ -86,6 +90,62 @@ const EditProfile = () => {
     []
   );
 
+  const updateProfilePicture = async () => {
+    const resizeImage = async (uri: string) => {
+      if (!uri) return "";
+      const manipResult = await ImageManipulator.manipulateAsync(
+        uri,
+        [{ resize: { width: 500 } }],
+        {
+          compress: 0.5,
+          format: ImageManipulator.SaveFormat.JPEG,
+          base64: true,
+        }
+      );
+      return manipResult.base64;
+    };
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0,
+    });
+
+    if (result.canceled) return;
+    if (!result.assets[0].base64) return;
+    const ig = await resizeImage(result.assets[0].uri);
+
+    const r = await supabase.storage.from("profile-pictures").upload(
+      `${userContext.state.id}/pfp.jpeg`,
+      decode(ig ?? ""),
+
+      {
+        contentType: "image/png",
+        cacheControl: "3600",
+        upsert: true,
+      }
+    );
+
+    console.log(r);
+
+    if (r.error) {
+      Alert.alert("Error", r.error.message);
+      return;
+    }
+
+    const url = supabase.storage
+      .from("profile-pictures")
+      .getPublicUrl(r.data?.path!).data.publicUrl;
+
+    let t = await supabase
+      .from("profiles")
+      .update({ avatar_url: url.toString() })
+      .eq("id", userContext.state.id);
+    console.log(t);
+  };
+
   const sheetRef = useRef<BottomSheet>(null);
 
   const [username, setUsername] = useState(userContext.state.username);
@@ -96,7 +156,10 @@ const EditProfile = () => {
       <GestureHandlerRootView style={pageStyle}>
         <View style={pageStyle}>
           <View style={[{ alignItems: "center" }, styles.section]}>
-            <ProfileCamera />
+            <ProfileCamera
+              onPress={() => updateProfilePicture()}
+              id={userContext.state.id}
+            />
           </View>
 
           <Text style={styles.label}>

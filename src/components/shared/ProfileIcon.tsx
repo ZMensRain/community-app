@@ -1,10 +1,20 @@
-import { Pressable, StyleSheet, View, Text, ViewStyle } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  Text,
+  ViewStyle,
+  Image,
+} from "react-native";
 
 import { Id } from "~/src/model/event";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { getUserData } from "~/src/utils/supabase";
+
 type props = {
   id: Id;
+  url?: string;
   size: number;
   showName: boolean;
   onPress?: () => void;
@@ -13,6 +23,16 @@ type props = {
 };
 
 const ProfileIcon = (props: props) => {
+  const [url, setUrl] = useState(props.url != undefined ? props.url : "");
+
+  useEffect(() => {
+    if (props.url) return;
+    getUserData(props.id.id).then((e) => {
+      if (typeof e == "string") return;
+      setUrl(e.avatar_url ?? "");
+    });
+  }, []);
+
   return (
     <Pressable
       onPress={props.onPress}
@@ -21,12 +41,20 @@ const ProfileIcon = (props: props) => {
       <View>
         {/*Profile picture or icon*/}
         <View style={styles.profile}>
-          <Ionicons
-            name={props.id.group ? "people" : "person"}
-            size={props.size}
-            style={{}}
-            adjustsFontSizeToFit={true}
-          />
+          {url.length > 0 ? (
+            <Image
+              source={{ uri: url }}
+              style={{ width: "100%", height: "100%" }}
+            />
+          ) : (
+            <Ionicons
+              name={props.id.group ? "people" : "person"}
+              size={props.size}
+              style={{}}
+              adjustsFontSizeToFit={true}
+            />
+          )}
+
           <View style={styles.children}>{props.children}</View>
         </View>
         {/*Name*/}
