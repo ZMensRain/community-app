@@ -150,6 +150,8 @@ const YourProfile = () => {
                 id={{ id: "1000", group: false }}
                 size={125}
                 showName={false}
+                url={userContext.state.avatarUrl}
+                key={userContext.state.avatarUrl}
               />
               <Text style={styles.username}>{userContext?.state.username}</Text>
             </View>
@@ -197,5 +199,3 @@ const styles = StyleSheet.create({
 });
 
 export default YourProfile;
-
-type location = { coordinates: [0, 0]; type: "Point" };

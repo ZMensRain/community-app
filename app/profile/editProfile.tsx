@@ -118,7 +118,7 @@ const EditProfile = () => {
     const ig = await resizeImage(result.assets[0].uri);
 
     const r = await supabase.storage.from("profile-pictures").upload(
-      `${userContext.state.id}/pfp.jpeg`,
+      `${userContext.state.id}/avatar/${Math.floor(Math.random() * 100)}.jpeg`,
       decode(ig ?? ""),
 
       {
@@ -127,8 +127,6 @@ const EditProfile = () => {
         upsert: true,
       }
     );
-
-    console.log(r);
 
     if (r.error) {
       Alert.alert("Error", r.error.message);
@@ -143,7 +141,10 @@ const EditProfile = () => {
       .from("profiles")
       .update({ avatar_url: url.toString() })
       .eq("id", userContext.state.id);
-    console.log(t);
+    userContext.dispatch({
+      type: UserActionKind.updateAvatarUrl,
+      payload: url,
+    });
   };
 
   const sheetRef = useRef<BottomSheet>(null);
@@ -159,6 +160,8 @@ const EditProfile = () => {
             <ProfileCamera
               onPress={() => updateProfilePicture()}
               id={userContext.state.id}
+              url={userContext.state.avatarUrl}
+              key={userContext.state.avatarUrl}
             />
           </View>
 

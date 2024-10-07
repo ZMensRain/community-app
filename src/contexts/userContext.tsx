@@ -8,6 +8,7 @@ export enum UserActionKind {
   updateEmail = "updateEmail",
   updateInterests = "updateInterests",
   updatePostIds = "updatePostIds",
+  updateAvatarUrl = "updateAvatarUrl",
 }
 
 export interface User {
@@ -17,6 +18,7 @@ export interface User {
   location: LatLng;
   interests: string[];
   postIds: string[];
+  avatarUrl: string;
   discriminator: "user";
 }
 
@@ -54,6 +56,9 @@ const userReducer = (state: User, action: UserAction) => {
       if ("discriminator" in action.payload) return state;
 
       return { ...state, postIds: action.payload };
+    case UserActionKind.updateAvatarUrl:
+      if (typeof action.payload != "string") return state;
+      return { ...state, avatarUrl: action.payload };
     default:
       return state;
   }
@@ -71,6 +76,7 @@ const initialState: User = {
   location: { latitude: 0, longitude: 0 },
   interests: [],
   postIds: [],
+  avatarUrl: "",
   discriminator: "user",
 };
 

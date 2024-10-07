@@ -23,10 +23,10 @@ type props = {
 };
 
 const ProfileIcon = (props: props) => {
-  const [url, setUrl] = useState(props.url != undefined ? props.url : "");
+  const [url, setUrl] = useState(props.url);
 
   useEffect(() => {
-    if (props.url) return;
+    if (props.url !== undefined) return;
     getUserData(props.id.id).then((e) => {
       if (typeof e == "string") return;
       setUrl(e.avatar_url ?? "");
@@ -41,7 +41,7 @@ const ProfileIcon = (props: props) => {
       <View>
         {/*Profile picture or icon*/}
         <View style={styles.profile}>
-          {url.length > 0 ? (
+          {url ? (
             <Image
               source={{ uri: url }}
               style={{ width: "100%", height: "100%" }}

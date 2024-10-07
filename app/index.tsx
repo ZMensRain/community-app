@@ -45,6 +45,7 @@ export default function Page() {
           location: { latitude: 0, longitude: 0 },
           postIds: [],
           username: "",
+          avatarUrl: "",
           discriminator: "user",
         };
         let r = await getUserData(user.id);
@@ -52,6 +53,7 @@ export default function Page() {
           user.interests = r.interests;
           user.username = String(r.username);
           user.location = r.location;
+          user.avatarUrl = r.avatar_url ?? "";
         }
         userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
       });

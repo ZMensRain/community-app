@@ -1,7 +1,8 @@
 import { Tabs, router } from "expo-router";
-import { View, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
+import { useUserContext } from "~/src/contexts/userContext";
 
 const layout = () => {
   function navigateToCreate() {
@@ -10,18 +11,24 @@ const layout = () => {
   function navigateToProfile() {
     router.navigate("profile/YourProfile");
   }
-  const headerLeftComponent = () => (
-    <ProfileIcon
-      showName={false}
-      id={{
-        group: false,
-        id: "",
-      }}
-      size={38}
-      onPress={navigateToProfile}
-      style={{ margin: 5 }}
-    />
-  );
+  const headerLeftComponent = () => {
+    const userContext = useUserContext();
+    if (!userContext) return;
+    return (
+      <ProfileIcon
+        showName={false}
+        id={{
+          group: false,
+          id: userContext.state.id,
+        }}
+        url={userContext.state.avatarUrl}
+        size={40}
+        onPress={navigateToProfile}
+        style={{ margin: 5 }}
+        key={userContext.state.avatarUrl}
+      />
+    );
+  };
   const headerRightComponent = () => (
     <Pressable onPress={navigateToCreate}>
       <Ionicons name="create-outline" size={32} style={{ margin: 5 }} />
