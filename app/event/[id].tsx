@@ -19,22 +19,36 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { supabase } from "~/src/utils/supabase";
 import FilledButton from "~/src/components/shared/filledButton";
+import { useUserContext } from "~/src/contexts/userContext";
 
 const EventScreen = () => {
   const [event, setEvent] = useState<CommunityEvent | null>();
+  const [isAttending, setAttending] = useState<boolean>(false);
   const local = useLocalSearchParams();
   const eventId = local["id"];
 
+  const userContext = useUserContext();
+
   useEffect(() => {
     if (!eventId) return;
-
+    if (!userContext) return;
     supabase
       .from("events")
       .select()
       .eq("id", eventId)
-      .then((value) => {
+      .then(async (value) => {
         const data = value.data;
         if (!data) return;
+
+        const response = await supabase
+          .from("attendingEvent")
+          .select("*")
+          .eq("event_id", eventId)
+          .eq("user_id", userContext.state.id);
+        if (response.data && response.data.length !== 0) {
+          setAttending(true);
+        }
+
         setEvent(CommunityEvent.fromDatabase(data[0]));
       });
   }, []);
@@ -53,6 +67,23 @@ const EventScreen = () => {
       </>
     );
   }
+
+  const onAttendButton = () => {
+    setAttending(!isAttending);
+    if (!isAttending)
+      supabase.from("attendingEvent").upsert({
+        user_id: userContext?.state.id,
+        event_id: eventId as string,
+        created_at: undefined,
+      });
+    else {
+      supabase
+        .from("attendingEvent")
+        .delete()
+        .eq("user_id", userContext?.state.id ?? "") // Scary make sure it doesn't delete all records for the event id
+        .eq("event_id", eventId as string);
+    }
+  };
 
   return (
     <>
@@ -236,7 +267,10 @@ const EventScreen = () => {
           )}
         </ScrollView>
         <View style={{ marginVertical: 10 }}>
-          <FilledButton text="Attend" />
+          <FilledButton
+            text={isAttending ? "I cannot make it" : "Attend"}
+            onPress={onAttendButton}
+          />
         </View>
       </View>
     </>
