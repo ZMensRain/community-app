@@ -1,15 +1,15 @@
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import { FlatList, ListRenderItemInfo, StyleSheet, View } from "react-native";
 import SearchBar from "src/components/create/SearchBar";
+import FilledButton from "~/src/components/shared/filledButton";
 import { EventTypeEnum } from "~/src/model/event";
-import { tagColors } from "~/src/utils/stylingValue";
+import { margin, padding, tagColors } from "~/src/utils/stylingValue";
 
 type props = { onAddInterest?: (value: string) => void };
 
 const AddInterestsSheet = ({ onAddInterest }: props) => {
-  let [searched, setSearched] = useState("");
+  const [searched, setSearched] = useState("");
 
   function getEnumNames(type: any) {
     return Object.keys(type).filter(
@@ -19,7 +19,7 @@ const AddInterestsSheet = ({ onAddInterest }: props) => {
 
   function getTypesText() {
     let match: Boolean = false;
-    let values = getEnumNames(EventTypeEnum);
+    const values = getEnumNames(EventTypeEnum);
     return (
       values
         .filter((value) => {
@@ -45,42 +45,36 @@ const AddInterestsSheet = ({ onAddInterest }: props) => {
     );
   }
 
+  const renderItem = (info: ListRenderItemInfo<string>) => {
+    return (
+      <View style={{ marginVertical: margin.small }}>
+        <FilledButton
+          text={info.item}
+          key={info.index}
+          buttonStyle={{
+            backgroundColor: tagColors(info.item).background,
+          }}
+          onPress={() => onAddInterest?.(info.item)}
+        />
+      </View>
+    );
+  };
+
   return (
     <BottomSheetView style={styles.container}>
       <SearchBar onTextUpdate={(v) => setSearched(v.toString())} />
-
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
-        {getTypesText().map((value, index) => (
-          <View
-            key={index}
-            style={{
-              borderRadius: 15,
-              overflow: "hidden",
-              marginVertical: 5,
-            }}
-          >
-            <TouchableHighlight onPress={() => onAddInterest?.(value)}>
-              <View
-                style={{
-                  backgroundColor: tagColors(value).background,
-                  padding: 10,
-                }}
-              >
-                <Text style={{ color: tagColors(value).foreground }}>
-                  {value}
-                </Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={getTypesText()}
+        showsVerticalScrollIndicator={false}
+        renderItem={renderItem}
+      />
     </BottomSheetView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
+    paddingHorizontal: padding.small,
     width: "100%",
     height: "100%",
   },
