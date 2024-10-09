@@ -1,15 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-  Alert,
-} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Text, View, StyleSheet, ScrollView, Alert } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Session } from "@supabase/supabase-js";
-import { getPosts, getUserData, supabase } from "src/utils/supabase";
+import { getPosts, supabase } from "src/utils/supabase";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack } from "expo-router";
 
@@ -23,10 +16,12 @@ import {
 } from "./components";
 
 import FilledButton from "~/src/components/shared/filledButton";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { CommunityEvent } from "~/src/model/event";
 import { UserActionKind, useUserContext } from "~/src/contexts/userContext";
 import { Issue } from "~/src/model/issue";
+import LoadingScreen from "~/src/components/shared/loadingScreen";
+import renderBackdrop from "~/src/components/shared/sheetBackdrop";
 
 const YourProfile = () => {
   const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>([]);
@@ -43,27 +38,25 @@ const YourProfile = () => {
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session === null) return;
-      const userData = await getUserData(session?.user.id);
       const posts = await getPosts(session?.user.id, 10);
-
-      if (typeof userData === "string") return;
-      if (userData.username === null) return;
 
       setPosts(posts);
       setSession(session);
     });
   }, []);
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
+  const headerRight = () => {
+    return (
+      <Ionicons.Button
+        name="settings-sharp"
+        size={20}
+        onPress={() => router.navigate("profile/editProfile")}
+        backgroundColor={"transparent"}
+        iconStyle={{ marginRight: 0, color: "black" }}
+        underlayColor={"transparent"}
       />
-    ),
-    []
-  );
+    );
+  };
 
   const onAddInterest = async (value: string) => {
     if (userContext?.state.interests.includes(value)) return;
@@ -76,7 +69,7 @@ const YourProfile = () => {
     sheetRef.current?.close();
 
     //Update server
-    let response = await supabase
+    const response = await supabase
       .from("profiles")
       .update({ interests: newInterests })
       .eq("id", session.user.id)
@@ -97,7 +90,7 @@ const YourProfile = () => {
     });
 
     //Update server
-    let response = await supabase
+    const response = await supabase
       .from("profiles")
       .update({ interests: newInterests })
       .eq("id", session.user.id)
@@ -106,19 +99,7 @@ const YourProfile = () => {
       Alert.alert("Something went wrong", response.error.message);
   };
 
-  if (session === null)
-    return (
-      <View
-        style={[
-          pageStyle,
-          {
-            justifyContent: "center",
-          },
-        ]}
-      >
-        <ActivityIndicator size={"large"} />
-      </View>
-    );
+  if (session === null) return <LoadingScreen />;
 
   return (
     <>
@@ -126,16 +107,7 @@ const YourProfile = () => {
         options={{
           headerShown: true,
           title: "Your Profile",
-          headerRight: () => (
-            <Ionicons.Button
-              name="settings-sharp"
-              size={20}
-              onPress={() => router.navigate("profile/editProfile")}
-              backgroundColor={"transparent"}
-              iconStyle={{ marginRight: 0, color: "black" }}
-              underlayColor={"transparent"}
-            />
-          ),
+          headerRight: headerRight,
         }}
       />
 
@@ -168,6 +140,7 @@ const YourProfile = () => {
               onInterestPress={onRemoveInterest}
               style={styles.section}
             />
+
             <View style={{ marginVertical: 10 }}>
               <FilledButton
                 text="Sign Out"
