@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
 import { Issue, IssueFromDatabase } from "~/src/model/issue";
+import { padding } from "~/src/utils/stylingValue";
 import { supabase } from "~/src/utils/supabase";
 
 const IssueScreen = () => {
@@ -31,7 +32,6 @@ const IssueScreen = () => {
       });
   }, []);
 
-  console.log(issue);
   return (
     <>
       <Stack.Screen
@@ -53,6 +53,7 @@ const IssueScreen = () => {
           >
             <Marker coordinate={issue.coordinates} />
           </MapView>
+
           <BottomSheet
             ref={sheetRef}
             snapPoints={["5%", "25%", "50%"]}
@@ -61,7 +62,7 @@ const IssueScreen = () => {
             backgroundStyle={{ backgroundColor: "#0000005a" }}
           >
             <BottomSheetView>
-              <View style={{ padding: 10 }}>
+              <View style={{ padding: padding.small }}>
                 <ProfileIcon
                   id={{ id: issue.creatorId, group: false }}
                   showName={false}
