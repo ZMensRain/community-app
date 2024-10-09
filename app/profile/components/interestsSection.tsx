@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Pressable, ViewStyle } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { tagColors } from "~/src/utils/stylingValue";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import FilledButton from "~/src/components/shared/filledButton";
 
 type props = {
   interests: string[];
@@ -26,44 +26,22 @@ const InterestsSection = ({
       </View>
 
       {interests.length > 0 ? (
-        <View
-          style={[
-            styles.content,
-            {
-              justifyContent: "flex-start",
-            },
-          ]}
-        >
-          {interests.map((val, index) => {
-            const colors = tagColors(val);
-            return (
-              <View
-                key={index}
-                style={{ margin: 5, borderRadius: 10, overflow: "hidden" }}
-              >
-                <TouchableHighlight onLongPress={() => onInterestPress?.(val)}>
-                  <View
-                    style={[
-                      styles.interest,
-                      { backgroundColor: colors.background },
-                    ]}
-                  >
-                    <Text style={{ color: colors.foreground }}>{val}</Text>
-                  </View>
-                </TouchableHighlight>
-              </View>
-            );
-          })}
+        <View style={styles.content}>
+          {interests.map((val, index) => (
+            <View key={index} style={{ margin: 5 }}>
+              <FilledButton
+                text={val}
+                buttonStyle={{
+                  ...styles.interest,
+                  backgroundColor: tagColors(val).background,
+                }}
+                onLongPress={() => onInterestPress?.(val)}
+              />
+            </View>
+          ))}
         </View>
       ) : (
-        <View
-          style={[
-            styles.content,
-            {
-              justifyContent: "center",
-            },
-          ]}
-        >
+        <View style={styles.content}>
           <Text style={styles.sectionFallBackText}>
             You don't have any interests saved yet. Interests help us tailor
             your feed.
@@ -89,9 +67,6 @@ const styles = StyleSheet.create({
   interest: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   sectionFallBackText: {
     textAlign: "center",
