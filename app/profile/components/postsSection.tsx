@@ -1,6 +1,12 @@
 import { router } from "expo-router";
-import { View, Text, StyleSheet, ViewStyle } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  FlatList,
+  ListRenderItemInfo,
+} from "react-native";
 import EventComponent from "~/src/components/EventComponent";
 import IssueCard from "~/src/components/issueCard";
 import { CommunityEvent } from "~/src/model/event";
@@ -12,18 +18,26 @@ type props = {
   style?: ViewStyle;
 };
 
+const renderItem = (info: ListRenderItemInfo<CommunityEvent | Issue>) => {
+  if (info.item instanceof CommunityEvent)
+    return (
+      <View style={{ width: 300, padding: 5 }} key={info.index}>
+        <EventComponent event={info.item} key={info.index} />
+      </View>
+    );
+  return (
+    <View style={{ width: 300, padding: 5 }} key={info.index}>
+      <IssueCard issue={info.item} key={info.index} />
+    </View>
+  );
+};
+
 const PostsSection = ({ posts = [], style }: props) => {
   return (
     <View style={style}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <View style={styles.header}>
         <Text style={styles.h2}>Your Posts</Text>
-        {posts.length > 0 && (
+        {posts.length && (
           <Text
             onPress={() => router.navigate("profile/posts/me")}
             style={{ color: colors.primary }}
@@ -33,42 +47,20 @@ const PostsSection = ({ posts = [], style }: props) => {
         )}
       </View>
 
-      <View
-        style={{
-          aspectRatio: 2,
-          borderRadius: 10,
-          overflow: "visible",
-        }}
-      >
+      <View style={styles.content}>
         {posts.length > 0 ? (
-          <View style={{ flex: 1 }}>
-            <ScrollView
-              horizontal={true}
-              nestedScrollEnabled={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              {posts.map((post, index) => {
-                if (post instanceof CommunityEvent)
-                  return (
-                    <View style={{ width: 300, padding: 5 }} key={index}>
-                      <EventComponent event={post} key={index} />
-                    </View>
-                  );
-                return (
-                  <View style={{ width: 300, padding: 5 }} key={index}>
-                    <IssueCard issue={post} key={index} />
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </View>
+          <FlatList
+            horizontal={true}
+            nestedScrollEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            data={posts}
+            renderItem={renderItem}
+          />
         ) : (
-          <View style={{ justifyContent: "center", flex: 1 }}>
-            <Text style={{ textAlign: "center", fontSize: 15 }}>
-              You don't seem to have any posts yet. Any events or issues you
-              create will appear here. Posts older than 2 years are deleted.
-            </Text>
-          </View>
+          <Text style={styles.fallbackText}>
+            You don't seem to have any posts yet. Any events or issues you
+            create will appear here. Posts older than 2 years are deleted.
+          </Text>
         )}
       </View>
     </View>
@@ -77,6 +69,21 @@ const PostsSection = ({ posts = [], style }: props) => {
 
 const styles = StyleSheet.create({
   h2: { fontSize: 24, fontWeight: "semibold" },
+  content: {
+    aspectRatio: 2,
+    borderRadius: 10,
+    overflow: "hidden",
+    justifyContent: "center",
+  },
+  fallbackText: {
+    textAlign: "center",
+    fontSize: 15,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 });
 
 export default PostsSection;
