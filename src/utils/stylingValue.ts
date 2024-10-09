@@ -1,28 +1,33 @@
-import { TextStyle, ViewStyle } from "react-native";
+import { ViewStyle, ColorValue } from "react-native";
+import { EventTag, EventType } from "../model/event";
 
-const sizes = { small: 10, medium: 20, large: 25 };
-const colors = {
+type ColorValueHex = `#${string}`;
+
+export const padding = { small: 10, medium: 15, large: 20 };
+export const margin = { small: 10, medium: 15, large: 20 };
+export const colors = {
   primary: "#004FC5",
   secondary: "#A5D59C",
   primaryContainer: "#F2F2F2",
   input: "#E0E0E0",
   subText: "#494949",
+  background: "white",
 };
-const pageTitle: TextStyle = {
-  fontWeight: "semibold",
-  fontSize: 36,
-  textAlign: "center",
+
+export const inputStyle: ViewStyle = {
+  marginVertical: 7.5,
+  paddingVertical: padding.small,
+  paddingHorizontal: padding.medium,
+  borderColor: "#E0E0E0",
+  borderRadius: 10,
+  borderWidth: 1,
 };
-const pageStyle: ViewStyle = {
+
+export const pageStyle: ViewStyle = {
   flex: 1,
-  paddingHorizontal: 10,
-  backgroundColor: "white",
+  paddingHorizontal: padding.small,
+  backgroundColor: colors.background,
 };
-
-import { ColorValue } from "react-native";
-import { EventTag, EventType } from "../model/event";
-
-type ColorValueHex = `#${string}`;
 
 const _tagColors: ColorValueHex[] = [
   "#B53B69",
@@ -93,7 +98,7 @@ const _typeColors: ColorValueHex[] = [
 ];
 
 /// Returns a background and a foreground color based on the tag passed in
-const tagColors = (tag: String | EventTag) => {
+export const tagColors = (tag: String | EventTag) => {
   let back: ColorValueHex =
     _tagColors[
       hash(typeof tag === "string" ? tag : tag.toString(), _tagColors.length)
@@ -104,7 +109,7 @@ const tagColors = (tag: String | EventTag) => {
 };
 
 /// Returns a color based on the type passed in
-const typeColor = (type: String | EventType) => {
+export const typeColor = (type: String | EventType) => {
   let color: ColorValueHex =
     _tagColors[
       hash(
@@ -129,7 +134,7 @@ const hash = (s: String, n: number) => {
 };
 
 /// Returns black or white based on the background color passed in
-const foregroundColor = (color: ColorValue) => {
+export const foregroundColor = (color: ColorValue) => {
   let k = color.toString();
   let r = parseInt(k.slice(1, 3), 16);
   let g = parseInt(k.slice(3, 5), 16);
@@ -141,15 +146,4 @@ const foregroundColor = (color: ColorValue) => {
     return "#000000";
   }
   return "#ffffff";
-};
-
-export {
-  sizes,
-  colors,
-  pageTitle,
-  pageStyle,
-  tagColors,
-  typeColor,
-  foregroundColor,
-  ColorValueHex,
 };
