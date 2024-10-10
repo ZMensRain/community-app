@@ -6,7 +6,7 @@ import SearchBar from "~/src/components/create/SearchBar";
 import OutlineButton from "~/src/components/shared/outlineButton";
 import { useIssueCreationContext } from "~/src/contexts/issueReportCreationContext";
 import { IssueTypeEnum } from "~/src/model/issue";
-import { pageStyle } from "~/src/utils/stylingValue";
+import { bodyFonts, pageStyle } from "~/src/utils/stylingValue";
 
 const IssueTypeScreen = () => {
   const issueCreationContext = useIssueCreationContext();
@@ -58,7 +58,7 @@ const IssueTypeScreen = () => {
         renderItem={(v) => (
           <View style={{ marginTop: 10 }}>
             <OutlineButton onPress={() => onPickType(v.item)}>
-              <Text style={{ fontSize: 16 }}>{v.item}</Text>
+              <Text style={{ fontSize: bodyFonts.medium }}>{v.item}</Text>
             </OutlineButton>
           </View>
         )}

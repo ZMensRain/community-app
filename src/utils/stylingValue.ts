@@ -26,6 +26,7 @@ export const inputStyle: ViewStyle = {
 export const pageStyle: ViewStyle = {
   flex: 1,
   paddingHorizontal: padding.small,
+  paddingTop: padding.small,
   backgroundColor: colors.background,
 };
 
@@ -147,3 +148,7 @@ export const foregroundColor = (color: ColorValue) => {
   }
   return "#ffffff";
 };
+
+export const bodyFonts = { small: 14, medium: 16, large: 18 };
+
+export const titleFonts = { small: 20, medium: 24, large: 30 };

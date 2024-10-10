@@ -5,19 +5,19 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  FlatList,
 } from "react-native";
 import {
   faMap,
   faClock,
   faCalendar,
 } from "@fortawesome/free-regular-svg-icons";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FormikValues, useFormik } from "formik";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import * as Yup from "yup";
 import { router, Stack } from "expo-router";
-
 import NextButton from "src/components/create/NextButton";
 import { Day } from "src/model/day";
 import DayCard from "src/components/DayCard";
@@ -26,21 +26,21 @@ import DateAndTimePicker from "src/components/create/DateAndTimePicker";
 import LocationPickerModal from "src/components/create/LocationModal";
 import { EventCreationContext } from "src/contexts/eventCreationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colors } from "~/src/utils/stylingValue";
+import { colors, titleFonts, pageStyle } from "~/src/utils/stylingValue";
+import renderBackdrop from "~/src/components/shared/sheetBackdrop";
 
 const WhereWhenScreen = () => {
-  let eventContext = useContext(EventCreationContext);
+  const eventContext = useContext(EventCreationContext);
   if (eventContext === undefined) {
     Alert.alert("State is missing");
     return;
   }
-  let [days, setDays] = useState<Day[]>(eventContext.event.days);
+  const [days, setDays] = useState<Day[]>(eventContext.event.days);
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = ["75%", "100%"];
 
   function next() {
     if (days.length < 1) return;
-
     let e = eventContext!.event;
     e.days = days;
     eventContext?.setEvent(e);
@@ -71,17 +71,6 @@ const WhereWhenScreen = () => {
     onSubmit: submitDay,
   });
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-      />
-    ),
-    []
-  );
-
   return (
     <>
       <Stack.Screen
@@ -94,7 +83,7 @@ const WhereWhenScreen = () => {
           ),
         }}
       />
-      <GestureHandlerRootView style={styles.container}>
+      <GestureHandlerRootView style={pageStyle}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/*Day form*/}
           <>
@@ -151,26 +140,21 @@ const WhereWhenScreen = () => {
           {/*Days view */}
           <>
             {days.length > 0 && (
-              <View style={{ flex: 1 }}>
-                <ScrollView
-                  horizontal={true}
-                  nestedScrollEnabled={true}
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                  style={{
-                    height: 300,
-                  }}
-                >
-                  {days.map((value, index) => {
-                    return <DayCard day={value} index={index} key={index} />;
-                  })}
-                </ScrollView>
-              </View>
+              <FlatList
+                horizontal={true}
+                nestedScrollEnabled={true}
+                showsHorizontalScrollIndicator={false}
+                style={[styles.mt10, styles.dayList]}
+                data={days}
+                renderItem={(i) => (
+                  <DayCard day={i.item} index={i.index} key={i.index} />
+                )}
+              />
             )}
           </>
         </ScrollView>
 
-        <View style={{ justifyContent: "flex-end", paddingBottom: 35 }}>
+        <View style={{ justifyContent: "flex-end", paddingBottom: 25 }}>
           <NextButton onPressed={next} />
         </View>
 
@@ -194,16 +178,12 @@ const WhereWhenScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 25 },
-  pageTitle: {
-    textAlign: "center",
-    fontSize: 32,
-    fontWeight: "bold",
-    marginTop: 20,
-  },
-  label: { fontSize: 20, fontWeight: "semibold" },
+  label: { fontSize: titleFonts.small, fontWeight: "semibold" },
   mt10: {
     marginTop: 10,
+  },
+  dayList: {
+    height: 300,
   },
 });
 

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Issue } from "../model/issue";
-import { colors } from "../utils/stylingValue";
+import { colors, titleFonts } from "../utils/stylingValue";
 import { getTimeSincePost } from "../utils/postutils";
 
 type props = { issue: Issue; onPress?: () => void };
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 10,
   },
-  title: { fontSize: 20 },
+  title: { fontSize: titleFonts.small },
   description: { color: colors.subText },
 });
 

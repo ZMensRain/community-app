@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ViewStyle } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { titleFonts } from "~/src/utils/stylingValue";
 type props = {
   style?: ViewStyle;
   lat: number;
@@ -39,7 +40,7 @@ const MapSection = ({ style, lat, long }: props) => {
 };
 
 const styles = StyleSheet.create({
-  h2: { fontSize: 24, fontWeight: "semibold" },
+  h2: { fontSize: titleFonts.medium, fontWeight: "semibold" },
 });
 
 export default MapSection;

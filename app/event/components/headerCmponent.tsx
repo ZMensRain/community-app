@@ -1,7 +1,7 @@
 import { View, Linking, Text, StyleSheet } from "react-native";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
 import { CommunityEvent } from "~/src/model/event";
-import { colors, typeColor } from "~/src/utils/stylingValue";
+import { colors, bodyFonts, typeColor } from "~/src/utils/stylingValue";
 
 type props = { event: CommunityEvent };
 
@@ -69,7 +69,7 @@ const HeaderComponent = ({ event }: props) => {
 
 const styles = StyleSheet.create({
   top: {
-    fontSize: 14,
+    fontSize: bodyFonts.small,
   },
 
   linkText: { color: colors.primary },

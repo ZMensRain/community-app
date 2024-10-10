@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { EventKit } from "~/src/model/event";
+import { bodyFonts, titleFonts } from "~/src/utils/stylingValue";
 
 type props = { kit: EventKit[] };
 
@@ -22,11 +23,11 @@ const KitSection = ({ kit }: props) => {
 
 const styles = StyleSheet.create({
   h1: {
-    fontSize: 24,
+    fontSize: titleFonts.medium,
     fontWeight: "semibold",
   },
   bodyFont: {
-    fontSize: 14,
+    fontSize: bodyFonts.small,
   },
 });
 

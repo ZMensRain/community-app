@@ -6,6 +6,7 @@ import DateTimePicker, {
 import React from "react";
 import { View, Platform, StyleSheet, Text } from "react-native";
 import IconButton from "../iconButton";
+import { titleFonts } from "~/src/utils/stylingValue";
 
 const today = new Date();
 
@@ -67,7 +68,7 @@ const DateAndTimePicker = ({
 };
 
 const styles = StyleSheet.create({
-  label: { fontSize: 20, fontWeight: "semibold" },
+  label: { fontSize: titleFonts.small, fontWeight: "semibold" },
   mt10: {
     marginTop: 10,
   },

@@ -1,7 +1,12 @@
 import { Text, View, StyleSheet, ScrollView, FlatList } from "react-native";
 import { CommunityEvent } from "src/model/event";
 import DayCard from "src/components/DayCard";
-import { pageStyle, tagColors } from "src/utils/stylingValue";
+import {
+  bodyFonts,
+  titleFonts,
+  pageStyle,
+  tagColors,
+} from "src/utils/stylingValue";
 import ProfileIcon from "src/components/shared/ProfileIcon";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -159,14 +164,14 @@ const EventScreen = () => {
 
 const styles = StyleSheet.create({
   description: {
-    fontSize: 16,
+    fontSize: bodyFonts.medium,
   },
   h1: {
-    fontSize: 24,
+    fontSize: titleFonts.medium,
     fontWeight: "semibold",
   },
   bodyFont: {
-    fontSize: 14,
+    fontSize: bodyFonts.small,
   },
   vMT: {
     marginVertical: 5,

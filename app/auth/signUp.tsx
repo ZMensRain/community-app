@@ -20,6 +20,7 @@ import * as Yup from "yup";
 
 import TermsComponent from "~/src/components/auth/Terms";
 import { supabase } from "src/utils/supabase";
+import { bodyFonts, titleFonts } from "~/src/utils/stylingValue";
 
 type formProps = {
   email: String;
@@ -236,13 +237,13 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: titleFonts.medium,
     textAlign: "center",
     marginTop: 20,
   },
   subtitle: {
     fontWeight: "semibold",
-    fontSize: 18,
+    fontSize: bodyFonts.medium,
     textAlign: "center",
     marginTop: 25,
   },
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   withButtonText: {
     textAlignVertical: "center",
     paddingHorizontal: 10,
-    fontSize: 14,
+    fontSize: bodyFonts.small,
     fontWeight: "medium",
   },
   signUpButton: {
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   signUpButtonText: {
     color: "white",
     textAlign: "center",
-    fontSize: 14,
+    fontSize: bodyFonts.small,
     fontWeight: "medium",
   },
 

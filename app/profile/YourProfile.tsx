@@ -6,7 +6,7 @@ import { getPosts, supabase } from "src/utils/supabase";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack } from "expo-router";
 
-import { pageStyle } from "~/src/utils/stylingValue";
+import { titleFonts, pageStyle } from "~/src/utils/stylingValue";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
 import {
   MapSection,
@@ -167,7 +167,7 @@ const YourProfile = () => {
 };
 
 const styles = StyleSheet.create({
-  username: { fontSize: 30, fontWeight: "medium" },
+  username: { fontSize: titleFonts.large, fontWeight: "medium" },
   section: { marginTop: 10 },
 });
 

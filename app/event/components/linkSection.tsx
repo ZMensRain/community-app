@@ -1,5 +1,5 @@
 import { View, Linking, Text, StyleSheet } from "react-native";
-import { colors } from "~/src/utils/stylingValue";
+import { colors, bodyFonts, titleFonts } from "~/src/utils/stylingValue";
 
 type props = { links: string[] };
 
@@ -22,11 +22,11 @@ const LinkSection = ({ links }: props) => {
 
 const styles = StyleSheet.create({
   h1: {
-    fontSize: 24,
+    fontSize: titleFonts.medium,
     fontWeight: "semibold",
   },
   bodyFont: {
-    fontSize: 14,
+    fontSize: bodyFonts.small,
   },
   vMT: {
     marginVertical: 5,

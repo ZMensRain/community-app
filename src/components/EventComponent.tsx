@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { CommunityEvent } from "../model/event";
 import { router } from "expo-router";
-import { colors, typeColor } from "../utils/stylingValue";
+import { colors, titleFonts, typeColor } from "../utils/stylingValue";
 import { getTimeSincePost } from "../utils/postutils";
 
 type EventProps = {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderColor: colors.input,
   },
-  title: { fontSize: 20 },
+  title: { fontSize: titleFonts.small },
   mt5: {
     marginTop: 5,
   },

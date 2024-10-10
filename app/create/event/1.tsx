@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View, Text, Alert } from "react-native";
+import { View, Alert, FlatList } from "react-native";
 import { useContext, useState } from "react";
 import { router } from "expo-router";
 
@@ -6,11 +6,12 @@ import { EventCreationContext } from "src/contexts/eventCreationContext";
 import TypeButton from "src/components/create/TypeButton";
 import SearchBar from "src/components/create/SearchBar";
 import { EventType, EventTypeEnum } from "src/model/event";
+import { pageStyle } from "~/src/utils/stylingValue";
 
 const PickTypeScreen = () => {
-  let event = useContext(EventCreationContext);
+  const event = useContext(EventCreationContext);
 
-  let [searched, setSearched] = useState(String);
+  const [searched, setSearched] = useState(String);
 
   function getTypesText() {
     let match: Boolean = false;
@@ -53,43 +54,28 @@ const PickTypeScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={pageStyle}>
       <SearchBar
         onTextUpdate={(newText) => {
           setSearched(newText.toString());
         }}
       />
       <View style={{ flex: 1, marginTop: 15 }}>
-        <ScrollView
+        <FlatList
           style={{ alignContent: "center" }}
           showsVerticalScrollIndicator={false}
-        >
-          {getTypesText().map((item, index) => (
+          data={getTypesText()}
+          renderItem={(info) => (
             <TypeButton
-              text={item}
-              key={index}
+              text={info.item}
+              key={info.index}
               onPress={(type) => next(type.toString())}
             />
-          ))}
-        </ScrollView>
+          )}
+        />
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 25,
-    paddingTop: 25,
-  },
-  title: {
-    textAlign: "center",
-    marginBottom: 15,
-    fontSize: 32,
-    fontWeight: "bold",
-  },
-});
 
 export default PickTypeScreen;

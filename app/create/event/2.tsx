@@ -15,20 +15,22 @@ import { router } from "expo-router";
 import { DressCode } from "src/model/event";
 import NextButton from "src/components/create/NextButton";
 import { EventCreationContext } from "src/contexts/eventCreationContext";
+import { bodyFonts, inputStyle, pageStyle } from "~/src/utils/stylingValue";
 
 const UserInputScreen = () => {
-  let event = useContext(EventCreationContext);
-  if (event === undefined) {
+  const eventContext = useContext(EventCreationContext);
+  if (eventContext === undefined) {
     Alert.alert("State is missing");
     return;
   }
+
   function next(values: FormikValues) {
-    if (event === undefined) {
+    if (eventContext === undefined) {
       Alert.alert("State is missing");
       return;
     }
 
-    let e = event?.event;
+    let e = eventContext?.event;
     e.title = values["title"];
     e.description = values["description"];
     e.ageRange = {
@@ -36,7 +38,7 @@ const UserInputScreen = () => {
       max: isNaN(Number(values["maxAge"])) ? null : Number(values["maxAge"]),
     };
     e.dressCode = values["dressCode"];
-    event.setEvent(e);
+    eventContext.setEvent(e);
     router.navigate("create/event/3");
   }
 
@@ -48,14 +50,14 @@ const UserInputScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={pageStyle}>
       <Formik
         initialValues={{
-          title: event.event.title,
-          description: event.event.description,
-          minAge: Number(event.event.ageRange.min),
-          maxAge: Number(event.event.ageRange.max),
-          dressCode: event.event.dressCode,
+          title: eventContext.event.title,
+          description: eventContext.event.description,
+          minAge: Number(eventContext.event.ageRange.min),
+          maxAge: Number(eventContext.event.ageRange.max),
+          dressCode: eventContext.event.dressCode,
         }}
         validationSchema={validation}
         onSubmit={next}
@@ -77,7 +79,7 @@ const UserInputScreen = () => {
                 </Text>
                 <TextInput
                   placeholder="Title"
-                  style={[styles.input]}
+                  style={inputStyle}
                   onChangeText={handleChange("title")}
                   onBlur={handleBlur("title")}
                   value={values.title}
@@ -86,6 +88,7 @@ const UserInputScreen = () => {
                   <Text style={[styles.error]}>{errors.title}</Text>
                 )}
               </View>
+
               {/*Description*/}
               <View style={styles.section}>
                 <Text style={styles.h2}>
@@ -94,7 +97,7 @@ const UserInputScreen = () => {
                 </Text>
                 <TextInput
                   placeholder="Description"
-                  style={[styles.input, { maxHeight: 200, minHeight: 100 }]}
+                  style={[inputStyle, { maxHeight: 200, minHeight: 100 }]}
                   numberOfLines={10}
                   textAlignVertical="top"
                   multiline={true}
@@ -104,9 +107,10 @@ const UserInputScreen = () => {
                   value={values.description}
                 />
                 {errors.description && (
-                  <Text style={[styles.error]}>{errors.description}</Text>
+                  <Text style={styles.error}>{errors.description}</Text>
                 )}
               </View>
+
               {/*Age range*/}
               <View style={styles.section}>
                 <Text style={styles.h2}>
@@ -120,7 +124,7 @@ const UserInputScreen = () => {
                 >
                   <TextInput
                     placeholder="Minimum"
-                    style={[styles.input, { flex: 0.4 }]}
+                    style={[inputStyle, { flex: 0.4 }]}
                     numberOfLines={1}
                     maxLength={3}
                     keyboardType="numeric"
@@ -131,7 +135,7 @@ const UserInputScreen = () => {
 
                   <TextInput
                     placeholder="Maximum"
-                    style={[styles.input, { flex: 0.4 }]}
+                    style={[inputStyle, { flex: 0.4 }]}
                     numberOfLines={1}
                     maxLength={3}
                     keyboardType="numeric"
@@ -147,6 +151,7 @@ const UserInputScreen = () => {
                   <Text style={styles.error}>{errors.maxAge}</Text>
                 )}
               </View>
+
               {/*Dress code*/}
               <View style={styles.section}>
                 <Text style={styles.h2}>
@@ -184,17 +189,8 @@ const UserInputScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#fff", flex: 1, paddingHorizontal: 25 },
   required: { color: "#FF0000" },
-  h2: { fontSize: 16, fontWeight: "bold" },
-  input: {
-    marginVertical: 7.5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderColor: "#E0E0E0",
-    borderRadius: 10,
-    borderWidth: 1,
-  },
+  h2: { fontSize: bodyFonts.medium, fontWeight: "bold" },
   section: { marginTop: 25 },
   error: {
     color: "red",

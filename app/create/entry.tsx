@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import FilledButton from "~/src/components/shared/filledButton";
-import { pageStyle } from "~/src/utils/stylingValue";
+import { titleFonts, pageStyle } from "~/src/utils/stylingValue";
 
 const EntryScreen = () => {
   return (
@@ -18,19 +18,19 @@ const EntryScreen = () => {
       >
         <FilledButton
           text={"Event"}
-          textStyle={{ fontSize: 30 }}
+          textStyle={styles.buttons}
           onPress={() => router.navigate("create/event/1")}
         />
 
         <FilledButton
           text={"Issue"}
-          textStyle={{ fontSize: 30 }}
+          textStyle={styles.buttons}
           onPress={() => router.navigate("create/issueReport/1")}
         />
 
         <FilledButton
           text={"Group"}
-          textStyle={{ fontSize: 30 }}
+          textStyle={styles.buttons}
           onPress={() => {}}
         />
       </View>
@@ -40,10 +40,13 @@ const EntryScreen = () => {
 const styles = StyleSheet.create({
   container: { alignItems: "stretch", flex: 1 },
   h1: {
-    fontSize: 32,
+    fontSize: titleFonts.large,
     fontWeight: "bold",
   },
   title: { textAlignVertical: "top", textAlign: "center", margin: 25 },
+  buttons: {
+    fontSize: titleFonts.large,
+  },
 });
 
 export default EntryScreen;

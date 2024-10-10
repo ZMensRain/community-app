@@ -11,7 +11,7 @@ import EventComponent from "~/src/components/EventComponent";
 import IssueCard from "~/src/components/issueCard";
 import { CommunityEvent } from "~/src/model/event";
 import { Issue } from "~/src/model/issue";
-import { colors } from "~/src/utils/stylingValue";
+import { colors, bodyFonts, titleFonts } from "~/src/utils/stylingValue";
 
 type props = {
   posts?: (CommunityEvent | Issue)[];
@@ -68,7 +68,7 @@ const PostsSection = ({ posts = [], style }: props) => {
 };
 
 const styles = StyleSheet.create({
-  h2: { fontSize: 24, fontWeight: "semibold" },
+  h2: { fontSize: titleFonts.medium, fontWeight: "semibold" },
   content: {
     aspectRatio: 2,
     borderRadius: 10,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   fallbackText: {
     textAlign: "center",
-    fontSize: 15,
+    fontSize: bodyFonts.small,
   },
   header: {
     flexDirection: "row",

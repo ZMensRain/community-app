@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, Button } from "react-native";
 import { Day } from "../model/day";
+import { titleFonts } from "../utils/stylingValue";
 
 type DayCardProps = {
   day: Day;
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
   pastText: {
     color: "#999999",
   },
-  title: { fontSize: 20, fontWeight: "600" },
+  title: { fontSize: titleFonts.small, fontWeight: "600" },
   date: {},
 });
 

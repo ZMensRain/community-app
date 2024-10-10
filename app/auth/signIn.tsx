@@ -18,6 +18,7 @@ import * as Yup from "yup";
 
 import TermsComponent from "~/src/components/auth/Terms";
 import { supabase } from "src/utils/supabase";
+import { bodyFonts, titleFonts } from "~/src/utils/stylingValue";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
@@ -130,13 +131,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: titleFonts.medium,
     textAlign: "center",
     marginTop: 20,
   },
   subtitle: {
     fontWeight: "semibold",
-    fontSize: 18,
+    fontSize: bodyFonts.medium,
     textAlign: "center",
     marginTop: 25,
   },
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   signInButtonText: {
     color: "white",
     textAlign: "center",
-    fontSize: 14,
+    fontSize: bodyFonts.small,
     fontWeight: "medium",
   },
   error: {

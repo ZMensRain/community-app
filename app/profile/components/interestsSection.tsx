@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, ViewStyle } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { tagColors } from "~/src/utils/stylingValue";
+import { bodyFonts, titleFonts, tagColors } from "~/src/utils/stylingValue";
 import FilledButton from "~/src/components/shared/filledButton";
 
 type props = {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     overflow: "hidden",
   },
-  h2: { fontSize: 24, fontWeight: "semibold" },
+  h2: { fontSize: titleFonts.medium, fontWeight: "semibold" },
   interest: {
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
   sectionFallBackText: {
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: 15,
+    fontSize: bodyFonts.small,
+    width: "100%",
   },
 });
 

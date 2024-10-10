@@ -10,6 +10,8 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileCamera from "~/src/components/ProfileCameraCircle";
 import {
+  bodyFonts,
+  titleFonts,
   inputStyle,
   margin,
   padding,
@@ -185,7 +187,7 @@ const EditProfile = () => {
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: titleFonts.small,
                 }}
               >
                 {userContext.state.email}
@@ -248,7 +250,7 @@ const EditProfile = () => {
 
 const styles = StyleSheet.create({
   section: { marginTop: margin.small },
-  label: { fontSize: 16, fontWeight: "bold" },
+  label: { fontSize: bodyFonts.medium, fontWeight: "bold" },
   buttonSection: {
     paddingHorizontal: "25%",
     paddingVertical: padding.small,
