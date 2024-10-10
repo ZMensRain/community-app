@@ -1,11 +1,5 @@
 import { useEffect } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  AppState,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Alert, AppState } from "react-native";
 import { getUserData, supabase } from "src/utils/supabase";
 import { router } from "expo-router";
 import {
@@ -13,6 +7,34 @@ import {
   UserActionKind,
   useUserContext,
 } from "~/src/contexts/userContext";
+import LoadingScreen from "~/src/components/shared/loadingScreen";
+
+const getUpdateUserContextData = async () => {
+  let user: User = {
+    id: "",
+    email: "",
+    interests: [],
+    location: { latitude: 0, longitude: 0 },
+    postIds: [],
+    username: "",
+    avatarUrl: "",
+    discriminator: "user",
+  };
+
+  const response = await supabase.auth.getUser();
+  if (!response.data.user) return user;
+
+  user.id = response.data.user.id;
+  user.email = response.data.user.email ?? "";
+  let r = await getUserData(user.id);
+  if (typeof r != "string") {
+    user.interests = r.interests;
+    user.username = String(r.username);
+    user.location = r.location;
+    user.avatarUrl = r.avatar_url ?? "";
+  }
+  return user;
+};
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -34,49 +56,20 @@ export default function Page() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) router.replace("/FeedTab");
       else router.replace("/auth/signUp");
+    });
 
-      supabase.auth.getUser().then(async (response) => {
-        if (!response.data.user) return;
-
-        let user: User = {
-          id: response.data.user.id,
-          email: response.data.user.email ?? "",
-          interests: [],
-          location: { latitude: 0, longitude: 0 },
-          postIds: [],
-          username: "",
-          avatarUrl: "",
-          discriminator: "user",
-        };
-        let r = await getUserData(user.id);
-        if (typeof r != "string") {
-          user.interests = r.interests;
-          user.username = String(r.username);
-          user.location = r.location;
-          user.avatarUrl = r.avatar_url ?? "";
-        }
-        userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
-      });
+    getUpdateUserContextData().then((user) => {
+      userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      getUpdateUserContextData().then((user) => {
+        userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
+      });
       if (session) router.replace("/FeedTab");
       else router.replace("/auth/signUp");
     });
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <ActivityIndicator size={"large"}></ActivityIndicator>
-    </View>
-  );
+  return <LoadingScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-  },
-});
