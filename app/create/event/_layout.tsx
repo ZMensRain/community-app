@@ -1,7 +1,10 @@
 import { Stack, router } from "expo-router";
-import { CommunityEvent, DressCode } from "../../../src/model/event";
+
 import { useState } from "react";
-import { EventCreationContext } from "../../../src/contexts/eventCreationContext";
+import {
+  EventCreationContext,
+  initialCreationState,
+} from "../../../src/contexts/eventCreationContext";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable } from "react-native";
@@ -9,35 +12,16 @@ import { colors } from "~/src/utils/stylingValue";
 import { supabase } from "~/src/utils/supabase";
 
 const EventCreationLayout = () => {
-  let [event, setEvent] = useState(
-    new CommunityEvent(
-      "",
-      { group: false, id: "" },
-      "",
-      "",
-      "",
-      { min: 1, max: 100 },
-      [],
-      DressCode.Anything,
-      [],
-      [],
-      "",
-      [],
-      []
-    )
-  );
+  const [event, setEvent] = useState(initialCreationState);
 
   const createEvent = async () => {
-    let a = await supabase.auth.getUser();
-    let id = a.data.user?.id;
+    const id = (await supabase.auth.getUser()).data.user?.id;
     if (!id) return;
 
-    let finialEvent = event;
+    const finialEvent = event;
     finialEvent.hosted_by = { id: id, group: false };
     router.navigate("FeedTab");
-    const r = await supabase
-      .from("events")
-      .insert([finialEvent.convertToDatabase()]);
+    await supabase.from("events").insert([finialEvent.convertToDatabase()]);
   };
 
   return (
