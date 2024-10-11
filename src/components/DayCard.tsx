@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, Button } from "react-native";
 import { Day } from "../model/day";
 import { titleFonts } from "../utils/stylingValue";
+import { LatLng } from "react-native-maps";
 
 type DayCardProps = {
   day: Day;
@@ -44,8 +45,8 @@ const DayCard = ({ day, index }: DayCardProps) => {
           {address
             .map((data) => {
               if (typeof data !== "string") {
-                let d = data as { lat: Number; lon: Number };
-                return `${d["lat"]}, ${d["lon"]}`;
+                let d = data as LatLng;
+                return `${d["latitude"]}, ${d["longitude"]}`;
               }
               return data;
             })

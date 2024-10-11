@@ -1,4 +1,4 @@
-import { locationType } from "./event";
+import { LatLng } from "react-native-maps";
 
 type Time = { hour: Number; minute: Number };
 
@@ -9,7 +9,7 @@ class Day {
     start: Date | Time,
     end: Date | Time,
     public date: Date,
-    public locations: locationType[]
+    public locations: LatLng[]
   ) {
     this.start = this.formatTime(start);
     this.end = this.formatTime(end);

@@ -1,7 +1,7 @@
+import { LatLng } from "react-native-maps";
 import { Day } from "./day";
 import { Database } from "~/database.types";
 
-type locationType = string | { lat: number; lon: number };
 type Id = { group: boolean; id: string };
 type EventType = EventTypeEnum | string;
 type EventTag = EventTagEnum | string;
@@ -26,8 +26,8 @@ class CommunityEvent {
     public createdAt: Date
   ) {}
 
-  public getLocations(unique: Boolean = true): locationType[] {
-    let output: locationType[] = [];
+  public getLocations(unique: Boolean = true): LatLng[] {
+    let output: LatLng[] = [];
 
     for (let i = 0; i < this.days.length; i++) {
       output = output.concat(this.days[i].locations);
@@ -43,7 +43,7 @@ class CommunityEvent {
     ): Day[] => {
       const formatLocation = (
         data: Database["public"]["CompositeTypes"]["day"]["location"]
-      ): locationType[] => {
+      ): LatLng[] => {
         //TODO
         return [];
       };
@@ -167,16 +167,16 @@ const testEvent = new CommunityEvent(
   { min: 10, max: 20 },
   [
     new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, yesterday, [
-      "1083 Bezuidenhout St, Mpumalanga",
+      { latitude: 10, longitude: -20 },
     ]),
     new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
-      "1978 Wattle St, Eastern Cape",
+      { latitude: 10, longitude: -20 },
     ]),
     new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
-      "2476 Diesel Street,Gauteng",
+      { latitude: 10, longitude: -20 },
     ]),
     new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
-      { lat: -26.396225, lon: 28.027029 },
+      { latitude: -26.396225, longitude: 28.027029 },
     ]),
   ],
   DressCode.Anything,
@@ -200,7 +200,6 @@ const testEvent = new CommunityEvent(
 /*cspell:enable */
 
 export {
-  locationType,
   CommunityEvent,
   testEvent,
   EventTag,
