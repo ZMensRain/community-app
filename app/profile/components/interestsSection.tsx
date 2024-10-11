@@ -8,6 +8,7 @@ type props = {
   onAddPressed?: () => void;
   onInterestPress?: (interest: string) => void;
   style?: ViewStyle;
+  title?: string;
 };
 
 const InterestsSection = ({
@@ -15,11 +16,12 @@ const InterestsSection = ({
   onAddPressed,
   onInterestPress,
   style,
+  title = "Your Interests",
 }: props) => {
   return (
     <View style={style}>
       <View style={styles.container}>
-        <Text style={styles.h2}>Your Interests</Text>
+        <Text style={styles.h2}>{title}</Text>
         <Pressable onPress={onAddPressed} hitSlop={20}>
           <Ionicons name="add" size={24} />
         </Pressable>

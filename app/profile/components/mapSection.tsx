@@ -5,11 +5,12 @@ type props = {
   style?: ViewStyle;
   lat: number;
   long: number;
+  title?: string;
 };
-const MapSection = ({ style, lat, long }: props) => {
+const MapSection = ({ style, lat, long, title = "Your Area" }: props) => {
   return (
     <View style={style}>
-      <Text style={styles.h2}>Your Area</Text>
+      <Text style={styles.h2}>{title}</Text>
       <View
         style={{
           aspectRatio: 1,

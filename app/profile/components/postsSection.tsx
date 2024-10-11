@@ -16,6 +16,7 @@ import { colors, bodyFonts, titleFonts } from "~/src/utils/stylingValue";
 type props = {
   posts?: (CommunityEvent | Issue)[];
   style?: ViewStyle;
+  title?: string;
 };
 
 const renderItem = (info: ListRenderItemInfo<CommunityEvent | Issue>) => {
@@ -32,11 +33,11 @@ const renderItem = (info: ListRenderItemInfo<CommunityEvent | Issue>) => {
   );
 };
 
-const PostsSection = ({ posts = [], style }: props) => {
+const PostsSection = ({ posts = [], style, title = "Your Posts" }: props) => {
   return (
     <View style={style}>
       <View style={styles.header}>
-        <Text style={styles.h2}>Your Posts</Text>
+        <Text style={styles.h2}>{title}</Text>
         {posts.length && (
           <Text
             onPress={() => router.navigate("profile/posts/me")}

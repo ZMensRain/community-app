@@ -11,54 +11,64 @@ import { Id } from "~/src/model/event";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ReactNode, useEffect, useState } from "react";
 import { getUserData } from "~/src/utils/supabase";
+import { router } from "expo-router";
 
 type props = {
   id: Id;
   url?: string;
   size: number;
   showName: boolean;
-  onPress?: () => void;
+  onPress?: (id: string) => void;
   style?: ViewStyle;
   children?: ReactNode;
 };
 
-const ProfileIcon = (props: props) => {
-  const [url, setUrl] = useState(props.url);
+const NavigateTo = (id: string) => {
+  router.navigate(`profile/${id}`);
+};
+
+const ProfileIcon = ({
+  id,
+  showName,
+  size,
+  children,
+  onPress = NavigateTo,
+  style,
+  url,
+}: props) => {
+  const [urlFetched, setUrl] = useState(url);
 
   useEffect(() => {
-    if (props.url !== undefined) return;
-    getUserData(props.id.id).then((e) => {
+    if (url !== undefined) return;
+    getUserData(id.id).then((e) => {
       if (typeof e == "string") return;
       setUrl(e.avatar_url ?? "");
     });
   }, []);
 
   return (
-    <Pressable
-      onPress={props.onPress}
-      style={[{ width: props.size }, props.style]}
-    >
+    <Pressable onPress={() => onPress(id.id)} style={[{ width: size }, style]}>
       <View>
         {/*Profile picture or icon*/}
         <View style={styles.profile}>
-          {url ? (
+          {urlFetched ? (
             <Image
-              source={{ uri: url }}
+              source={{ uri: urlFetched }}
               style={{ width: "100%", height: "100%" }}
             />
           ) : (
             <Ionicons
-              name={props.id.group ? "people" : "person"}
-              size={props.size}
+              name={id.group ? "people" : "person"}
+              size={size}
               style={{}}
               adjustsFontSizeToFit={true}
             />
           )}
 
-          <View style={styles.children}>{props.children}</View>
+          <View style={styles.children}>{children}</View>
         </View>
         {/*Name*/}
-        {props.showName && <Text style={{ textAlign: "center" }}>Hello</Text>}
+        {showName && <Text style={{ textAlign: "center" }}>Hello</Text>}
       </View>
     </Pressable>
   );
