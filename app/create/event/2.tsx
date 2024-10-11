@@ -161,9 +161,12 @@ const UserInputScreen = () => {
                   setSelected={(val: DressCode) =>
                     setFieldValue("dressCode", val)
                   }
-                  defaultOption={{ value: values.dressCode, key: 0 }}
-                  data={Object.values(DressCode).map((value, index) => {
-                    return { key: index, value: value };
+                  defaultOption={{
+                    value: values.dressCode,
+                    key: values.dressCode,
+                  }}
+                  data={Object.values(DressCode).map((value) => {
+                    return { key: value, value: value };
                   })}
                   save="value"
                   placeholder="Dress code"

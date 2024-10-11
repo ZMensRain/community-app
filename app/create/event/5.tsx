@@ -28,7 +28,7 @@ import { EventCreationContext } from "src/contexts/eventCreationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors, titleFonts, pageStyle } from "~/src/utils/stylingValue";
 import renderBackdrop from "~/src/components/shared/sheetBackdrop";
-
+import { LatLng } from "react-native-maps";
 const WhereWhenScreen = () => {
   const eventContext = useContext(EventCreationContext);
   if (eventContext === undefined) {
@@ -54,7 +54,7 @@ const WhereWhenScreen = () => {
     date: Yup.date().required(),
     starts: Yup.date().required(),
     ends: Yup.date().required(),
-    location: Yup.array().required(),
+    location: Yup.object().required(),
   });
 
   // Using useFormik instead of <Formik>
@@ -64,7 +64,7 @@ const WhereWhenScreen = () => {
       date: new Date(),
       starts: new Date(2000, 1, 1, 8, 30, 0, 0),
       ends: new Date(2000, 1, 1, 14, 30, 0, 0),
-      location: [],
+      location: { latitude: 0, longitude: 0 },
     },
     validationSchema: validation,
     validateOnChange: true,
@@ -128,12 +128,12 @@ const WhereWhenScreen = () => {
                 onPress={() => sheetRef.current?.snapToIndex(0)}
               >
                 <Text>
-                  {formik.values.location.length === 0
-                    ? "No location set"
-                    : formik.values.location.length}
+                  {`${formik.values.location.latitude}, ${formik.values.location.longitude}`}
                 </Text>
               </IconButton>
-              {formik.errors.location && <Text>{formik.errors.location}</Text>}
+              {formik.errors.location && (
+                <Text>{formik.errors.location.toString()}</Text>
+              )}
             </View>
           </>
 

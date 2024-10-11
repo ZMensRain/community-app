@@ -30,7 +30,7 @@ class CommunityEvent {
     let output: LatLng[] = [];
 
     for (let i = 0; i < this.days.length; i++) {
-      output = output.concat(this.days[i].locations);
+      output.push(this.days[i].location);
     }
 
     if (unique) return [...new Set(output)];
@@ -43,9 +43,11 @@ class CommunityEvent {
     ): Day[] => {
       const formatLocation = (
         data: Database["public"]["CompositeTypes"]["day"]["location"]
-      ): LatLng[] => {
+      ): LatLng => {
         //TODO
-        return [];
+        const d = data as { coordinates: [number, number]; type: string };
+
+        return { latitude: d.coordinates[1], longitude: d.coordinates[0] };
       };
       const out = [];
 
@@ -89,12 +91,17 @@ class CommunityEvent {
   public convertToDatabase(): Database["public"]["Tables"]["events"]["Row"] {
     let days = [];
 
+    const convertLocations = (location: LatLng) => {
+      return `POINT(${location.longitude} ${location.latitude})`;
+    };
+
     for (let i = 0; i < this.days.length; i++) {
+      const day = this.days[i];
       days.push({
-        event_date: this.days[i].date.toISOString(),
-        start_time: `${this.days[i].start.hour}:${this.days[i].start.minute}:00`,
-        end_time: `${this.days[i].start.hour}:${this.days[i].start.minute}:00`,
-        location: [],
+        event_date: day.date.toISOString(),
+        start_time: `${day.start.hour}:${day.start.minute}:00`,
+        end_time: `${day.start.hour}:${day.start.minute}:00`,
+        location: convertLocations(day.location),
       });
     }
 
@@ -104,8 +111,8 @@ class CommunityEvent {
       attendees: this.attendees.map((v) => v.id),
       days: days,
       description: this.description,
-      dress_code:
-        this.dressCode.toString() as Database["public"]["Enums"]["dresscode"],
+      // @ts-ignore
+      dress_code: this.dressCode.toString(),
       kit: this.kit as string[],
       links: this.links,
       tags: this.tags as string[],
@@ -113,6 +120,24 @@ class CommunityEvent {
       title: this.title,
       type: this.type.toString(),
     };
+  }
+  static clone(from: CommunityEvent): CommunityEvent {
+    return new CommunityEvent(
+      from.id,
+      from.hosted_by,
+      from.title,
+      from.description,
+      from.type,
+      from.ageRange,
+      from.days,
+      from.dressCode,
+      from.attendees,
+      from.links,
+      from.ticketWebsite,
+      from.tags,
+      from.kit,
+      from.createdAt
+    );
   }
 }
 
@@ -166,18 +191,22 @@ const testEvent = new CommunityEvent(
   "Dance",
   { min: 10, max: 20 },
   [
-    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, yesterday, [
-      { latitude: 10, longitude: -20 },
-    ]),
-    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
-      { latitude: 10, longitude: -20 },
-    ]),
-    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
-      { latitude: 10, longitude: -20 },
-    ]),
-    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), [
-      { latitude: -26.396225, longitude: 28.027029 },
-    ]),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, yesterday, {
+      latitude: 10,
+      longitude: -20,
+    }),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), {
+      latitude: 10,
+      longitude: -20,
+    }),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), {
+      latitude: 10,
+      longitude: -20,
+    }),
+    new Day({ hour: 8, minute: 30 }, { hour: 14, minute: 30 }, new Date(), {
+      latitude: -26.396225,
+      longitude: 28.027029,
+    }),
   ],
   DressCode.Anything,
   [

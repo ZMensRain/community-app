@@ -19,7 +19,7 @@ export const initialCreationState = new CommunityEvent(
   "",
   { min: 1, max: 100 },
   [],
-  DressCode.Anything,
+  DressCode[DressCode.Casual],
   [],
   [],
   "",

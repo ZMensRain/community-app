@@ -1,6 +1,6 @@
 import { LatLng } from "react-native-maps";
 
-type Time = { hour: Number; minute: Number };
+type Time = { hour: number; minute: number };
 
 class Day {
   start: Time;
@@ -9,7 +9,7 @@ class Day {
     start: Date | Time,
     end: Date | Time,
     public date: Date,
-    public locations: LatLng[]
+    public location: LatLng
   ) {
     this.start = this.formatTime(start);
     this.end = this.formatTime(end);

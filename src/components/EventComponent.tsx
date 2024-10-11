@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-  TouchableHighlight,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 import { CommunityEvent } from "../model/event";
 import { router } from "expo-router";
 import { colors, titleFonts, typeColor } from "../utils/stylingValue";
@@ -18,6 +12,7 @@ const EventComponent = (props: EventProps) => {
   const onPress = () => {
     router.navigate("event/" + props.event.id);
   };
+  const locations = props.event.getLocations();
   return (
     <TouchableHighlight
       style={styles.container}
@@ -39,7 +34,11 @@ const EventComponent = (props: EventProps) => {
         >
           {props.event.type}
         </Text>
-        <Text style={[styles.mt5]}>{`${props.event.getLocations()[0]}`}</Text>
+        {locations.length > 0 && (
+          <Text
+            style={[styles.mt5]}
+          >{`${locations[0].latitude}, ${locations[0].longitude}`}</Text>
+        )}
         <Text style={[styles.mt5, { color: "#7C7C7C" }]}>
           {props.event.tags.join(", ")}
         </Text>

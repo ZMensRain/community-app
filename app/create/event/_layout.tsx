@@ -10,9 +10,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable } from "react-native";
 import { colors } from "~/src/utils/stylingValue";
 import { supabase } from "~/src/utils/supabase";
+import { CommunityEvent } from "~/src/model/event";
 
 const EventCreationLayout = () => {
-  const [event, setEvent] = useState(initialCreationState);
+  const [event, setEvent] = useState(
+    CommunityEvent.clone(initialCreationState)
+  );
 
   const createEvent = async () => {
     const id = (await supabase.auth.getUser()).data.user?.id;
@@ -22,6 +25,8 @@ const EventCreationLayout = () => {
     finialEvent.hosted_by = { id: id, group: false };
     router.navigate("FeedTab");
     await supabase.from("events").insert([finialEvent.convertToDatabase()]);
+
+    setEvent(initialCreationState);
   };
 
   return (

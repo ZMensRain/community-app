@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, StyleSheet, Text, Button, Linking } from "react-native";
 import { Day } from "../model/day";
 import { titleFonts } from "../utils/stylingValue";
 import { LatLng } from "react-native-maps";
@@ -9,7 +9,7 @@ type DayCardProps = {
 };
 
 const DayCard = ({ day, index }: DayCardProps) => {
-  const address = day.locations;
+  const location = day.location;
   let isPath: Boolean = false;
   let isPast: Boolean = false;
   //TODO check if is path
@@ -41,16 +41,13 @@ const DayCard = ({ day, index }: DayCardProps) => {
         Ends At: {`${day.end["hour"]}:${day.end["minute"]}`}
       </Text>
       {isPath === false && (
-        <Text style={[isPast && styles.pastText]}>
-          {address
-            .map((data) => {
-              if (typeof data !== "string") {
-                let d = data as LatLng;
-                return `${d["latitude"]}, ${d["longitude"]}`;
-              }
-              return data;
-            })
-            .join(" - ")}
+        <Text
+          style={[isPast && styles.pastText]}
+          onPress={() =>
+            Linking.openURL(`geo:${location.latitude},${location.longitude}`)
+          }
+        >
+          {`${location.latitude}, ${location.longitude}`}
         </Text>
       )}
       {isPath && <Button title="View Path"></Button>}
