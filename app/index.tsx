@@ -58,10 +58,6 @@ export default function Page() {
       else router.replace("/auth/signUp");
     });
 
-    getUpdateUserContextData().then((user) => {
-      userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
-    });
-
     supabase.auth.onAuthStateChange((_event, session) => {
       getUpdateUserContextData().then((user) => {
         userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
