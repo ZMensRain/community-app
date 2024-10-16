@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { CommunityEvent } from "../model/event";
 import { Database } from "~/database.types";
 import { Issue, IssueFromDatabase } from "../model/issue";
+import { LatLng } from "react-native-maps";
 
 /* cSpell:disable */
 const supabaseURL = "https://yemtwnliyzhfbdclmrnn.supabase.co";
@@ -20,27 +21,40 @@ const supabase = createClient<Database>(supabaseURL, supabaseKey, {
   },
 });
 
-const getEvents = async (created_by: string, number: number | null) => {
-  let data: Database["public"]["Tables"]["events"]["Row"][] = [];
-
-  if (number) {
-    const f = await supabase
-      .from("events")
-      .select()
-      .eq("created_by", created_by)
-      .order("created_at")
-      .limit(number);
-    if (f.data) data = [...data, ...f.data];
-  } else {
-    const response = await supabase
-      .from("events")
-      .select()
-      .eq("created_by", created_by)
-      .order("created_at");
-    if (response.data) data = data.concat(response.data);
+type getEventsPram = {
+  userId?: string;
+  location?: LatLng;
+  tags?: string[];
+  types?: string[];
+  limit?: number;
+  degrees?: number;
+};
+const getEvents = async ({
+  userId,
+  types,
+  limit,
+  tags,
+  location,
+  degrees = 0.4511,
+}: getEventsPram) => {
+  let request = supabase.from("events").select();
+  if (userId) request = request.eq("created_by", userId);
+  if (types) request = request.in("type", types);
+  if (limit) request = request.limit(limit);
+  if (tags) request = request.containedBy("tags", tags).neq("tags", "{}");
+  if (location) {
+    const r = await supabase.rpc("get_events_in_range", {
+      location_input: `POINT(${location.longitude} ${location.latitude})`,
+      range_input: degrees,
+    });
+    if (!r.error) {
+      const ids = r.data.map((v) => v.id);
+      request.in("id", ids);
+    }
   }
-
-  return data.map((v) => CommunityEvent.fromDatabase(v));
+  const response = await request;
+  if (response.error || response.data === null) return [];
+  return response.data.map((data) => CommunityEvent.fromDatabase(data));
 };
 
 const getIssues = async (created_by: string, number: number | null) => {
@@ -71,7 +85,7 @@ async function getPosts(
   numberOfEach: number
 ): Promise<(CommunityEvent | Issue)[]> {
   let l = [
-    ...(await getEvents(created_by, numberOfEach)),
+    ...(await getEvents({ userId: created_by, limit: numberOfEach })),
     ...(await getIssues(created_by, numberOfEach)),
   ];
   l.sort((a, b) => {
