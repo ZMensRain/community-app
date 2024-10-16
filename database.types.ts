@@ -183,6 +183,21 @@ export type Database = {
           type: string
         }[]
       }
+      get_issues_in_range: {
+        Args: {
+          location_input: unknown
+          range_input: number
+        }
+        Returns: {
+          created_at: string
+          created_by: string
+          description: string | null
+          fixed: boolean
+          id: string
+          location: unknown | null
+          type: string | null
+        }[]
+      }
       mark_issue_as_fixed: {
         Args: {
           is_fixed: boolean

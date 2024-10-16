@@ -21,7 +21,7 @@ const supabase = createClient<Database>(supabaseURL, supabaseKey, {
   },
 });
 
-type getEventsPram = {
+type getEventsParams = {
   userId?: string;
   location?: LatLng;
   tags?: string[];
@@ -36,7 +36,7 @@ const getEvents = async ({
   tags,
   location,
   degrees = 0.4511,
-}: getEventsPram) => {
+}: getEventsParams) => {
   let request = supabase.from("events").select();
   if (userId) request = request.eq("created_by", userId);
   if (types) request = request.in("type", types);
@@ -49,7 +49,7 @@ const getEvents = async ({
     });
     if (!r.error) {
       const ids = r.data.map((v) => v.id);
-      request.in("id", ids);
+      request = request.in("id", ids);
     }
   }
   const response = await request;
@@ -57,42 +57,49 @@ const getEvents = async ({
   return response.data.map((data) => CommunityEvent.fromDatabase(data));
 };
 
-const getIssues = async (created_by: string, number: number | null) => {
-  let data: Database["public"]["Tables"]["issues"]["Row"][] = [];
-
-  if (number) {
-    const f = await supabase
-      .from("issues")
-      .select()
-      .eq("created_by", created_by)
-      .order("created_at")
-      .limit(number);
-    if (f.data) data = [...data, ...f.data];
-  } else {
-    const response = await supabase
-      .from("issues")
-      .select()
-      .eq("created_by", created_by)
-      .order("created_at");
-    if (response.data) data = data.concat(response.data);
+type getIssuesParams = {
+  userId?: string;
+  types?: string[];
+  limit?: number;
+  fixed?: boolean;
+  degrees?: number;
+  location?: LatLng;
+};
+const getIssues = async ({
+  userId,
+  types,
+  limit,
+  fixed,
+  degrees = 0.4511,
+  location,
+}: getIssuesParams) => {
+  let request = supabase.from("issues").select();
+  if (userId) request = request.eq("created_by", userId);
+  if (types) request = request.in("type", types);
+  if (limit) request = request.limit(limit);
+  if (fixed !== undefined) request = request.eq("fixed", fixed);
+  if (location) {
+    const r = await supabase.rpc("get_issues_in_range", {
+      location_input: `POINT(${location.longitude} ${location.latitude})`,
+      range_input: degrees,
+    });
+    if (!r.error) {
+      const ids = r.data.map((v) => v.id);
+      request = request.in("id", ids);
+    }
   }
-
-  return data.map((v) => IssueFromDatabase(v));
+  const response = await request;
+  if (response.error || response.data === null) return [];
+  return response.data.map((v) => IssueFromDatabase(v));
 };
 
 async function getPosts(
-  created_by: string,
-  numberOfEach: number
+  params: getIssuesParams & getEventsParams
 ): Promise<(CommunityEvent | Issue)[]> {
-  let l = [
-    ...(await getEvents({ userId: created_by, limit: numberOfEach })),
-    ...(await getIssues(created_by, numberOfEach)),
-  ];
-  l.sort((a, b) => {
-    return b.createdAt.getTime() - a.createdAt.getTime();
-  });
+  const posts = [...(await getEvents(params)), ...(await getIssues(params))];
 
-  return l;
+  posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  return posts;
 }
 
 const getUserData = async (id: string) => {
