@@ -21,7 +21,7 @@ const ViewProfile = () => {
     if (typeof id != "string") return;
     getUserData(id).then(async (data) => {
       if (typeof data === "string") return;
-      const posts = await getPosts(id, 10);
+      const posts = await getPosts({ userId: id, limit: 10 });
       let u: User = {
         avatarUrl: data.avatar_url ?? "",
         discriminator: "user",
@@ -68,7 +68,12 @@ const ViewProfile = () => {
             long={user.location.longitude}
             title="Area"
           />
-          <PostsSection posts={posts} style={styles.section} title="Posts" />
+          <PostsSection
+            posts={posts}
+            style={styles.section}
+            title="Posts"
+            id={id as string}
+          />
           <InterestsSection
             interests={user.interests}
             style={styles.section}

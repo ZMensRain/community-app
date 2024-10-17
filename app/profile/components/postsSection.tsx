@@ -17,6 +17,7 @@ type props = {
   posts?: (CommunityEvent | Issue)[];
   style?: ViewStyle;
   title?: string;
+  id?: string;
 };
 
 const renderItem = (info: ListRenderItemInfo<CommunityEvent | Issue>) => {
@@ -33,14 +34,19 @@ const renderItem = (info: ListRenderItemInfo<CommunityEvent | Issue>) => {
   );
 };
 
-const PostsSection = ({ posts = [], style, title = "Your Posts" }: props) => {
+const PostsSection = ({
+  posts = [],
+  style,
+  title = "Your Posts",
+  id = "me",
+}: props) => {
   return (
     <View style={style}>
       <View style={styles.header}>
         <Text style={styles.h2}>{title}</Text>
         {posts.length && (
           <Text
-            onPress={() => router.navigate("profile/posts/me")}
+            onPress={() => router.navigate(`profile/posts/${id}`)}
             style={{ color: colors.primary }}
           >
             See All
