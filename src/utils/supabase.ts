@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import { CommunityEvent } from "../model/event";
 import { Database } from "~/database.types";
-import { Issue, IssueFromDatabase } from "../model/issue";
+import { IssueFromDatabase } from "../model/issue";
 import { LatLng } from "react-native-maps";
 
 /* cSpell:disable */
@@ -11,15 +11,6 @@ const supabaseURL = "https://yemtwnliyzhfbdclmrnn.supabase.co";
 const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllbXR3bmxpeXpoZmJkY2xtcm5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY5NjUyMzQsImV4cCI6MjAzMjU0MTIzNH0.N31WgDzl0WzGGhpGoTL6cXzF2kdmdDSv1XMstnQwMQ0";
 /* cSpell:enable */
-
-const supabase = createClient<Database>(supabaseURL, supabaseKey, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
 
 type getEventsParams = {
   userId?: string;
@@ -29,19 +20,40 @@ type getEventsParams = {
   limit?: number;
   degrees?: number;
 };
+type getIssuesParams = {
+  userId?: string;
+  types?: string[];
+  limit?: number;
+  fixed?: boolean;
+  degrees?: number;
+  location?: LatLng;
+};
+type getPostsParams = getEventsParams & getIssuesParams;
+
+const supabase = createClient<Database>(supabaseURL, supabaseKey, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
+const km50inDegrees = 0.4511;
+
 const getEvents = async ({
   userId,
   types,
   limit,
   tags,
   location,
-  degrees = 0.4511,
+  degrees = km50inDegrees,
 }: getEventsParams) => {
   let request = supabase.from("events").select();
   if (userId) request = request.eq("created_by", userId);
-  if (types) request = request.in("type", types);
+  if (types && types.length > 0) request = request.in("type", types);
   if (limit) request = request.limit(limit);
-  if (tags) request = request.containedBy("tags", tags).neq("tags", "{}");
+  if (tags && tags.length > 0)
+    request = request.containedBy("tags", tags).neq("tags", "{}");
   if (location) {
     const r = await supabase.rpc("get_events_in_range", {
       location_input: `POINT(${location.longitude} ${location.latitude})`,
@@ -57,20 +69,12 @@ const getEvents = async ({
   return response.data.map((data) => CommunityEvent.fromDatabase(data));
 };
 
-type getIssuesParams = {
-  userId?: string;
-  types?: string[];
-  limit?: number;
-  fixed?: boolean;
-  degrees?: number;
-  location?: LatLng;
-};
 const getIssues = async ({
   userId,
   types,
   limit,
   fixed,
-  degrees = 0.4511,
+  degrees = km50inDegrees,
   location,
 }: getIssuesParams) => {
   let request = supabase.from("issues").select();
@@ -93,9 +97,7 @@ const getIssues = async ({
   return response.data.map((v) => IssueFromDatabase(v));
 };
 
-async function getPosts(
-  params: getIssuesParams & getEventsParams
-): Promise<(CommunityEvent | Issue)[]> {
+async function getPosts(params: getPostsParams) {
   const posts = [...(await getEvents(params)), ...(await getIssues(params))];
 
   posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -131,4 +133,5 @@ export {
   getIssues,
   getEventsParams,
   getIssuesParams,
+  getPostsParams,
 };
