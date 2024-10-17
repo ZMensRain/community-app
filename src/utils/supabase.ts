@@ -28,7 +28,8 @@ type getIssuesParams = {
   degrees?: number;
   location?: LatLng;
 };
-type getPostsParams = getEventsParams & getIssuesParams;
+type getPostsParams = getEventsParams &
+  getIssuesParams & { interests?: string[] };
 
 const supabase = createClient<Database>(supabaseURL, supabaseKey, {
   auth: {
@@ -98,7 +99,17 @@ const getIssues = async ({
 };
 
 async function getPosts(params: getPostsParams) {
-  const posts = [...(await getEvents(params)), ...(await getIssues(params))];
+  let finalParams = params;
+
+  if (params.interests) {
+    const types = params.interests.concat(finalParams.types ?? []);
+    finalParams = { ...finalParams, types: types };
+  }
+
+  const posts = [
+    ...(await getEvents(finalParams)),
+    ...(await getIssues(finalParams)),
+  ];
 
   posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   return posts;

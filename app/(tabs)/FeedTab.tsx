@@ -9,11 +9,7 @@ import React, { useEffect } from "react";
 import EventComponent from "src/components/EventComponent";
 
 import { CommunityEvent } from "src/model/event";
-import {
-  getEventsParams,
-  getIssuesParams,
-  getPosts,
-} from "~/src/utils/supabase";
+import { getPosts, getPostsParams } from "~/src/utils/supabase";
 import { pageStyle } from "~/src/utils/stylingValue";
 import { Issue } from "~/src/model/issue";
 import IssueCard from "~/src/components/issueCard";
@@ -25,17 +21,11 @@ function FeedTab() {
   const userContext = useUserContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [posts, setPosts] = React.useState<(CommunityEvent | Issue)[]>([]);
-  const [filters, setFilters] = React.useState<
-    getEventsParams & getIssuesParams
-  >({ location: userContext?.state.location, limit: 1000 });
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    fetchPosts(true);
-  }, []);
+  const [filters, setFilters] = React.useState<getPostsParams>({
+    location: userContext?.state.location,
+    limit: 1000,
+  });
 
-  useEffect(() => {
-    fetchPosts(false);
-  }, [userContext?.state.interests]);
   const fetchPosts = async (setRefresh: boolean) => {
     const posts = await getPosts(filters);
     if (setRefresh) setRefreshing(false);
@@ -43,6 +33,10 @@ function FeedTab() {
     setPosts(posts);
   };
   const onIssuePress = (issue: Issue) => router.navigate(`issue/${issue.id}`);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchPosts(true);
+  }, []);
 
   const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
     if (item.item instanceof CommunityEvent)
@@ -56,8 +50,10 @@ function FeedTab() {
   };
 
   useEffect(() => {
-    console.log("called");
-    console.log(filters);
+    setFilters({ ...filters, interests: userContext?.state.interests });
+  }, [userContext?.state]);
+
+  useEffect(() => {
     fetchPosts(false);
   }, [filters]);
 
@@ -65,8 +61,14 @@ function FeedTab() {
     <View style={pageStyle}>
       <SearchPosts
         location={filters.location !== undefined}
-        interests={false}
-        onInterestsSwitched={() => {}}
+        interests={filters.interests !== undefined}
+        onInterestsSwitched={() => {
+          const isFiltering = filters.interests !== undefined;
+          setFilters({
+            ...filters,
+            interests: isFiltering ? undefined : userContext?.state.interests,
+          });
+        }}
         onLocationSwitched={function (): void {
           setFilters({
             ...filters,
