@@ -2,23 +2,24 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   View,
-  Text,
   FlatList,
   ActivityIndicator,
   ListRenderItemInfo,
 } from "react-native";
 import EventComponent from "~/src/components/EventComponent";
 import IssueCard from "~/src/components/issueCard";
+import SearchPosts from "~/src/components/shared/searchPosts";
 import { CommunityEvent } from "~/src/model/event";
 import { Issue } from "~/src/model/issue";
 import { pageStyle } from "~/src/utils/stylingValue";
-import { getPosts, supabase } from "~/src/utils/supabase";
+import { getPosts, getPostsParams, supabase } from "~/src/utils/supabase";
 
 const Posts = () => {
   const local = useLocalSearchParams();
   const userId = local["id"];
   const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>();
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<getPostsParams>({});
   useEffect(() => {
     const call = async () => {
       let id = userId as string;
@@ -32,11 +33,11 @@ const Posts = () => {
         id = user;
       }
 
-      setPosts(await getPosts(id));
+      setPosts(await getPosts({ ...filters, userId: id }));
       setLoading(false);
     };
     call();
-  }, []);
+  }, [filters]);
 
   const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
     if (item.item instanceof CommunityEvent)
@@ -57,7 +58,10 @@ const Posts = () => {
         {loading ? (
           <ActivityIndicator size="large" />
         ) : (
-          <FlatList data={posts} renderItem={renderItem} />
+          <>
+            <SearchPosts onUpdateFilters={(params) => setFilters(params)} />
+            <FlatList data={posts} renderItem={renderItem} />
+          </>
         )}
       </View>
     </>
