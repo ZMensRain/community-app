@@ -76,7 +76,7 @@ const SearchPosts = (props: props) => {
           <LabeledSwitch
             label={"Your Interests"}
             value={props.interests}
-            onPress={() => props.onInterestsSwitched}
+            onPress={props.onInterestsSwitched}
           />
           <View style={{ width: "100%" }}>
             <View
