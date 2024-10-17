@@ -32,7 +32,9 @@ function FeedTab() {
     if (!posts) return;
     setPosts(posts);
   };
+
   const onIssuePress = (issue: Issue) => router.navigate(`issue/${issue.id}`);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchPosts(true);
@@ -50,41 +52,12 @@ function FeedTab() {
   };
 
   useEffect(() => {
-    setFilters({ ...filters, interests: userContext?.state.interests });
-  }, [userContext?.state]);
-
-  useEffect(() => {
     fetchPosts(false);
   }, [filters]);
 
   return (
     <View style={pageStyle}>
-      <SearchPosts
-        location={filters.location !== undefined}
-        interests={filters.interests !== undefined}
-        onInterestsSwitched={() => {
-          const isFiltering = filters.interests !== undefined;
-          setFilters({
-            ...filters,
-            interests: isFiltering ? undefined : userContext?.state.interests,
-          });
-        }}
-        onLocationSwitched={function (): void {
-          setFilters({
-            ...filters,
-            location:
-              filters.location === undefined
-                ? userContext?.state.location
-                : undefined,
-          });
-        }}
-        onTypesChange={function (type: string): void {
-          throw new Error("Function not implemented.");
-        }}
-        onTagsChange={function (tag: string): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
+      <SearchPosts onUpdateFilters={(filters) => setFilters(filters)} />
       <FlatList
         data={posts}
         renderItem={renderItem}

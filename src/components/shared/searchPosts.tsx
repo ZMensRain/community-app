@@ -1,8 +1,9 @@
 import { Switch, View, Text, Alert, Platform } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors, margin, padding, titleFonts } from "~/src/utils/stylingValue";
-import { useState } from "react";
-import { LatLng } from "react-native-maps";
+import { useEffect, useState } from "react";
+import { getPostsParams } from "~/src/utils/supabase";
+import { useUserContext } from "~/src/contexts/userContext";
 
 const LabeledSwitch = (props: {
   label: string;
@@ -24,18 +25,46 @@ const LabeledSwitch = (props: {
 };
 
 type props = {
-  location: boolean;
+  onUpdateFilters?: (params: getPostsParams) => void;
+};
+
+type filterBy = {
   interests: boolean;
-  tags?: string[];
-  types?: string[];
-  onLocationSwitched: () => void;
-  onTypesChange: (type: string) => void;
-  onTagsChange: (tag: string) => void;
-  onInterestsSwitched: () => void;
+  location: boolean;
+  tags: boolean;
+  types: boolean;
 };
 
 const SearchPosts = (props: props) => {
   const [showFilters, setShowFilters] = useState(false);
+  const [currentFilters, setCurrentFilters] = useState<filterBy>({
+    interests: false,
+    location: false,
+    tags: false,
+    types: false,
+  });
+  const [filterValues, setFilterValues] = useState<getPostsParams>({
+    limit: 1000,
+  });
+  const userContext = useUserContext();
+
+  // Update values that are dependent on the current user
+  useEffect(() => {
+    setFilterValues({
+      ...filterValues,
+      location: userContext?.state.location,
+      interests: userContext?.state.interests,
+    });
+  }, [userContext?.state]);
+
+  useEffect(() => {
+    let filters: getPostsParams = {};
+    if (currentFilters.interests) filters.interests = filterValues.interests;
+    if (currentFilters.location) filters.location = filterValues.location;
+    if (currentFilters.tags) filters.tags = filterValues.tags;
+    if (currentFilters.types) filters.types = filterValues.types;
+    props.onUpdateFilters?.(filters);
+  }, [currentFilters, filterValues]);
 
   return (
     <View>
@@ -70,13 +99,23 @@ const SearchPosts = (props: props) => {
         >
           <LabeledSwitch
             label={"Your Location"}
-            value={props.location}
-            onPress={props.onLocationSwitched}
+            value={currentFilters.location}
+            onPress={() =>
+              setCurrentFilters({
+                ...currentFilters,
+                location: !currentFilters.location,
+              })
+            }
           />
           <LabeledSwitch
             label={"Your Interests"}
-            value={props.interests}
-            onPress={props.onInterestsSwitched}
+            value={currentFilters.interests}
+            onPress={() =>
+              setCurrentFilters({
+                ...currentFilters,
+                interests: !currentFilters.interests,
+              })
+            }
           />
           <View style={{ width: "100%" }}>
             <View
@@ -88,16 +127,7 @@ const SearchPosts = (props: props) => {
               }}
             >
               <Text style={{ fontSize: titleFonts.small }}>Tags</Text>
-              <Ionicons
-                name="add"
-                size={24}
-                onPress={() => {
-                  //TODO Find better solution
-                  Alert.prompt("Tag", "", (v) => {
-                    props.onTagsChange(v);
-                  });
-                }}
-              />
+              <Ionicons name="add" size={24} onPress={() => {}} />
             </View>
           </View>
           <View style={{ width: "100%", height: 10 }}></View>
