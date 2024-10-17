@@ -123,4 +123,12 @@ const getUserData = async (id: string) => {
   return out;
 };
 
-export { getUserData, supabase, getPosts, getEvents, getIssues };
+export {
+  getUserData,
+  supabase,
+  getPosts,
+  getEvents,
+  getIssues,
+  getEventsParams,
+  getIssuesParams,
+};
