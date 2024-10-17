@@ -9,53 +9,40 @@ import React, { useEffect } from "react";
 import EventComponent from "src/components/EventComponent";
 
 import { CommunityEvent } from "src/model/event";
-import { supabase } from "~/src/utils/supabase";
+import {
+  getEventsParams,
+  getIssuesParams,
+  getPosts,
+} from "~/src/utils/supabase";
 import { pageStyle } from "~/src/utils/stylingValue";
-import { Issue, IssueFromDatabase } from "~/src/model/issue";
+import { Issue } from "~/src/model/issue";
 import IssueCard from "~/src/components/issueCard";
 import { router } from "expo-router";
+import { useUserContext } from "~/src/contexts/userContext";
+import SearchPosts from "~/src/components/shared/searchPosts";
 
 function FeedTab() {
+  const userContext = useUserContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [posts, setPosts] = React.useState<(CommunityEvent | Issue)[]>([]);
+  const [filters, setFilters] = React.useState<
+    getEventsParams & getIssuesParams
+  >({ location: userContext?.state.location, limit: 1000 });
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchPosts().then((events) => {
-      setRefreshing(false);
-      if (!events) return;
-      setPosts(events);
-    });
+    fetchPosts(true);
   }, []);
 
   useEffect(() => {
-    fetchPosts().then((events) => {
-      setRefreshing(false);
-      if (!events) return;
-      setPosts(events);
-    });
-  }, []);
-
-  const fetchPosts = async () => {
-    const e = await supabase.from("events").select();
-    const i = await supabase.from("issues").select();
-
-    if (e.data === null) return;
-    if (i.data === null) return;
-
-    let data = [
-      ...e.data.map((data) => CommunityEvent.fromDatabase(data)),
-      ...i.data.map((data) => IssueFromDatabase(data)),
-    ];
-    data.sort((a, b) => {
-      return b.createdAt.getTime() - a.createdAt.getTime();
-    });
-
-    return data;
+    fetchPosts(false);
+  }, [userContext?.state.interests]);
+  const fetchPosts = async (setRefresh: boolean) => {
+    const posts = await getPosts(filters);
+    if (setRefresh) setRefreshing(false);
+    if (!posts) return;
+    setPosts(posts);
   };
-
-  const onIssuePress = (issue: Issue) => {
-    router.navigate(`issue/${issue.id}`);
-  };
+  const onIssuePress = (issue: Issue) => router.navigate(`issue/${issue.id}`);
 
   const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
     if (item.item instanceof CommunityEvent)
@@ -68,8 +55,34 @@ function FeedTab() {
     );
   };
 
+  useEffect(() => {
+    console.log("called");
+    console.log(filters);
+    fetchPosts(false);
+  }, [filters]);
+
   return (
     <View style={pageStyle}>
+      <SearchPosts
+        location={filters.location !== undefined}
+        interests={false}
+        onInterestsSwitched={() => {}}
+        onLocationSwitched={function (): void {
+          setFilters({
+            ...filters,
+            location:
+              filters.location === undefined
+                ? userContext?.state.location
+                : undefined,
+          });
+        }}
+        onTypesChange={function (type: string): void {
+          throw new Error("Function not implemented.");
+        }}
+        onTagsChange={function (tag: string): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
       <FlatList
         data={posts}
         renderItem={renderItem}
