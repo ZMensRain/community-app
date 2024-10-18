@@ -7,11 +7,16 @@ import {
   tagColors,
   titleFonts,
 } from "~/src/utils/stylingValue";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPostsParams } from "~/src/utils/supabase";
 import { useUserContext } from "~/src/contexts/userContext";
-import FilledButton from "./filledButton";
 import LabeledSwitch from "./labeledSwitch";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import renderBackdrop from "./sheetBackdrop";
+import TagBottomSheet from "./modals/TagBottomSheet";
+import TypeBottomSheet from "./modals/typeBottomSheet";
+import FilledButton from "./filledButton";
+import OutlineButton from "./outlineButton";
 
 type props = {
   onUpdateFilters?: (params: getPostsParams) => void;
@@ -54,6 +59,9 @@ const SearchPosts = (props: props) => {
     if (currentFilters.types) filters.types = filterValues.types;
     props.onUpdateFilters?.(filters);
   }, [currentFilters, filterValues]);
+
+  const tagModalSheetRef = useRef<BottomSheetModal>(null);
+  const typeModalSheetRef = useRef<BottomSheetModal>(null);
 
   return (
     <View>
@@ -116,24 +124,103 @@ const SearchPosts = (props: props) => {
               }}
             >
               <Text style={{ fontSize: titleFonts.small }}>Tags</Text>
-              <Ionicons name="add" size={24} onPress={() => {}} />
+              <Ionicons
+                name="add"
+                size={24}
+                onPress={() => {
+                  tagModalSheetRef.current?.present();
+                }}
+              />
             </View>
           </View>
-          <View style={{ width: "100%", height: 10 }}></View>
-          <View style={{ width: "100%" }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={filterValues.tags}
+            renderItem={(info) => (
+              <View style={{ marginRight: margin.small }}>
+                <FilledButton
+                  text={info.item}
+                  buttonStyle={{
+                    backgroundColor: tagColors(info.item).background,
+                  }}
+                  onLongPress={() => {
+                    setFilterValues({
+                      ...filterValues,
+                      tags: filterValues.tags?.filter((v) => v !== info.item),
+                    });
+                  }}
+                />
+              </View>
+            )}
+          />
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: titleFonts.small }}>Types</Text>
+            <Ionicons
+              name="add"
+              size={24}
+              onPress={() => {
+                typeModalSheetRef.current?.present();
               }}
-            >
-              <Text style={{ fontSize: titleFonts.small }}>Types</Text>
-              <Ionicons name="add" size={24} onPress={() => {}} />
-            </View>
+            />
           </View>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={filterValues.types}
+            renderItem={(info) => (
+              <View style={{ marginRight: margin.small }}>
+                <OutlineButton
+                  onLongPress={() =>
+                    setFilterValues({
+                      ...filterValues,
+                      types: filterValues.types?.filter((v) => v !== info.item),
+                    })
+                  }
+                >
+                  <Text>{info.item}</Text>
+                </OutlineButton>
+              </View>
+            )}
+          />
         </View>
       )}
+      <BottomSheetModal
+        ref={tagModalSheetRef}
+        snapPoints={["75%"]}
+        backdropComponent={renderBackdrop}
+      >
+        <TagBottomSheet
+          onTagPicked={(tag) => {
+            setFilterValues({
+              ...filterValues,
+              tags: [...(filterValues.tags ?? []), tag],
+            });
+          }}
+        />
+      </BottomSheetModal>
+      <BottomSheetModal
+        ref={typeModalSheetRef}
+        snapPoints={["75%"]}
+        backdropComponent={renderBackdrop}
+      >
+        <TypeBottomSheet
+          onTypePicked={(type) => {
+            setFilterValues({
+              ...filterValues,
+              types: [...(filterValues.types ?? []), type],
+            });
+          }}
+        />
+      </BottomSheetModal>
     </View>
   );
 };
