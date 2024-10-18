@@ -38,7 +38,7 @@ function FeedTab() {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchPosts(true);
-  }, []);
+  }, [filters]);
 
   const renderItem = (item: ListRenderItemInfo<CommunityEvent | Issue>) => {
     if (item.item instanceof CommunityEvent)

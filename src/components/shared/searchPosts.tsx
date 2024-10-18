@@ -1,28 +1,17 @@
-import { Switch, View, Text, Alert, Platform } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colors, margin, padding, titleFonts } from "~/src/utils/stylingValue";
+import {
+  colors,
+  margin,
+  padding,
+  tagColors,
+  titleFonts,
+} from "~/src/utils/stylingValue";
 import { useEffect, useState } from "react";
 import { getPostsParams } from "~/src/utils/supabase";
 import { useUserContext } from "~/src/contexts/userContext";
-
-const LabeledSwitch = (props: {
-  label: string;
-  value: boolean;
-  onPress: () => void;
-}) => {
-  return (
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Switch
-        onChange={props.onPress}
-        value={props.value}
-        trackColor={{ true: colors.primary }}
-        thumbColor={Platform.OS === "android" ? colors.primary : undefined}
-      />
-
-      <Text style={{ marginLeft: margin.small }}>{props.label}</Text>
-    </View>
-  );
-};
+import FilledButton from "./filledButton";
+import LabeledSwitch from "./labeledSwitch";
 
 type props = {
   onUpdateFilters?: (params: getPostsParams) => void;
@@ -40,7 +29,7 @@ const SearchPosts = (props: props) => {
   const [currentFilters, setCurrentFilters] = useState<filterBy>({
     interests: false,
     location: false,
-    tags: false,
+    tags: true,
     types: false,
   });
   const [filterValues, setFilterValues] = useState<getPostsParams>({
@@ -72,9 +61,34 @@ const SearchPosts = (props: props) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "flex-end",
+          justifyContent: showFilters ? "space-between" : "flex-end",
         }}
       >
+        {showFilters && (
+          <>
+            <LabeledSwitch
+              label={"Your Location"}
+              value={currentFilters.location}
+              onPress={() =>
+                setCurrentFilters({
+                  ...currentFilters,
+                  location: !currentFilters.location,
+                })
+              }
+            />
+            <LabeledSwitch
+              label={"Interests"}
+              value={currentFilters.interests}
+              onPress={() =>
+                setCurrentFilters({
+                  ...currentFilters,
+                  interests: !currentFilters.interests,
+                })
+              }
+            />
+          </>
+        )}
+
         <Ionicons.Button
           name="filter"
           size={24}
@@ -89,38 +103,13 @@ const SearchPosts = (props: props) => {
       {showFilters && (
         <View
           style={{
-            width: "100%",
-            paddingTop: padding.small,
-            flexDirection: "row",
+            paddingVertical: padding.small,
             gap: padding.small,
-            paddingVertical: padding.medium,
-            flexWrap: "wrap",
           }}
         >
-          <LabeledSwitch
-            label={"Your Location"}
-            value={currentFilters.location}
-            onPress={() =>
-              setCurrentFilters({
-                ...currentFilters,
-                location: !currentFilters.location,
-              })
-            }
-          />
-          <LabeledSwitch
-            label={"Your Interests"}
-            value={currentFilters.interests}
-            onPress={() =>
-              setCurrentFilters({
-                ...currentFilters,
-                interests: !currentFilters.interests,
-              })
-            }
-          />
           <View style={{ width: "100%" }}>
             <View
               style={{
-                width: "100%",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -134,7 +123,6 @@ const SearchPosts = (props: props) => {
           <View style={{ width: "100%" }}>
             <View
               style={{
-                width: "100%",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
