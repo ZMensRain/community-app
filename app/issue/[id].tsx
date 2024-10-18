@@ -1,12 +1,13 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Linking, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
+import FilledButton from "~/src/components/shared/filledButton";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
 import { Issue, IssueFromDatabase } from "~/src/model/issue";
-import { padding } from "~/src/utils/stylingValue";
+import { margin, padding } from "~/src/utils/stylingValue";
 import { supabase } from "~/src/utils/supabase";
 
 const IssueScreen = () => {
@@ -57,20 +58,46 @@ const IssueScreen = () => {
           <BottomSheet
             ref={sheetRef}
             snapPoints={["5%", "25%", "50%"]}
+            enableDynamicSizing={true}
             enablePanDownToClose={false}
             index={1}
             backgroundStyle={{ backgroundColor: "#0000005a" }}
           >
             <BottomSheetView>
               <View style={{ padding: padding.small }}>
-                <ProfileIcon
-                  id={{ id: issue.creatorId, group: false }}
-                  showName={false}
-                  size={50}
-                />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 20,
+                  }}
+                >
+                  <ProfileIcon
+                    id={{ id: issue.creatorId, group: false }}
+                    showName={false}
+                    size={50}
+                  />
+                  <Text style={{ color: "white" }}>
+                    Status:{" "}
+                    <Text style={{ color: issue.fixed ? "#09f96d" : "red" }}>
+                      {issue.fixed ? "Resolved" : "unresolved"}
+                    </Text>
+                  </Text>
+                </View>
+
                 <Text style={{ color: "white", textAlign: "justify" }}>
                   {issue.description}
                 </Text>
+                <View style={{ gap: 10, marginTop: margin.small }}>
+                  <FilledButton
+                    text={"Directions"}
+                    onPress={() =>
+                      Linking.openURL(
+                        `geo:${issue.coordinates.latitude},${issue.coordinates.longitude}`
+                      )
+                    }
+                  />
+                </View>
               </View>
             </BottomSheetView>
           </BottomSheet>

@@ -16,6 +16,7 @@ interface Issue {
   creatorId: string;
   createdAt: Date;
   id: string;
+  fixed: boolean;
 }
 
 const IssueFromDatabase = (
@@ -31,6 +32,7 @@ const IssueFromDatabase = (
       latitude: location.coordinates[1],
       longitude: location.coordinates[0],
     },
+    fixed: data.fixed,
     id: data.id,
   };
   return issue;

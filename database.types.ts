@@ -198,7 +198,7 @@ export type Database = {
           type: string | null
         }[]
       }
-      mark_issue_as_fixed: {
+      set_issue_fixed_state: {
         Args: {
           is_fixed: boolean
           issue_id: string
