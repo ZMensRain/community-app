@@ -80,7 +80,7 @@ const IssueScreen = () => {
                   <Text style={{ color: "white" }}>
                     Status:{" "}
                     <Text style={{ color: issue.fixed ? "#09f96d" : "red" }}>
-                      {issue.fixed ? "Resolved" : "unresolved"}
+                      {issue.fixed ? "Resolved" : "Unresolved"}
                     </Text>
                   </Text>
                 </View>
@@ -96,6 +96,19 @@ const IssueScreen = () => {
                         `geo:${issue.coordinates.latitude},${issue.coordinates.longitude}`
                       )
                     }
+                  />
+                  <FilledButton
+                    text={issue.fixed ? "Unresolved" : "Resolved"}
+                    buttonStyle={{
+                      backgroundColor: issue.fixed ? "red" : "#09f96d",
+                    }}
+                    onPress={async () => {
+                      setIssue({ ...issue, fixed: !issue.fixed });
+                      await supabase.rpc("set_issue_fixed_state", {
+                        is_fixed: !issue.fixed,
+                        issue_id: issue.id,
+                      });
+                    }}
                   />
                 </View>
               </View>
