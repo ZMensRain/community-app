@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useContext, useRef, useState } from "react";
 
-import TagBottomSheet from "~/src/components/create/TagModal";
+import TagBottomSheet from "~/src/components/shared/modals/TagBottomSheet";
 import { EventCreationContext } from "~/src/contexts/eventCreationContext";
 import FilledButton from "~/src/components/shared/filledButton";
 import renderBackdrop from "~/src/components/shared/sheetBackdrop";

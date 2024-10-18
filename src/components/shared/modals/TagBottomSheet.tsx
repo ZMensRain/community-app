@@ -1,10 +1,10 @@
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { ScrollView, View, StyleSheet, Text } from "react-native";
-import SearchBar from "./SearchBar";
+import SearchBar from "../../create/SearchBar";
 import { useState } from "react";
 import { EventTagEnum } from "~/src/model/event";
-import FilledButton from "../shared/filledButton";
-import { tagColors } from "~/src/utils/stylingValue";
+import FilledButton from "../filledButton";
+import { padding, tagColors } from "~/src/utils/stylingValue";
 
 type props = {
   onTagPicked: (tag: string) => void;
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "stretch",
     justifyContent: "flex-end",
-    paddingHorizontal: 10,
+    paddingHorizontal: padding.small,
   },
 });
 
