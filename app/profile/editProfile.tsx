@@ -111,16 +111,14 @@ const EditProfile = () => {
       type: UserActionKind.updateLocation,
       payload: coordinate,
     });
-    supabase.auth.getUser().then((user) => {
-      if (!user.data.user) return;
 
-      supabase
-        .from("profiles")
-        .update({
-          location: `POINT(${coordinate.longitude} ${coordinate.latitude})`,
-        })
-        .eq("id", user.data.user?.id);
-    });
+    supabase
+      .from("profiles")
+      .update({
+        location: `POINT(${coordinate.longitude} ${coordinate.latitude})`,
+      })
+      .eq("id", userContext.state.id)
+      .then();
   };
 
   const updateProfilePicture = async () => {
