@@ -86,17 +86,20 @@ const EditProfile = () => {
   };
 
   const deleteAccount = () => {
-    Alert.prompt(
+    Alert.alert(
       "Delete Your Account",
-      "Enter the code sent to your email to continue",
+      "Are you sure? This action cannot be undone and will delete all your posts.",
       [
         { text: "Cancel", style: "cancel", isPreferred: true },
-        { text: "Delete Account", style: "destructive" },
-      ],
-      "plain-text",
-      "",
-      "default",
-      {}
+        {
+          text: "Delete Account",
+          style: "destructive",
+          onPress: async (v) => {
+            let f = await supabase.rpc("deleteUser");
+            supabase.auth.signOut();
+          },
+        },
+      ]
     );
   };
 

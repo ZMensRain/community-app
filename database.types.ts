@@ -161,6 +161,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      deleteUser: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_events_in_range: {
         Args: {
           location_input: unknown
