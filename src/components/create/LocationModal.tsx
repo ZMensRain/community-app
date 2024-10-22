@@ -1,6 +1,6 @@
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { StyleSheet, Text, Button } from "react-native";
-import { LatLng } from "react-native-maps";
+import MapView, { LatLng } from "react-native-maps";
 
 type props = {
   onPickLocation?: (locations: LatLng) => void;
@@ -10,19 +10,18 @@ type props = {
 const LocationPickerModal = (props: props) => {
   return (
     <BottomSheetView style={styles.container}>
-      <Text>Unimplemented</Text>
-      <Button
-        onPress={() => {
-          props.onPickLocation?.({ latitude: 0, longitude: 0 });
+      <MapView
+        onPress={(v) => {
+          props.onPickLocation?.(v.nativeEvent.coordinate);
         }}
-        title={"Set to 0, 0 for now"}
-      ></Button>
+        style={{ width: "100%", height: "100%" }}
+      ></MapView>
     </BottomSheetView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10 },
+  container: { flex: 1 },
 });
 
 export default LocationPickerModal;
