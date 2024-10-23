@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import {
   Pressable,
   StyleSheet,
@@ -225,7 +225,10 @@ const EditProfile = () => {
           </View>
 
           <View style={[styles.buttonSection, styles.section]}>
-            <FilledButton text="Reset Password" />
+            <FilledButton
+              text="Reset Password"
+              onPress={() => router.navigate("reset/password")}
+            />
             <FilledButton
               text="Delete Account"
               buttonStyle={{ backgroundColor: "red" }}
