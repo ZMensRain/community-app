@@ -53,11 +53,6 @@ export default function Page() {
   if (userContext == null) Alert.alert("Something has gone very wrong");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) router.replace("/FeedTab");
-      else router.replace("/auth/signUp");
-    });
-
     supabase.auth.onAuthStateChange((_event, session) => {
       getUpdateUserContextData().then((user) => {
         userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
