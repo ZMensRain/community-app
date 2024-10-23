@@ -2,6 +2,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { UserProvider } from "~/src/contexts/userContext";
+import { colors } from "~/src/utils/stylingValue";
 
 const RootLayout = () => {
   return (
@@ -14,6 +15,8 @@ const RootLayout = () => {
               title: "",
               headerBackButtonMenuEnabled: false,
               headerShown: false,
+              headerTintColor: colors.primary,
+              headerTitleStyle: { color: "black" },
             }}
           >
             <Stack.Screen name="(tabs)" />
