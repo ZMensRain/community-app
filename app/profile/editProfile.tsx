@@ -72,7 +72,8 @@ const EditProfile = () => {
       supabase
         .from("profiles")
         .update({ username: username })
-        .eq("id", userContext.state.id);
+        .eq("id", userContext.state.id)
+        .then();
 
       userContext.dispatch({
         type: UserActionKind.updateUsername,
