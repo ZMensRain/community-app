@@ -44,7 +44,7 @@ const PostsSection = ({
     <View style={style}>
       <View style={styles.header}>
         <Text style={styles.h2}>{title}</Text>
-        {posts.length && (
+        {posts.length > 0 && (
           <Text
             onPress={() => router.navigate(`profile/posts/${id}`)}
             style={{ color: colors.primary }}
