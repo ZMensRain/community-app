@@ -14,19 +14,21 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faGoogle, faApple } from "@fortawesome/free-brands-svg-icons/";
-import { FormikValues, Formik } from "formik";
+import { FormikValues, useFormik } from "formik";
 import { router } from "expo-router";
 import * as Yup from "yup";
 
 import TermsComponent from "~/src/components/auth/Terms";
 import { supabase } from "src/utils/supabase";
-import { bodyFonts, titleFonts } from "~/src/utils/stylingValue";
-
-type formProps = {
-  email: String;
-  username: String;
-  password: String;
-};
+import {
+  bodyFonts,
+  inputStyle,
+  margin,
+  padding,
+  pageStyle,
+  titleFonts,
+} from "~/src/utils/stylingValue";
+import FilledButton from "~/src/components/shared/filledButton";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -83,8 +85,14 @@ function SignUp() {
       .required("Required"),
   });
 
+  const formik = useFormik({
+    initialValues: { email: "", password: "", username: "" },
+    onSubmit: submit,
+    validationSchema: validation,
+  });
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[pageStyle, styles.container]}>
       <Pressable onPress={Keyboard.dismiss}>
         <ScrollView>
           <Text style={styles.pageTitle}>Community</Text>
@@ -92,121 +100,99 @@ function SignUp() {
           {loading ? (
             <ActivityIndicator size={"large"} />
           ) : (
-            <Formik
-              initialValues={{ email: "", password: "", username: "" }}
-              onSubmit={submit}
-              validationSchema={validation}
-            >
-              {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-                <View style={[{ paddingHorizontal: 36 }]}>
-                  <>
-                    {/*Email address field*/}
-                    <View style={[styles.verticallySpaced]}>
-                      <TextInput
-                        style={styles.input}
-                        onChangeText={handleChange("email")}
-                        onBlur={handleBlur("email")}
-                        value={values.email}
-                        placeholder="email@address.com"
-                        keyboardType="email-address"
-                        autoCapitalize={"none"}
-                      />
-                      {errors.email != null && (
-                        <Text style={styles.error}>{errors.email}</Text>
-                      )}
-                    </View>
+            <>
+              {/*Email address field*/}
+              <View style={[styles.verticallySpaced]}>
+                <TextInput
+                  style={inputStyle}
+                  onChangeText={formik.handleChange("email")}
+                  onBlur={formik.handleBlur("email")}
+                  value={formik.values.email}
+                  placeholder="email@address.com"
+                  keyboardType="email-address"
+                  autoCapitalize={"none"}
+                />
+                {formik.errors.email && (
+                  <Text style={styles.error}>{formik.errors.email}</Text>
+                )}
+              </View>
 
-                    {/*Username field*/}
-                    <View style={styles.verticallySpaced}>
-                      <TextInput
-                        style={styles.input}
-                        onChangeText={handleChange("username")}
-                        onBlur={handleBlur("username")}
-                        value={values.username}
-                        placeholder="Username"
-                        autoCapitalize={"words"}
-                      />
-                      {errors.username != null && (
-                        <Text style={styles.error}>{errors.username}</Text>
-                      )}
-                    </View>
+              {/*Username field*/}
+              <View style={styles.verticallySpaced}>
+                <TextInput
+                  style={inputStyle}
+                  onChangeText={formik.handleChange("username")}
+                  onBlur={formik.handleBlur("username")}
+                  value={formik.values.username}
+                  placeholder="Username"
+                  autoCapitalize={"words"}
+                />
+                {formik.errors.username && (
+                  <Text style={styles.error}>{formik.errors.username}</Text>
+                )}
+              </View>
 
-                    {/*Password field*/}
-                    <View style={styles.verticallySpaced}>
-                      <TextInput
-                        style={styles.input}
-                        editable
-                        onChangeText={handleChange("password")}
-                        onBlur={handleBlur("password")}
-                        value={values.password}
-                        secureTextEntry={true}
-                        placeholder="Password"
-                        autoCapitalize={"none"}
-                      />
-                      {errors.password != null && (
-                        <Text style={styles.error}>{errors.password}</Text>
-                      )}
-                    </View>
+              {/*Password field*/}
+              <View style={styles.verticallySpaced}>
+                <TextInput
+                  style={inputStyle}
+                  editable
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
+                  value={formik.values.password}
+                  secureTextEntry={true}
+                  placeholder="Password"
+                  autoCapitalize={"none"}
+                />
+                {formik.errors.password && (
+                  <Text style={styles.error}>{formik.errors.password}</Text>
+                )}
+              </View>
 
-                    {/*Sign up button*/}
-                    <View style={styles.verticallySpaced}>
-                      <Pressable
-                        onPress={() => handleSubmit()}
-                        style={styles.signUpButton}
-                      >
-                        <Text style={styles.signUpButtonText}>
-                          Sign up with email
-                        </Text>
-                      </Pressable>
-                    </View>
-                  </>
+              {/*Sign up button*/}
+              <View style={styles.verticallySpaced}>
+                <FilledButton
+                  onPress={() => formik.handleSubmit()}
+                  text="Sign up With email"
+                  buttonStyle={{ backgroundColor: "black" }}
+                />
+              </View>
 
-                  <View
-                    style={{
-                      marginTop: 40,
-                      flexDirection: "row",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <View style={styles.dividerLine} />
-                    <Text style={{ textAlign: "center", color: "#828282" }}>
-                      or continue with
-                    </Text>
-                    <View style={styles.dividerLine} />
-                  </View>
+              <View
+                style={{
+                  marginTop: 40,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <View style={styles.dividerLine} />
+                <Text style={{ textAlign: "center", color: "#828282" }}>
+                  or continue with
+                </Text>
+                <View style={styles.dividerLine} />
+              </View>
 
-                  {/*Social sign in buttons*/}
-                  <>
-                    {/*Sign in with Google*/}
-                    <Pressable style={styles.withButton}>
-                      <FontAwesomeIcon
-                        icon={faGoogle}
-                        size={25}
-                      ></FontAwesomeIcon>
-                      <Text style={styles.withButtonText}>Google</Text>
-                    </Pressable>
+              {/*Social sign in buttons*/}
+              <>
+                {/*Sign in with Google*/}
+                <Pressable style={styles.withButton}>
+                  <FontAwesomeIcon icon={faGoogle} size={25}></FontAwesomeIcon>
+                  <Text style={styles.withButtonText}>Google</Text>
+                </Pressable>
 
-                    {/*Sign in with Apple*/}
-                    <Pressable
-                      style={styles.withButton}
-                      onPress={signUpWithApple}
-                    >
-                      <FontAwesomeIcon
-                        icon={faApple}
-                        size={25}
-                      ></FontAwesomeIcon>
-                      <Text style={styles.withButtonText}>Apple</Text>
-                    </Pressable>
-                  </>
+                {/*Sign in with Apple*/}
+                <Pressable style={styles.withButton} onPress={signUpWithApple}>
+                  <FontAwesomeIcon icon={faApple} size={25}></FontAwesomeIcon>
+                  <Text style={styles.withButtonText}>Apple</Text>
+                </Pressable>
+              </>
 
-                  <Pressable onPress={() => router.navigate("auth/signIn")}>
-                    <Text style={[{ textAlign: "center", color: "#828282" }]}>
-                      Have an account?
-                    </Text>
-                  </Pressable>
-                </View>
-              )}
-            </Formik>
+              <Pressable onPress={() => router.navigate("auth/signIn")}>
+                <Text style={[{ textAlign: "center", color: "#828282" }]}>
+                  Have an account?
+                </Text>
+              </Pressable>
+            </>
           )}
           <TermsComponent />
         </ScrollView>
@@ -216,30 +202,17 @@ function SignUp() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    flex: 1,
-  },
+  container: { paddingHorizontal: padding.large },
 
   verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
+    paddingVertical: 4,
   },
 
-  input: {
-    marginVertical: 7.5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderColor: "#E0E0E0",
-    borderRadius: 10,
-    borderWidth: 1,
-  },
   pageTitle: {
     fontWeight: "bold",
     fontSize: titleFonts.medium,
     textAlign: "center",
-    marginTop: 20,
+    marginTop: margin.large,
   },
   subtitle: {
     fontWeight: "semibold",
@@ -267,17 +240,6 @@ const styles = StyleSheet.create({
   withButtonText: {
     textAlignVertical: "center",
     paddingHorizontal: 10,
-    fontSize: bodyFonts.small,
-    fontWeight: "medium",
-  },
-  signUpButton: {
-    backgroundColor: "#000",
-    paddingVertical: 10,
-    borderRadius: 10,
-  },
-  signUpButtonText: {
-    color: "white",
-    textAlign: "center",
     fontSize: bodyFonts.small,
     fontWeight: "medium",
   },

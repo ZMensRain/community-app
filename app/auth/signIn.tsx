@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import {
   Alert,
   StyleSheet,
-  AppState,
-  View,
   Pressable,
   Keyboard,
   ScrollView,
   Text,
   TextInput,
-  ActivityIndicator,
+  View,
 } from "react-native";
-import { Formik, FormikValues } from "formik";
+import { FormikValues, useFormik } from "formik";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import * as Yup from "yup";
 
 import TermsComponent from "~/src/components/auth/Terms";
 import { supabase } from "src/utils/supabase";
-import { bodyFonts, titleFonts } from "~/src/utils/stylingValue";
+import {
+  bodyFonts,
+  inputStyle,
+  margin,
+  padding,
+  pageStyle,
+  titleFonts,
+} from "~/src/utils/stylingValue";
+import FilledButton from "~/src/components/shared/filledButton";
+import LoadingScreen from "~/src/components/shared/loadingScreen";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
@@ -42,12 +49,17 @@ export default function SignIn() {
       .required("Required"),
   });
 
-  const onSubmit = (values: FormikValues) => {
+  const onSubmit = (values: FormikValues) =>
     signInWithEmail(values["email"], values["password"]);
-  };
+
+  const formik = useFormik({
+    initialValues: { email: "", password: "" },
+    onSubmit: onSubmit,
+    validationSchema: validation,
+  });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[pageStyle, styles.container]}>
       <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
         <ScrollView>
           {/*Title*/}
@@ -56,62 +68,69 @@ export default function SignIn() {
           <Text style={styles.subtitle}>Sign In</Text>
 
           {loading ? (
-            <ActivityIndicator size={"large"} />
+            <LoadingScreen />
           ) : (
-            <Formik
-              initialValues={{ email: "", password: "" }}
-              onSubmit={onSubmit}
-              validationSchema={validation}
-              validateOnChange={true}
-            >
-              {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-                <>
-                  {/*Input fields*/}
-                  <>
-                    <TextInput
-                      value={values.email}
-                      style={styles.input}
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      placeholder={"email@address.com"}
-                    />
-                    {errors.email != null && (
-                      <Text style={styles.error}>{errors.email}</Text>
-                    )}
+            <>
+              {/*Input fields*/}
 
-                    <TextInput
-                      value={values.password}
-                      style={styles.input}
-                      onChangeText={handleChange("password")}
-                      onBlur={handleBlur("password")}
-                      placeholder={"password"}
-                      secureTextEntry={true}
-                    />
-                    {errors.password != null && (
-                      <Text style={styles.error}>{errors.password}</Text>
-                    )}
-                  </>
-
-                  <Pressable
-                    style={[styles.mt, styles.mb]}
-                    onPress={() => router.navigate("auth/signUp")}
-                    pressRetentionOffset={20}
-                  >
-                    <Text style={[{ textAlign: "center", color: "#828282" }]}>
-                      Don't have an account?
-                    </Text>
-                  </Pressable>
-
-                  {/*Sign in button */}
-                  <Pressable
-                    style={[styles.signInButton, styles.mt]}
-                    onPress={() => handleSubmit()}
-                  >
-                    <Text style={styles.signInButtonText}>Sign in</Text>
-                  </Pressable>
-                </>
+              <TextInput
+                value={formik.values.email}
+                onChangeText={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
+                keyboardType="email-address"
+                placeholder={"email@address.com"}
+                style={inputStyle}
+              />
+              {formik.errors.email && (
+                <Text style={styles.error}>{formik.errors.email}</Text>
               )}
-            </Formik>
+
+              <TextInput
+                value={formik.values.password}
+                onChangeText={formik.handleChange("password")}
+                onBlur={formik.handleBlur("password")}
+                secureTextEntry={true}
+                placeholder={"Password"}
+                style={inputStyle}
+              />
+              {formik.errors.password && (
+                <Text style={styles.error}>{formik.errors.password}</Text>
+              )}
+
+              <View
+                style={[
+                  {
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    gap: 10,
+                    marginVertical: margin.medium,
+                  },
+                ]}
+              >
+                <Text
+                  style={styles.textButton}
+                  onPress={() => router.navigate("auth/signUp")}
+                >
+                  Need an account?
+                </Text>
+
+                <Text
+                  style={styles.textButton}
+                  onPress={() => {
+                    router.navigate("forgotPassword");
+                  }}
+                >
+                  Forgot Password?
+                </Text>
+              </View>
+
+              {/*Sign in button */}
+              <FilledButton
+                text="Sign in"
+                onPress={() => formik.handleSubmit()}
+                buttonStyle={{ backgroundColor: "black" }}
+              />
+            </>
           )}
 
           <TermsComponent />
@@ -122,13 +141,7 @@ export default function SignIn() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 35 },
-  body: {
-    marginHorizontal: 36,
-    justifyContent: "center",
-    height: "100%",
-    backgroundColor: "blue",
-  },
+  container: { paddingHorizontal: padding.large },
   title: {
     fontWeight: "bold",
     fontSize: titleFonts.medium,
@@ -141,30 +154,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 25,
   },
-  input: {
-    marginVertical: 7.5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderColor: "#E0E0E0",
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  signInButton: {
-    backgroundColor: "#000",
-    paddingVertical: 10,
-    borderRadius: 10,
-  },
-  signInButtonText: {
-    color: "white",
+  textButton: {
     textAlign: "center",
-    fontSize: bodyFonts.small,
-    fontWeight: "medium",
+    color: "#828282",
   },
   error: {
     color: "red",
   },
-  mt: {
-    marginTop: 10,
-  },
-  mb: { marginBottom: 10 },
 });
