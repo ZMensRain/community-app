@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Text, View, StyleSheet, ScrollView, Alert } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Session } from "@supabase/supabase-js";
 import { getPosts, supabase } from "src/utils/supabase";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack } from "expo-router";
@@ -25,7 +24,7 @@ import renderBackdrop from "~/src/components/shared/sheetBackdrop";
 
 const YourProfile = () => {
   const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>([]);
-  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setLoading] = useState(true);
   const sheetRef = useRef<BottomSheet>(null);
   const userContext = useUserContext();
 
@@ -36,12 +35,9 @@ const YourProfile = () => {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session === null) return;
-      const posts = await getPosts(session?.user.id, 10);
-
+    getPosts({ userId: userContext.state.id }).then((posts) => {
       setPosts(posts);
-      setSession(session);
+      setLoading(false);
     });
   }, []);
 
@@ -60,7 +56,6 @@ const YourProfile = () => {
 
   const onAddInterest = async (value: string) => {
     if (userContext?.state.interests.includes(value)) return;
-    if (session === null) return;
     const newInterests = [...userContext.state.interests, value];
     userContext?.dispatch({
       type: UserActionKind.updateInterests,
@@ -72,14 +67,13 @@ const YourProfile = () => {
     const response = await supabase
       .from("profiles")
       .update({ interests: newInterests })
-      .eq("id", session.user.id)
+      .eq("id", userContext.state.id)
       .select();
     if (response.error)
       Alert.alert("Something went wrong", response.error.message);
   };
 
   const onRemoveInterest = async (value: string) => {
-    if (session === null) return;
     let newInterests = userContext.state.interests.filter(
       (val) => value.toLowerCase() !== val.toLowerCase()
     );
@@ -93,13 +87,13 @@ const YourProfile = () => {
     const response = await supabase
       .from("profiles")
       .update({ interests: newInterests })
-      .eq("id", session.user.id)
+      .eq("id", userContext.state.id)
       .select();
     if (response.error)
       Alert.alert("Something went wrong", response.error.message);
   };
 
-  if (session === null) return <LoadingScreen />;
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <>
