@@ -27,12 +27,6 @@ const EntryScreen = () => {
           textStyle={styles.buttons}
           onPress={() => router.navigate("create/issueReport/1")}
         />
-
-        <FilledButton
-          text={"Group"}
-          textStyle={styles.buttons}
-          onPress={() => {}}
-        />
       </View>
     </View>
   );

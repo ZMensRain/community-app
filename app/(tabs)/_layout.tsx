@@ -48,16 +48,6 @@ const layout = () => {
         }}
       />
       <Tabs.Screen
-        name="GroupsTab"
-        options={{
-          headerTitle: "Groups",
-          headerLeft: headerLeftComponent,
-          headerRight: headerRightComponent,
-          tabBarIcon: () => <Ionicons name="people" size={24} />,
-          tabBarLabel: "Groups",
-        }}
-      />
-      <Tabs.Screen
         name="MapTab"
         options={{
           headerTitle: "Map",
