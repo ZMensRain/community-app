@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 import { CommunityEvent } from "../model/event";
 import { router } from "expo-router";
-import { colors, titleFonts, typeColor } from "../utils/stylingValue";
+import {
+  colors,
+  tagColors,
+  titleFonts,
+  typeColor,
+} from "../utils/stylingValue";
 import { getTimeSincePost } from "../utils/postutils";
 
 type EventProps = {
@@ -13,6 +18,9 @@ const EventComponent = (props: EventProps) => {
     router.navigate("event/" + props.event.id);
   };
   const locations = props.event.getLocations();
+  const dates = props.event.days
+    .sort((a, b) => a.date.getUTCDate() - b.date.getUTCDate())
+    .map((day) => day.date);
   return (
     <TouchableHighlight
       style={styles.container}
@@ -25,7 +33,9 @@ const EventComponent = (props: EventProps) => {
             {getTimeSincePost(props.event.createdAt)}
           </Text>
         </View>
+
         <Text style={styles.title}>{props.event.title}</Text>
+
         <Text
           style={[
             { color: typeColor(props.event.type), fontWeight: "bold" },
@@ -34,14 +44,36 @@ const EventComponent = (props: EventProps) => {
         >
           {props.event.type}
         </Text>
-        {locations.length > 0 && (
-          <Text
-            style={[styles.mt5]}
-          >{`${locations[0].latitude}, ${locations[0].longitude}`}</Text>
-        )}
-        <Text style={[styles.mt5, { color: "#7C7C7C" }]}>
-          {props.event.tags.join(", ")}
+
+        <Text>
+          {dates[0].toDateString()}{" "}
+          {dates.length > 1
+            ? " - " + dates[dates.length - 1].toDateString()
+            : ""}
         </Text>
+
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          {props.event.tags.map((tag) => {
+            const colors = tagColors(tag);
+            return (
+              <View
+                style={{
+                  borderRadius: 10,
+                  backgroundColor: colors.background,
+                  padding: 5,
+                }}
+              >
+                <Text
+                  style={{
+                    color: colors.foreground,
+                  }}
+                >
+                  {tag}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
       </View>
     </TouchableHighlight>
   );
