@@ -54,14 +54,16 @@ const HeaderComponent = ({ event }: props) => {
               : ""}
           </Text>
         </View>
-        <View>
-          <Text
-            style={[styles.linkText, { fontWeight: "bold" }]}
-            onPress={() => Linking.openURL(event.ticketWebsite ?? "")}
-          >
-            Tickets
-          </Text>
-        </View>
+        {event.ticketWebsite && (
+          <View>
+            <Text
+              style={[styles.linkText, { fontWeight: "bold" }]}
+              onPress={() => Linking.openURL(event.ticketWebsite ?? "")}
+            >
+              Tickets
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );
