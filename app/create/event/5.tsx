@@ -90,7 +90,7 @@ const WhereWhenScreen = () => {
               mode="date"
               onValueSet={(newDate) => formik.setFieldValue("date", newDate)}
               value={formik.values.date}
-              icon={<Ionicons name="calendar" size={25} />}
+              icon={<Ionicons name="calendar-outline" size={25} />}
             />
 
             {/*Starts */}
@@ -100,7 +100,7 @@ const WhereWhenScreen = () => {
               mode="time"
               onValueSet={(newDate) => formik.setFieldValue("starts", newDate)}
               value={formik.values.starts}
-              icon={<Ionicons name="time" size={25} />}
+              icon={<Ionicons name="time-outline" size={25} />}
             />
 
             {/*Ends */}
@@ -110,7 +110,7 @@ const WhereWhenScreen = () => {
               mode="time"
               onValueSet={(newDate) => formik.setFieldValue("ends", newDate)}
               value={formik.values.ends}
-              icon={<Ionicons name="time" size={25} />}
+              icon={<Ionicons name="time-outline" size={25} />}
             />
 
             {/*Location */}
@@ -120,7 +120,7 @@ const WhereWhenScreen = () => {
                 <Text style={{ color: "red" }}>*</Text>
               </Text>
               <IconButton
-                icon={<Ionicons name="map" size={25} />}
+                icon={<Ionicons name="map-outline" size={25} />}
                 onPress={() => sheetRef.current?.snapToIndex(0)}
               >
                 <Text>
