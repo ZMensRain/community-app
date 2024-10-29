@@ -5,52 +5,32 @@ import { EventKitEnum, EventKit } from "../../model/event";
 import KitComponent from "./KitComponent";
 import SearchBar from "./SearchBar";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
+import { getSearchResults } from "~/src/utils/search";
 
 type props = {
   onAdd: (kit: EventKit) => void;
 };
+const quickAccess = Object.keys(EventKitEnum);
 
 const KitSearchModal = (props: props) => {
-  let [searched, setSearched] = useState("");
-  const getSearchResults = () => {
-    let match = false;
-    return Object.keys(EventKitEnum)
-      .filter((value) => {
-        if (match === false) {
-          match = value.toUpperCase() === searched.toUpperCase();
-        }
-        return (
-          isNaN(Number(value)) &&
-          value.toUpperCase().startsWith(searched.toUpperCase())
-        );
-      })
-      .concat(match || searched === "" ? [] : [searched]);
-  };
+  const [searched, setSearched] = useState("");
 
   return (
     <BottomSheetView>
       <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-          }}
-        >
-          <SearchBar onTextUpdate={(value) => setSearched(value.toString())} />
-        </View>
+        <SearchBar onTextUpdate={(value) => setSearched(value.toString())} />
+
         <ScrollView>
-          {getSearchResults().map((value, index) => {
-            return (
-              <KitComponent
-                kit={value}
-                add={true}
-                key={index}
-                onButtonPressed={(value) => {
-                  props.onAdd(value);
-                }}
-              />
-            );
-          })}
+          {getSearchResults(searched, quickAccess).map((value) => (
+            <KitComponent
+              kit={value}
+              add={true}
+              key={value}
+              onButtonPressed={(value) => {
+                props.onAdd(value);
+              }}
+            />
+          ))}
         </ScrollView>
       </View>
     </BottomSheetView>

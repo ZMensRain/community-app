@@ -149,6 +149,10 @@ export const foregroundColor = (color: ColorValue) => {
   return "#ffffff";
 };
 
+export const pascalToTitleCase = (text: string) => {
+  return text.replace(/([A-Z])/g, " $1").trimStart();
+};
+
 export const bodyFonts = { small: 14, medium: 16, large: 18 };
 
 export const titleFonts = { small: 20, medium: 24, large: 30 };

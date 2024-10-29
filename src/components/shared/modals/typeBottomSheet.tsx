@@ -6,29 +6,18 @@ import { EventTypeEnum } from "~/src/model/event";
 import { margin, padding } from "~/src/utils/stylingValue";
 import { IssueTypeEnum } from "~/src/model/issue";
 import OutlineButton from "../outlineButton";
+import { getSearchResults } from "~/src/utils/search";
 
 type props = {
   onTypePicked?: (tag: string) => void;
 };
 
+const quickAccess = Object.keys(EventTypeEnum).concat(
+  Object.keys(IssueTypeEnum)
+);
+
 const TypeBottomSheet = ({ onTypePicked }: props) => {
   const [searched, setSearched] = useState("");
-
-  const getSearchResults = () => {
-    let match = false;
-    return Object.keys(EventTypeEnum)
-      .concat(Object.keys(IssueTypeEnum))
-      .filter((value) => {
-        if (match === false) {
-          match = value.toUpperCase() === searched.toUpperCase();
-        }
-        return (
-          isNaN(Number(value)) &&
-          value.toUpperCase().startsWith(searched.toUpperCase())
-        );
-      })
-      .concat(match || searched === "" ? [] : [searched]);
-  };
 
   return (
     <BottomSheetView style={styles.container}>
@@ -37,7 +26,7 @@ const TypeBottomSheet = ({ onTypePicked }: props) => {
       <FlatList
         showsVerticalScrollIndicator={false}
         style={{ marginTop: margin.small }}
-        data={getSearchResults()}
+        data={getSearchResults(searched, quickAccess)}
         renderItem={(info) => (
           <View style={{ marginVertical: margin.small }}>
             <OutlineButton onPress={() => onTypePicked?.(info.item)}>

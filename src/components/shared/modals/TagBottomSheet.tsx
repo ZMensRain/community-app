@@ -5,35 +5,23 @@ import { useState } from "react";
 import { EventTagEnum } from "~/src/model/event";
 import FilledButton from "../filledButton";
 import { padding, tagColors } from "~/src/utils/stylingValue";
+import { getSearchResults } from "~/src/utils/search";
 
 type props = {
   onTagPicked: (tag: string) => void;
 };
 
+const quickAccess = Object.keys(EventTagEnum);
+
 const TagBottomSheet = ({ onTagPicked }: props) => {
   const [searched, setSearched] = useState("");
-
-  const getSearchResults = () => {
-    let match = false;
-    return Object.keys(EventTagEnum)
-      .filter((value) => {
-        if (match === false) {
-          match = value.toUpperCase() === searched.toUpperCase();
-        }
-        return (
-          isNaN(Number(value)) &&
-          value.toUpperCase().startsWith(searched.toUpperCase())
-        );
-      })
-      .concat(match || searched === "" ? [] : [searched]);
-  };
 
   return (
     <BottomSheetView style={styles.container}>
       <SearchBar onTextUpdate={(v) => setSearched(v)} />
       <ScrollView style={{ marginTop: 10 }}>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-          {getSearchResults().map((v) => (
+          {getSearchResults(searched, quickAccess).map((v) => (
             <FilledButton
               text={v}
               key={v}
