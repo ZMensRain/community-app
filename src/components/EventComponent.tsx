@@ -62,6 +62,7 @@ const EventComponent = (props: EventProps) => {
                   backgroundColor: colors.background,
                   padding: 5,
                 }}
+                key={tag}
               >
                 <Text
                   style={{
