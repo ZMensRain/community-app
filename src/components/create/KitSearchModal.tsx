@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { StyleSheet, FlatList, ListRenderItemInfo } from "react-native";
 
 import { EventKitEnum, EventKit } from "../../model/event";
 import KitComponent from "./KitComponent";
@@ -15,24 +15,24 @@ const quickAccess = Object.keys(EventKitEnum);
 const KitSearchModal = (props: props) => {
   const [searched, setSearched] = useState("");
 
-  return (
-    <BottomSheetView>
-      <View style={styles.container}>
-        <SearchBar onTextUpdate={(value) => setSearched(value.toString())} />
+  const renderItem = (info: ListRenderItemInfo<string>) => (
+    <KitComponent
+      kit={info.item}
+      add={true}
+      key={info.item}
+      onButtonPressed={(value) => {
+        props.onAdd(value);
+      }}
+    />
+  );
 
-        <ScrollView>
-          {getSearchResults(searched, quickAccess).map((value) => (
-            <KitComponent
-              kit={value}
-              add={true}
-              key={value}
-              onButtonPressed={(value) => {
-                props.onAdd(value);
-              }}
-            />
-          ))}
-        </ScrollView>
-      </View>
+  return (
+    <BottomSheetView style={styles.container}>
+      <SearchBar onTextUpdate={(value) => setSearched(value.toString())} />
+      <FlatList
+        data={getSearchResults(searched, quickAccess)}
+        renderItem={renderItem}
+      />
     </BottomSheetView>
   );
 };
