@@ -58,7 +58,7 @@ const KitScreen = () => {
         }}
       />
 
-      <GestureHandlerRootView style={pageStyle}>
+      <View style={pageStyle}>
         {kit.length > 0 && <FlatList data={kit} renderItem={renderKit} />}
 
         {/* Text section */}
@@ -98,7 +98,7 @@ const KitScreen = () => {
         >
           <KitSearchModal onAdd={(value) => setKit(kit.concat(value))} />
         </BottomSheet>
-      </GestureHandlerRootView>
+      </View>
     </>
   );
 };

@@ -83,7 +83,7 @@ const WhereWhenScreen = () => {
           ),
         }}
       />
-      <GestureHandlerRootView style={pageStyle}>
+      <View style={pageStyle}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/*Day form*/}
           <>
@@ -172,7 +172,7 @@ const WhereWhenScreen = () => {
             }}
           />
         </BottomSheet>
-      </GestureHandlerRootView>
+      </View>
     </>
   );
 };

@@ -160,95 +160,94 @@ const EditProfile = () => {
   return (
     <>
       <Stack.Screen options={{ headerShown: true, headerRight: headerRight }} />
-      <GestureHandlerRootView style={pageStyle}>
-        <View style={{ flex: 1 }}>
-          <View style={[{ alignItems: "center" }, styles.section]}>
-            <ProfileCamera
-              onPress={() => updateProfilePicture()}
-              id={userContext.state.id}
-              url={userContext.state.avatarUrl}
-              key={userContext.state.avatarUrl}
-            />
-          </View>
 
-          <View style={styles.section}>
-            <Text style={styles.label}>
-              Username <Text style={{ color: "red" }}>*</Text>
-            </Text>
+      <View style={pageStyle}>
+        <View style={[{ alignItems: "center" }, styles.section]}>
+          <ProfileCamera
+            onPress={() => updateProfilePicture()}
+            id={userContext.state.id}
+            url={userContext.state.avatarUrl}
+            key={userContext.state.avatarUrl}
+          />
+        </View>
 
-            <TextInput
-              placeholder="Username"
-              style={inputStyle}
-              value={username}
-              onChangeText={(v) => setUsername(v)}
-            />
-          </View>
+        <View style={styles.section}>
+          <Text style={styles.label}>
+            Username <Text style={{ color: "red" }}>*</Text>
+          </Text>
 
-          <View style={styles.section}>
-            <Text style={styles.label}>Email</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text
-                style={{
-                  fontSize: titleFonts.small,
-                }}
-              >
-                {userContext.state.email}
-              </Text>
-              <Ionicons
-                name="pencil"
-                size={20}
-                allowFontScaling={false}
-                onPress={() => {}}
-              />
-            </View>
-          </View>
+          <TextInput
+            placeholder="Username"
+            style={inputStyle}
+            value={username}
+            onChangeText={(v) => setUsername(v)}
+          />
+        </View>
 
-          <View style={styles.section}>
-            <Text style={styles.label}>Your Area</Text>
-
-            <Pressable
-              onPress={() => {
-                sheetRef.current?.snapToIndex(0);
-              }}
+        <View style={styles.section}>
+          <Text style={styles.label}>Email</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 10,
-                borderColor: "#E0E0E0",
-                borderWidth: 1,
-                borderRadius: 10,
-                padding: 5,
+                fontSize: titleFonts.small,
               }}
             >
-              <Ionicons name="map" size={24} />
-              <Text style={{ textAlignVertical: "center" }}>Set Location</Text>
-            </Pressable>
-          </View>
-
-          <View style={[styles.buttonSection, styles.section]}>
-            <FilledButton
-              text="Reset Password"
-              onPress={() => router.navigate("reset/password")}
-            />
-            <FilledButton
-              text="Delete Account"
-              buttonStyle={{ backgroundColor: "red" }}
-              onPress={deleteAccount}
+              {userContext.state.email}
+            </Text>
+            <Ionicons
+              name="pencil"
+              size={20}
+              allowFontScaling={false}
+              onPress={() => {}}
             />
           </View>
         </View>
-        <BottomSheet
-          ref={sheetRef}
-          snapPoints={["75%", "100%"]}
-          enablePanDownToClose={true}
-          index={-1}
-          backdropComponent={renderBackdrop}
-        >
-          <BottomSheetView>
-            <MapSheet onSaveLocation={updateUserLocation} />
-          </BottomSheetView>
-        </BottomSheet>
-      </GestureHandlerRootView>
+
+        <View style={styles.section}>
+          <Text style={styles.label}>Your Area</Text>
+
+          <Pressable
+            onPress={() => {
+              sheetRef.current?.snapToIndex(0);
+            }}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+              borderColor: "#E0E0E0",
+              borderWidth: 1,
+              borderRadius: 10,
+              padding: 5,
+            }}
+          >
+            <Ionicons name="map" size={24} />
+            <Text style={{ textAlignVertical: "center" }}>Set Location</Text>
+          </Pressable>
+        </View>
+
+        <View style={[styles.buttonSection, styles.section]}>
+          <FilledButton
+            text="Reset Password"
+            onPress={() => router.navigate("reset/password")}
+          />
+          <FilledButton
+            text="Delete Account"
+            buttonStyle={{ backgroundColor: "red" }}
+            onPress={deleteAccount}
+          />
+        </View>
+      </View>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={["75%", "100%"]}
+        enablePanDownToClose={true}
+        index={-1}
+        backdropComponent={renderBackdrop}
+      >
+        <BottomSheetView>
+          <MapSheet onSaveLocation={updateUserLocation} />
+        </BottomSheetView>
+      </BottomSheet>
     </>
   );
 };

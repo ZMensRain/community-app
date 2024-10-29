@@ -105,57 +105,55 @@ const YourProfile = () => {
         }}
       />
 
-      <GestureHandlerRootView>
-        <View style={pageStyle}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-          >
-            <View style={{ alignItems: "center", width: "100%" }}>
-              <ProfileIcon
-                id={{ id: "1000", group: false }}
-                size={125}
-                showName={false}
-                url={userContext.state.avatarUrl}
-                key={userContext.state.avatarUrl}
-              />
-              <Text style={styles.username}>{userContext?.state.username}</Text>
-            </View>
-
-            <MapSection
-              style={styles.section}
-              lat={userContext.state.location.latitude}
-              long={userContext.state.location.longitude}
-            />
-            <PostsSection posts={posts} style={styles.section} />
-            <InterestsSection
-              interests={userContext.state.interests}
-              onAddPressed={() => sheetRef.current?.snapToIndex(0)}
-              onInterestPress={onRemoveInterest}
-              style={styles.section}
-            />
-
-            <View style={{ marginVertical: 10 }}>
-              <FilledButton
-                text="Sign Out"
-                buttonStyle={{ backgroundColor: "red" }}
-                onPress={() => {
-                  supabase.auth.signOut();
-                }}
-              />
-            </View>
-          </ScrollView>
-        </View>
-        <BottomSheet
-          ref={sheetRef}
-          snapPoints={["100%"]}
-          enablePanDownToClose={true}
-          index={-1}
-          backdropComponent={renderBackdrop}
+      <View style={pageStyle}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
         >
-          <AddInterestsSheet onAddInterest={onAddInterest} />
-        </BottomSheet>
-      </GestureHandlerRootView>
+          <View style={{ alignItems: "center", width: "100%" }}>
+            <ProfileIcon
+              id={{ id: "1000", group: false }}
+              size={125}
+              showName={false}
+              url={userContext.state.avatarUrl}
+              key={userContext.state.avatarUrl}
+            />
+            <Text style={styles.username}>{userContext?.state.username}</Text>
+          </View>
+
+          <MapSection
+            style={styles.section}
+            lat={userContext.state.location.latitude}
+            long={userContext.state.location.longitude}
+          />
+          <PostsSection posts={posts} style={styles.section} />
+          <InterestsSection
+            interests={userContext.state.interests}
+            onAddPressed={() => sheetRef.current?.snapToIndex(0)}
+            onInterestPress={onRemoveInterest}
+            style={styles.section}
+          />
+
+          <View style={{ marginVertical: 10 }}>
+            <FilledButton
+              text="Sign Out"
+              buttonStyle={{ backgroundColor: "red" }}
+              onPress={() => {
+                supabase.auth.signOut();
+              }}
+            />
+          </View>
+        </ScrollView>
+      </View>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={["100%"]}
+        enablePanDownToClose={true}
+        index={-1}
+        backdropComponent={renderBackdrop}
+      >
+        <AddInterestsSheet onAddInterest={onAddInterest} />
+      </BottomSheet>
     </>
   );
 };

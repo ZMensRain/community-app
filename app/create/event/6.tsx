@@ -46,7 +46,7 @@ const TagsScreen = () => {
           ),
         }}
       />
-      <GestureHandlerRootView style={[pageStyle]}>
+      <View style={[pageStyle]}>
         {tags.length === 0 ? (
           <View style={{ justifyContent: "center", flex: 1 }}>
             <Text style={{ textAlign: "center" }}>
@@ -81,7 +81,7 @@ const TagsScreen = () => {
         >
           <TagBottomSheet onTagPicked={onAddTag} />
         </BottomSheet>
-      </GestureHandlerRootView>
+      </View>
     </>
   );
 };
