@@ -1,9 +1,9 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import DateTimePicker, {
   DateTimePickerAndroid,
 } from "@react-native-community/datetimepicker";
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { View, Platform, StyleSheet, Text } from "react-native";
 import IconButton from "../iconButton";
 import { titleFonts } from "~/src/utils/stylingValue";
@@ -16,7 +16,7 @@ type props = {
   value: Date;
   mode: "date" | "time";
   error: string | null;
-  icon: IconDefinition;
+  icon: ReactNode;
 };
 
 const DateAndTimePicker = ({

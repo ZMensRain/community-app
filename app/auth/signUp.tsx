@@ -12,8 +12,9 @@ import {
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faGoogle, faApple } from "@fortawesome/free-brands-svg-icons/";
+
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 import { FormikValues, useFormik } from "formik";
 import { router } from "expo-router";
 import * as Yup from "yup";
@@ -176,13 +177,13 @@ function SignUp() {
               <>
                 {/*Sign in with Google*/}
                 <Pressable style={styles.withButton}>
-                  <FontAwesomeIcon icon={faGoogle} size={25}></FontAwesomeIcon>
+                  <Ionicons name="logo-google" size={25} />
                   <Text style={styles.withButtonText}>Google</Text>
                 </Pressable>
 
                 {/*Sign in with Apple*/}
                 <Pressable style={styles.withButton} onPress={signUpWithApple}>
-                  <FontAwesomeIcon icon={faApple} size={25}></FontAwesomeIcon>
+                  <Ionicons name="logo-apple" size={25} />
                   <Text style={styles.withButtonText}>Apple</Text>
                 </Pressable>
               </>

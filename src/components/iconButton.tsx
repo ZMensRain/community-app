@@ -1,28 +1,16 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 type props = {
-  icon: IconDefinition;
-  iconSize?: number;
+  icon: ReactNode;
   onPress?: () => void;
   children?: ReactNode;
 };
 
-const IconButton = ({
-  iconSize = 24,
-  icon,
-  children,
-  onPress = () => {},
-}: props) => {
+const IconButton = ({ icon, children, onPress = () => {} }: props) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
-      <FontAwesomeIcon
-        icon={icon}
-        size={iconSize}
-        style={{ alignSelf: "center" }}
-      />
+      {icon}
       <View style={{ paddingLeft: 6 }}>{children}</View>
     </Pressable>
   );
