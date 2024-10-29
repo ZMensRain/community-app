@@ -39,7 +39,7 @@ const YourProfile = () => {
       setPosts(posts);
       setLoading(false);
     });
-  }, []);
+  }, [userContext.state.postIds]);
 
   const headerRight = () => {
     return (
