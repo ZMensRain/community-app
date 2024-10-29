@@ -1,8 +1,15 @@
-import { View, StyleSheet, Text, Button, Linking } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  Linking,
+  Pressable,
+} from "react-native";
 import { Day } from "../model/day";
 import { titleFonts } from "../utils/stylingValue";
-import { LatLng } from "react-native-maps";
-
+import Ionicons from "@expo/vector-icons/Ionicons";
+import IconButton from "./iconButton";
 type DayCardProps = {
   day: Day;
   index: number;
@@ -41,15 +48,17 @@ const DayCard = ({ day, index }: DayCardProps) => {
         Ends At: {`${day.end["hour"]}:${day.end["minute"]}`}
       </Text>
       {isPath === false && (
-        <Text
-          style={[isPast && styles.pastText]}
+        <Pressable
+          style={{ flexDirection: "row", alignItems: "center" }}
           onPress={() =>
             Linking.openURL(`geo:${location.latitude},${location.longitude}`)
           }
         >
-          {`${location.latitude}, ${location.longitude}`}
-        </Text>
+          <Ionicons name="location-outline" size={25} />
+          <Text>See Location</Text>
+        </Pressable>
       )}
+
       {isPath && <Button title="View Path"></Button>}
     </View>
   );
