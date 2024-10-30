@@ -19,7 +19,7 @@ const EventComponent = (props: EventProps) => {
   };
   const locations = props.event.getLocations();
   const dates = props.event.days
-    .sort((a, b) => a.date.getUTCDate() - b.date.getUTCDate())
+    .sort((a, b) => b.date.getUTCDate() - a.date.getUTCDate())
     .map((day) => day.date);
   return (
     <TouchableHighlight
@@ -52,7 +52,7 @@ const EventComponent = (props: EventProps) => {
             : ""}
         </Text>
 
-        <View style={{ flexDirection: "row", gap: 10 }}>
+        <View style={{ flexDirection: "row", gap: 5, flexWrap: "wrap" }}>
           {props.event.tags.map((tag) => {
             const colors = tagColors(tag);
             return (
