@@ -1,5 +1,5 @@
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { View, Text } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import LoadingScreen from "~/src/components/shared/loadingScreen";
@@ -13,11 +13,13 @@ function MapTab() {
   const userContext = useUserContext();
   const [posts, setPosts] = useState<(CommunityEvent | Issue)[] | null>(null);
 
-  useEffect(() => {
-    getPosts({ location: userContext?.state.location }).then((posts) =>
-      setPosts(posts)
-    );
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getPosts({ location: userContext?.state.location }).then((posts) =>
+        setPosts(posts)
+      );
+    }, [])
+  );
 
   if (posts === null) return <LoadingScreen />;
   if (!userContext) return <LoadingScreen error="No User context" />;
