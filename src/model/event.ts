@@ -141,10 +141,36 @@ class CommunityEvent {
   }
 }
 
-//TODO Fill Enums
 enum EventTagEnum {
   DogFriendly,
   Vegan,
+  Lifestyle,
+  FamilyFriendly,
+  Social,
+  Geek,
+  Indie,
+  Alternative,
+  Nature,
+  Natural,
+  GrossRoots,
+  Intimate,
+  Lavish,
+  Simple,
+  Casual,
+  Informative,
+  Interactive,
+  Traditional,
+  Modern,
+  OnceInALifetime,
+  Lively,
+  Magical,
+  Educational,
+  Authentic,
+  Accessible,
+  Live,
+  Collaborative,
+  Vegetarian,
+  DIY,
 }
 enum EventTypeEnum {
   Meetings,
