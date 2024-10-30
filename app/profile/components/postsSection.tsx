@@ -65,8 +65,9 @@ const PostsSection = ({
           />
         ) : (
           <Text style={styles.fallbackText}>
-            You don't seem to have any posts yet. Any events or issues you
-            create will appear here. Posts older than 2 years are deleted.
+            There doesn't seem to be any posts here yet. Any events or issues
+            that are created will appear here. Posts older than 2 years are
+            deleted.
           </Text>
         )}
       </View>
