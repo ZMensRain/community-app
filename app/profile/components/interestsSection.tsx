@@ -49,8 +49,7 @@ const InterestsSection = ({
       ) : (
         <View style={styles.content}>
           <Text style={styles.sectionFallBackText}>
-            You don't have any interests saved yet. Interests help us tailor
-            your feed.
+            No interests saved yet.
           </Text>
         </View>
       )}

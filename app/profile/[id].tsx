@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { getPosts, getUserData, supabase } from "src/utils/supabase";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { titleFonts, pageStyle } from "~/src/utils/stylingValue";
+import { titleFonts, pageStyle, padding } from "~/src/utils/stylingValue";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
 import { MapSection, PostsSection, InterestsSection } from "./components";
 import FilledButton from "~/src/components/shared/filledButton";
@@ -48,7 +48,7 @@ const ViewProfile = () => {
         }}
       />
 
-      <View style={pageStyle}>
+      <View style={[pageStyle, styles.container]}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
@@ -80,16 +80,6 @@ const ViewProfile = () => {
             title="Interests"
             showButton={false}
           />
-
-          <View style={{ marginVertical: 10 }}>
-            <FilledButton
-              text="Sign Out"
-              buttonStyle={{ backgroundColor: "red" }}
-              onPress={() => {
-                supabase.auth.signOut();
-              }}
-            />
-          </View>
         </ScrollView>
       </View>
     </>
@@ -97,6 +87,7 @@ const ViewProfile = () => {
 };
 
 const styles = StyleSheet.create({
+  container: { paddingBottom: padding.large },
   username: { fontSize: titleFonts.large, fontWeight: "medium" },
   section: { marginTop: 10 },
 });
