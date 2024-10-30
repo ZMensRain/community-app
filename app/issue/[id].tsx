@@ -1,10 +1,10 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Linking, Text, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Linking, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import FilledButton from "~/src/components/shared/filledButton";
+import LoadingScreen from "~/src/components/shared/loadingScreen";
 import ProfileIcon from "~/src/components/shared/ProfileIcon";
 import { Issue, IssueFromDatabase } from "~/src/model/issue";
 import { margin, padding } from "~/src/utils/stylingValue";
@@ -116,7 +116,7 @@ const IssueScreen = () => {
           </BottomSheet>
         </View>
       ) : (
-        <ActivityIndicator />
+        <LoadingScreen />
       )}
     </>
   );
