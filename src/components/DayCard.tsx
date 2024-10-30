@@ -23,12 +23,7 @@ const DayCard = ({ day, index }: DayCardProps) => {
   let date = day.date;
   let now = new Date();
 
-  if (
-    date.getFullYear() < now.getFullYear() ||
-    date.getMonth() < now.getMonth() ||
-    date.getDate() < now.getDate()
-  )
-    isPast = true;
+  if (date.getTime() < now.getTime()) isPast = true;
 
   return (
     <View
