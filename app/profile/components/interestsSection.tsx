@@ -9,6 +9,7 @@ type props = {
   onInterestPress?: (interest: string) => void;
   style?: ViewStyle;
   title?: string;
+  showButton?: boolean;
 };
 
 const InterestsSection = ({
@@ -17,14 +18,17 @@ const InterestsSection = ({
   onInterestPress,
   style,
   title = "Your Interests",
+  showButton,
 }: props) => {
   return (
     <View style={style}>
       <View style={styles.container}>
         <Text style={styles.h2}>{title}</Text>
-        <Pressable onPress={onAddPressed} hitSlop={20}>
-          <Ionicons name="add" size={24} />
-        </Pressable>
+        {showButton !== false && (
+          <Pressable onPress={onAddPressed} hitSlop={20}>
+            <Ionicons name="add" size={24} />
+          </Pressable>
+        )}
       </View>
 
       {interests.length > 0 ? (

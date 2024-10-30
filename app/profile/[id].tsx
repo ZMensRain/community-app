@@ -78,6 +78,7 @@ const ViewProfile = () => {
             interests={user.interests}
             style={styles.section}
             title="Interests"
+            showButton={false}
           />
 
           <View style={{ marginVertical: 10 }}>
