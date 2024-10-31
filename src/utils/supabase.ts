@@ -53,8 +53,8 @@ const getEvents = async ({
   if (userId) request = request.eq("created_by", userId);
   if (types && types.length > 0) request = request.in("type", types);
   if (limit) request = request.limit(limit);
-  if (tags && tags.length > 0)
-    request = request.containedBy("tags", tags).neq("tags", "{}");
+  if (tags && tags.length > 0) request = request.contains("tags", tags);
+
   if (location) {
     const r = await supabase.rpc("get_events_in_range", {
       location_input: `POINT(${location.longitude} ${location.latitude})`,
@@ -80,7 +80,7 @@ const getIssues = async ({
 }: getIssuesParams) => {
   let request = supabase.from("issues").select();
   if (userId) request = request.eq("created_by", userId);
-  if (types) request = request.in("type", types);
+  if (types && types.length > 0) request = request.in("type", types);
   if (limit) request = request.limit(limit);
   if (fixed !== undefined) request = request.eq("fixed", fixed);
   if (location) {
