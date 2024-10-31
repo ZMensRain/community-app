@@ -14,23 +14,22 @@ import { pageStyle } from "~/src/utils/stylingValue";
 import { Issue } from "~/src/model/issue";
 import IssueCard from "~/src/components/issueCard";
 import { router } from "expo-router";
-import { useUserContext } from "~/src/contexts/userContext";
+
 import SearchPosts from "~/src/components/shared/searchPosts";
 
 function FeedTab() {
-  const userContext = useUserContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [posts, setPosts] = React.useState<(CommunityEvent | Issue)[]>([]);
   const [filters, setFilters] = React.useState<getPostsParams>({
-    location: userContext?.state.location,
     limit: 1000,
   });
 
   const fetchPosts = async (setRefresh: boolean) => {
-    const posts = await getPosts(filters);
+    const fetchedPosts = await getPosts(filters);
     if (setRefresh) setRefreshing(false);
-    if (!posts) return;
-    setPosts(posts);
+    if (!fetchedPosts) return;
+
+    setPosts(fetchedPosts);
   };
 
   const onIssuePress = (issue: Issue) => router.navigate(`issue/${issue.id}`);

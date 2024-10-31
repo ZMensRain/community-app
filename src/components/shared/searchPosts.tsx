@@ -22,21 +22,8 @@ type props = {
   onUpdateFilters?: (params: getPostsParams) => void;
 };
 
-type filterBy = {
-  interests: boolean;
-  location: boolean;
-  tags: boolean;
-  types: boolean;
-};
-
 const SearchPosts = (props: props) => {
   const [showFilters, setShowFilters] = useState(false);
-  const [currentFilters, setCurrentFilters] = useState<filterBy>({
-    interests: false,
-    location: false,
-    tags: true,
-    types: false,
-  });
   const [filterValues, setFilterValues] = useState<getPostsParams>({
     limit: 1000,
   });
@@ -52,13 +39,8 @@ const SearchPosts = (props: props) => {
   }, [userContext?.state]);
 
   useEffect(() => {
-    let filters: getPostsParams = {};
-    if (currentFilters.interests) filters.interests = filterValues.interests;
-    if (currentFilters.location) filters.location = filterValues.location;
-    if (currentFilters.tags) filters.tags = filterValues.tags;
-    if (currentFilters.types) filters.types = filterValues.types;
-    props.onUpdateFilters?.(filters);
-  }, [currentFilters, filterValues]);
+    props.onUpdateFilters?.(filterValues);
+  }, [filterValues]);
 
   const tagModalSheetRef = useRef<BottomSheetModal>(null);
   const typeModalSheetRef = useRef<BottomSheetModal>(null);
@@ -76,23 +58,29 @@ const SearchPosts = (props: props) => {
           <>
             <LabeledSwitch
               label={"Your Location"}
-              value={currentFilters.location}
-              onPress={() =>
-                setCurrentFilters({
-                  ...currentFilters,
-                  location: !currentFilters.location,
-                })
-              }
+              value={filterValues.location !== undefined}
+              onPress={() => {
+                if (filterValues.location)
+                  setFilterValues({ ...filterValues, location: undefined });
+                else
+                  setFilterValues({
+                    ...filterValues,
+                    location: userContext?.state.location,
+                  });
+              }}
             />
             <LabeledSwitch
               label={"Interests"}
-              value={currentFilters.interests}
-              onPress={() =>
-                setCurrentFilters({
-                  ...currentFilters,
-                  interests: !currentFilters.interests,
-                })
-              }
+              value={filterValues.interests !== undefined}
+              onPress={() => {
+                if (filterValues.interests)
+                  setFilterValues({ ...filterValues, interests: undefined });
+                else
+                  setFilterValues({
+                    ...filterValues,
+                    interests: userContext?.state.interests,
+                  });
+              }}
             />
           </>
         )}
