@@ -37,8 +37,10 @@ export default function SignIn() {
       password: password,
     });
 
-    if (error) Alert.alert(error.message);
-    setLoading(false);
+    if (error) {
+      Alert.alert(error.message);
+      setLoading(false);
+    }
   }
 
   const validation = Yup.object().shape({
