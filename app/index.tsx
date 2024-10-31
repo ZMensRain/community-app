@@ -54,13 +54,18 @@ export default function Page() {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        if (router.canDismiss()) router.dismissAll();
+        router.replace("/auth/signUp");
+      }
       getUpdateUserContextData().then((user) => {
         userContext?.dispatch({ type: UserActionKind.setUser, payload: user });
+        if (session) {
+          if (router.canDismiss()) router.dismissAll();
+          router.replace("/FeedTab");
+        }
       });
-      if (session) router.replace("/FeedTab");
-      else router.replace("/auth/signUp");
     });
   }, []);
-
   return <LoadingScreen />;
 }
