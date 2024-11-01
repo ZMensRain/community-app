@@ -19,7 +19,7 @@ const EventComponent = (props: EventProps) => {
   };
   const locations = props.event.getLocations();
   const dates = props.event.days
-    .sort((a, b) => b.date.getUTCDate() - a.date.getUTCDate())
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
     .map((day) => day.date);
   return (
     <TouchableHighlight
