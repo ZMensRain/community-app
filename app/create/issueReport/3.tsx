@@ -1,28 +1,40 @@
 import { useState } from "react";
 import { View } from "react-native";
-import MapView, { LatLng, Marker } from "react-native-maps";
-import SearchBar from "~/src/components/create/SearchBar";
+import MapView, { MapPressEvent, Marker } from "react-native-maps";
+
 import FilledButton from "~/src/components/shared/filledButton";
 import { useIssueCreationContext } from "~/src/contexts/issueReportCreationContext";
-import { colors } from "~/src/utils/stylingValue";
+import { useUserContext } from "~/src/contexts/userContext";
 
 const IssueLocationScreen = () => {
+  const userContext = useUserContext();
   const issueCreationContext = useIssueCreationContext();
   if (!issueCreationContext) return null;
   const [locationChosen, setLocationChosen] = useState(false);
 
+  function handleTap(v: MapPressEvent) {
+    if (!issueCreationContext) {
+      return;
+    }
+    setLocationChosen(true);
+
+    issueCreationContext.state[1]({
+      ...issueCreationContext.state[0],
+      coordinates: v.nativeEvent.coordinate,
+    });
+  }
+
   return (
     <View>
       <MapView
-        style={{ width: "100%", height: "100%" }}
-        onPress={(v) => {
-          setLocationChosen(true);
-
-          issueCreationContext.state[1]({
-            ...issueCreationContext.state[0],
-            coordinates: v.nativeEvent.coordinate,
-          });
+        initialRegion={{
+          latitude: userContext?.state.location.latitude ?? 0,
+          longitude: userContext?.state.location.longitude ?? 0,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         }}
+        style={{ width: "100%", height: "100%" }}
+        onPress={handleTap}
         showsUserLocation={true}
       >
         <Marker coordinate={issueCreationContext.state[0].coordinates} />
@@ -33,13 +45,7 @@ const IssueLocationScreen = () => {
           width: "100%",
           padding: 10,
         }}
-      >
-        <View
-          style={{ backgroundColor: colors.primaryContainer, borderRadius: 15 }}
-        >
-          <SearchBar />
-        </View>
-      </View>
+      ></View>
       <View
         style={{
           position: "absolute",
