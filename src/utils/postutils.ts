@@ -11,7 +11,7 @@ const getTimeSincePost = (date: Date) => {
 
   // hour
   time /= 60;
-  if (time < 60) return `${Math.floor(time)}h`;
+  if (time < 24) return `${Math.floor(time)}h`;
 
   // days
   time /= 24;
