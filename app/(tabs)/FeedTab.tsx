@@ -15,15 +15,15 @@ import { pageStyle } from "~/src/utils/stylingValue";
 import { Issue } from "~/src/model/issue";
 import IssueCard from "~/src/components/issueCard";
 import { router } from "expo-router";
-import { useUserContext } from "~/src/contexts/userContext";
+
 import SearchPosts from "~/src/components/shared/searchPosts";
+import { useUserContext } from "~/src/contexts/userContext";
 
 function FeedTab() {
   const userContext = useUserContext();
   const [refreshing, setRefreshing] = React.useState(false);
   const [posts, setPosts] = React.useState<(CommunityEvent | Issue)[]>([]);
   const [filters, setFilters] = React.useState<getPostsParams>({
-    location: userContext?.state.location,
     limit: 1000,
     interests: userContext?.state.interests,
   });
