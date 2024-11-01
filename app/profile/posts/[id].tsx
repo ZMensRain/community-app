@@ -5,6 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
   ListRenderItemInfo,
+  Text,
 } from "react-native";
 import EventComponent from "~/src/components/EventComponent";
 import IssueCard from "~/src/components/issueCard";
@@ -17,7 +18,7 @@ import { getPosts, getPostsParams, supabase } from "~/src/utils/supabase";
 const Posts = () => {
   const local = useLocalSearchParams();
   const userId = local["id"];
-  const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>();
+  const [posts, setPosts] = useState<(CommunityEvent | Issue)[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<getPostsParams>({});
   useEffect(() => {
@@ -59,8 +60,18 @@ const Posts = () => {
           <ActivityIndicator size="large" />
         ) : (
           <>
-            <SearchPosts onUpdateFilters={(params) => setFilters(params)} />
-            <FlatList data={posts} renderItem={renderItem} />
+            <SearchPosts filters={filters} setFilters={setFilters} />
+            {posts.length === 0 && !loading && (
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={{ textAlign: "center" }}>
+                  Nothing here? Is your community location set? Maybe try
+                  different filters.
+                </Text>
+              </View>
+            )}
+            {posts.length > 0 && (
+              <FlatList data={posts} renderItem={renderItem} />
+            )}
           </>
         )}
       </View>

@@ -3,6 +3,7 @@ import {
   View,
   FlatList,
   ListRenderItemInfo,
+  Text,
 } from "react-native";
 
 import React, { useEffect } from "react";
@@ -24,13 +25,14 @@ function FeedTab() {
   const [filters, setFilters] = React.useState<getPostsParams>({
     location: userContext?.state.location,
     limit: 1000,
+    interests: userContext?.state.interests,
   });
 
   const fetchPosts = async (setRefresh: boolean) => {
-    const posts = await getPosts(filters);
+    const fetchedPosts = await getPosts(filters);
     if (setRefresh) setRefreshing(false);
-    if (!posts) return;
-    setPosts(posts);
+    if (!fetchedPosts) return;
+    setPosts(fetchedPosts);
   };
 
   const onIssuePress = (issue: Issue) => router.navigate(`issue/${issue.id}`);
@@ -57,15 +59,25 @@ function FeedTab() {
 
   return (
     <View style={pageStyle}>
-      <SearchPosts onUpdateFilters={(filters) => setFilters(filters)} />
-      <FlatList
-        data={posts}
-        renderItem={renderItem}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        showsVerticalScrollIndicator={false}
-      />
+      <SearchPosts filters={filters} setFilters={setFilters} />
+      {posts.length === 0 && !refreshing && (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text style={{ textAlign: "center" }}>
+            Nothing here? Is your community location set? Maybe try different
+            filters.
+          </Text>
+        </View>
+      )}
+      {posts.length > 0 && (
+        <FlatList
+          data={posts}
+          renderItem={renderItem}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 }

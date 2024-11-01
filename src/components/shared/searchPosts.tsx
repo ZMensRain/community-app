@@ -19,46 +19,22 @@ import FilledButton from "./filledButton";
 import OutlineButton from "./outlineButton";
 
 type props = {
-  onUpdateFilters?: (params: getPostsParams) => void;
+  filters: getPostsParams;
+  setFilters: React.Dispatch<React.SetStateAction<getPostsParams>>;
 };
 
-type filterBy = {
-  interests: boolean;
-  location: boolean;
-  tags: boolean;
-  types: boolean;
-};
-
-const SearchPosts = (props: props) => {
-  const [showFilters, setShowFilters] = useState(false);
-  const [currentFilters, setCurrentFilters] = useState<filterBy>({
-    interests: false,
-    location: false,
-    tags: true,
-    types: false,
-  });
-  const [filterValues, setFilterValues] = useState<getPostsParams>({
-    limit: 1000,
-  });
+const SearchPosts = ({ filters, setFilters }: props) => {
   const userContext = useUserContext();
+  const [showFilters, setShowFilters] = useState(false);
 
   // Update values that are dependent on the current user
   useEffect(() => {
-    setFilterValues({
-      ...filterValues,
+    setFilters({
+      ...filters,
       location: userContext?.state.location,
       interests: userContext?.state.interests,
     });
   }, [userContext?.state]);
-
-  useEffect(() => {
-    let filters: getPostsParams = {};
-    if (currentFilters.interests) filters.interests = filterValues.interests;
-    if (currentFilters.location) filters.location = filterValues.location;
-    if (currentFilters.tags) filters.tags = filterValues.tags;
-    if (currentFilters.types) filters.types = filterValues.types;
-    props.onUpdateFilters?.(filters);
-  }, [currentFilters, filterValues]);
 
   const tagModalSheetRef = useRef<BottomSheetModal>(null);
   const typeModalSheetRef = useRef<BottomSheetModal>(null);
@@ -69,33 +45,37 @@ const SearchPosts = (props: props) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: showFilters ? "space-between" : "flex-end",
+          justifyContent: "space-between",
         }}
       >
-        {showFilters && (
-          <>
-            <LabeledSwitch
-              label={"Your Location"}
-              value={currentFilters.location}
-              onPress={() =>
-                setCurrentFilters({
-                  ...currentFilters,
-                  location: !currentFilters.location,
-                })
-              }
-            />
-            <LabeledSwitch
-              label={"Interests"}
-              value={currentFilters.interests}
-              onPress={() =>
-                setCurrentFilters({
-                  ...currentFilters,
-                  interests: !currentFilters.interests,
-                })
-              }
-            />
-          </>
-        )}
+        <>
+          <LabeledSwitch
+            label={"Your Location"}
+            value={filters.location !== undefined}
+            onPress={() => {
+              if (filters.location)
+                setFilters({ ...filters, location: undefined });
+              else
+                setFilters({
+                  ...filters,
+                  location: userContext?.state.location,
+                });
+            }}
+          />
+          <LabeledSwitch
+            label={"Interests"}
+            value={filters.interests !== undefined}
+            onPress={() => {
+              if (filters.interests)
+                setFilters({ ...filters, interests: undefined });
+              else
+                setFilters({
+                  ...filters,
+                  interests: userContext?.state.interests,
+                });
+            }}
+          />
+        </>
 
         <Ionicons.Button
           name="filter"
@@ -137,7 +117,7 @@ const SearchPosts = (props: props) => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={filterValues.tags}
+            data={filters.tags}
             renderItem={(info) => (
               <View style={{ marginRight: margin.small }}>
                 <FilledButton
@@ -146,9 +126,9 @@ const SearchPosts = (props: props) => {
                     backgroundColor: tagColors(info.item).background,
                   }}
                   onLongPress={() => {
-                    setFilterValues({
-                      ...filterValues,
-                      tags: filterValues.tags?.filter((v) => v !== info.item),
+                    setFilters({
+                      ...filters,
+                      tags: filters.tags?.filter((v) => v !== info.item),
                     });
                   }}
                 />
@@ -175,14 +155,14 @@ const SearchPosts = (props: props) => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={filterValues.types}
+            data={filters.types}
             renderItem={(info) => (
               <View style={{ marginRight: margin.small }}>
                 <OutlineButton
                   onLongPress={() =>
-                    setFilterValues({
-                      ...filterValues,
-                      types: filterValues.types?.filter((v) => v !== info.item),
+                    setFilters({
+                      ...filters,
+                      types: filters.types?.filter((v) => v !== info.item),
                     })
                   }
                 >
@@ -200,9 +180,9 @@ const SearchPosts = (props: props) => {
       >
         <TagBottomSheet
           onTagPicked={(tag) => {
-            setFilterValues({
-              ...filterValues,
-              tags: [...(filterValues.tags ?? []), tag],
+            setFilters({
+              ...filters,
+              tags: [...(filters.tags ?? []), tag],
             });
           }}
         />
@@ -214,9 +194,9 @@ const SearchPosts = (props: props) => {
       >
         <TypeBottomSheet
           onTypePicked={(type) => {
-            setFilterValues({
-              ...filterValues,
-              types: [...(filterValues.types ?? []), type],
+            setFilters({
+              ...filters,
+              types: [...(filters.types ?? []), type],
             });
           }}
         />
