@@ -25,6 +25,7 @@ function FeedTab() {
   const [posts, setPosts] = React.useState<(CommunityEvent | Issue)[]>([]);
   const [filters, setFilters] = React.useState<getPostsParams>({
     limit: 1000,
+    location: userContext?.state.location,
     interests: userContext?.state.interests,
   });
 
